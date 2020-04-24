@@ -701,7 +701,7 @@ class babbler64(babbler256):
                  ):
         self._rnn_size = 64
         self._vocab_size = 26
-        self._embed_dim = 10
+        self._embed_dim = 25
         self._num_layers = 4
         self._wn = True
         self._shuffle_buffer = 10000

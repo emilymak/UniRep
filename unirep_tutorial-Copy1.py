@@ -20,6 +20,7 @@ USE_FULL_1900_DIM_MODEL = False # if True use 1900 dimensional model, else use 6
 
 import tensorflow as tf
 import numpy as np
+import pandas as pd
 
 # Set seeds
 tf.set_random_seed(42)
@@ -53,7 +54,7 @@ else:
 # In[3]:
 
 
-batch_size = 12
+batch_size = 63
 b = babbler(batch_size=batch_size, model_path=MODEL_WEIGHT_PATH)
 
 
@@ -62,13 +63,18 @@ b = babbler(batch_size=batch_size, model_path=MODEL_WEIGHT_PATH)
 # In[4]:
 
 
-seq = "MRKGEELFTGVVPILVELDGDVNGHKFSVRGEGEGDATNGKLTLKFICTTGKLPVPWPTLVTTLTYGVQCFARYPDHMKQHDFFKSAMPEGYVQERTISFKDDGTYKTRAEVKFEGDTLVNRIELKGIDFKEDGNILGHKLEYNFNSHNVYITADKQKNGIKANFKIRHNVEDGSVQLADHYQQNTPIGDGPVLLPDNHYLSTQSVLSKDPNEKRDHMVLLEFVTAAGITHGMDELYK"
+seq_open = open("./adimab_seq.txt")
+seq = seq_open.read()
+print(seq)
 
 
 # In[5]:
 
 
-np.array(b.format_seq(seq))
+seq_formatted = []
+for line in seq.splitlines():
+    seq_formatted.append(np.array(b.format_seq(line)))
+print(seq_formatted)
 
 
 # We also provide a function that will check your amino acid sequences don't contain any characters which will break the UniRep model.
@@ -89,7 +95,7 @@ b.is_valid_seq(seq)
 
 
 # Before you can train your model, 
-with open("seqs.txt", "r") as source:
+with open("adimab_seq.txt", "r") as source:
     with open("formatted.txt", "w") as destination:
         for i,seq in enumerate(source):
             seq = seq.strip()
@@ -184,7 +190,7 @@ loss = tf.losses.mean_squared_error(y_placeholder, prediction)
 # In[13]:
 
 
-learning_rate=.001
+learning_rate=.002
 top_variables = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, scope="top")
 optimizer = tf.train.AdamOptimizer(learning_rate)
 top_only_step_op = optimizer.minimize(loss, var_list=top_variables)
@@ -206,11 +212,13 @@ nonpad_len(batch)
 
 # We are ready to train. As an illustration, let's learn to predict the number 42 just optimizing the top model.
 
-# In[15]:
+# In[41]:
 
 
-y = [[42]]*batch_size
+#visc_open = open("./adimab_visc.txt")
+y = [[16.8], [348.0], [22.7], [6.0], [8.1], [6.1], [8.9], [11.9], [11.7], [19.7], [180.0], [14.6], [12.6], [9.9], [8.6], [10.3], [26.4], [10.8], [45.0], [27.0], [12.4], [219.1], [11.9], [45.0], [11.4], [8.9], [9.3], [14.6], [10.3], [12.6], [12.2], [9.4], [21.8], [8.4], [17.8], [10.4], [12], [15.3], [15.2], [40.0], [10.9], [48.8], [12.0], [15.0], [13.1], [5.5], [10.8], [13.9], [21.7], [31.8], [16.6], [17.1], [7.6], [14.8], [21.2], [13.9], [45.9], [27.3], [13.8], [25.6], [11.7], [12.1], [17.6]]
 num_iters = 10
+predictions = []
 with tf.Session() as sess:
     sess.run(tf.global_variables_initializer())
     for i in range(num_iters):
@@ -225,17 +233,19 @@ with tf.Session() as sess:
                      initial_state_placeholder:b._zero_state
                 }
         )
-                  
+        
         print("Iteration {0}: {1}".format(i, loss_))
 
 
 # We can also jointly train the top model and the mLSTM. Note that if using the 1900-unit (full) model, you will need a GPU with at least 16GB RAM. To see a demonstration of joint training with fewer computational resources, please run this notebook using the 64-unit model.
 
-# In[16]:
+# In[56]:
 
 
-y = [[42]]*batch_size
-num_iters = 10
+y = [[16.8], [348.0], [22.7], [6.0], [8.1], [6.1], [8.9], [11.9], [11.7], [19.7], [180.0], [14.6], [12.6], [9.9], [8.6], [10.3], [26.4], [10.8], [45.0], [27.0], [12.4], [219.1], [11.9], [45.0], [11.4], [8.9], [9.3], [14.6], [10.3], [12.6], [12.2], [9.4], [21.8], [8.4], [17.8], [10.4], [12], [15.3], [15.2], [40.0], [10.9], [48.8], [12.0], [15.0], [13.1], [5.5], [10.8], [13.9], [21.7], [31.8], [16.6], [17.1], [7.6], [14.8], [21.2], [13.9], [45.9], [27.3], [13.8], [25.6], [11.7], [12.1], [17.6]]
+print(y)
+print(batch)
+num_iters = 2
 with tf.Session() as sess:
     sess.run(tf.global_variables_initializer())
     for i in range(num_iters):
@@ -250,8 +260,22 @@ with tf.Session() as sess:
                      initial_state_placeholder:b._zero_state
                 }
         )
-        
+        prediction = tf.argmax(y,1)
+        print(prediction.eval(feed_dict={x_placeholder: batch}))
+        print(prediction)
         print("Iteration {0}: {1}".format(i,loss_))
+
+
+# In[ ]:
+
+
+
+
+
+# In[17]:
+
+
+
 
 
 # In[ ]:
