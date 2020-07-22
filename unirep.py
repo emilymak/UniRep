@@ -419,7 +419,7 @@ class babbler1900():
         final_hidden = final_hidden[0]
         hs = hs[0]
         avg_hidden = np.mean(hs, axis=0)
-        return avg_hidden, final_hidden, final_cell
+        return avg_hidden, final_hidden, final_cell, hs
 
     def get_babble(self, seed, length=250, temp=1):
         """

@@ -21,6 +21,7 @@ USE_FULL_1900_DIM_MODEL = False # if True use 1900 dimensional model, else use 6
 import tensorflow as tf
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 
 # Set seeds
 tf.set_random_seed(42)
@@ -54,7 +55,7 @@ else:
 # In[3]:
 
 
-batch_size = 63
+batch_size = 1
 b = babbler(batch_size=batch_size, model_path=MODEL_WEIGHT_PATH)
 
 
@@ -63,9 +64,8 @@ b = babbler(batch_size=batch_size, model_path=MODEL_WEIGHT_PATH)
 # In[4]:
 
 
-seq_open = open("./adimab_seq.txt")
+seq_open = open("./emi_iso_seqs.txt")
 seq = seq_open.read()
-print(seq)
 
 
 # In[5]:
@@ -74,12 +74,11 @@ print(seq)
 seq_formatted = []
 for line in seq.splitlines():
     seq_formatted.append(np.array(b.format_seq(line)))
-print(seq_formatted)
 
 
 # We also provide a function that will check your amino acid sequences don't contain any characters which will break the UniRep model.
 
-# In[6]:
+# In[ ]:
 
 
 b.is_valid_seq(seq)
@@ -91,14 +90,16 @@ b.is_valid_seq(seq)
 # 
 # Sequence formatting can be done as follows:
 
-# In[7]:
+# In[5]:
 
 
 # Before you can train your model, 
-with open("adimab_seq.txt", "r") as source:
+sequences = []
+with open("emi_iso_seqs.txt", "r") as source:
     with open("formatted.txt", "w") as destination:
         for i,seq in enumerate(source):
             seq = seq.strip()
+            sequences.append(seq)
             if b.is_valid_seq(seq) and len(seq) < 275: 
                 formatted = ",".join(map(str,b.format_seq(seq)))
                 destination.write(formatted)
@@ -107,7 +108,7 @@ with open("adimab_seq.txt", "r") as source:
 
 # This is what the integer format looks like
 
-# In[8]:
+# In[ ]:
 
 
 get_ipython().system('head -n1 formatted.txt')
@@ -125,7 +126,7 @@ get_ipython().system('head -n1 formatted.txt')
 # - Automatically padding the sequences with zeros so the returned batch is a perfect rectangle
 # - Automatically repeating the dataset
 
-# In[9]:
+# In[7]:
 
 
 bucket_op = b.bucket_batch_pad("formatted.txt", interval=1000) # Large interval
@@ -135,7 +136,7 @@ bucket_op = b.bucket_batch_pad("formatted.txt", interval=1000) # Large interval
 
 # Now that we have the `bucket_op`, we can simply `sess.run()` it to get a correctly formatted batch
 
-# In[10]:
+# In[8]:
 
 
 with tf.Session() as sess:
@@ -152,7 +153,7 @@ print(batch.shape)
 
 # First, obtain all of the ops needed to output a representation
 
-# In[11]:
+# In[9]:
 
 
 final_hidden, x_placeholder, batch_size_placeholder, seq_length_placeholder, initial_state_placeholder = (
@@ -169,7 +170,7 @@ final_hidden, x_placeholder, batch_size_placeholder, seq_length_placeholder, ini
 # 
 # 3.  Minimizing the loss inside of a TensorFlow session
 
-# In[12]:
+# In[10]:
 
 
 y_placeholder = tf.placeholder(tf.float32, shape=[None,1], name="y")
@@ -187,10 +188,10 @@ loss = tf.losses.mean_squared_error(y_placeholder, prediction)
 
 # You can specifically train the top model first by isolating variables of the "top" scope, and forcing the optimizer to only optimize these.
 
-# In[13]:
+# In[11]:
 
 
-learning_rate=.002
+learning_rate=.005
 top_variables = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, scope="top")
 optimizer = tf.train.AdamOptimizer(learning_rate)
 top_only_step_op = optimizer.minimize(loss, var_list=top_variables)
@@ -199,7 +200,7 @@ all_step_op = optimizer.minimize(loss)
 
 # We next need to define a function that allows us to calculate the length each sequence in the batch so that we know what index to use to obtain the right "final" hidden state
 
-# In[14]:
+# In[12]:
 
 
 def nonpad_len(batch):
@@ -212,13 +213,12 @@ nonpad_len(batch)
 
 # We are ready to train. As an illustration, let's learn to predict the number 42 just optimizing the top model.
 
-# In[41]:
+# In[ ]:
 
 
-#visc_open = open("./adimab_visc.txt")
-y = [[16.8], [348.0], [22.7], [6.0], [8.1], [6.1], [8.9], [11.9], [11.7], [19.7], [180.0], [14.6], [12.6], [9.9], [8.6], [10.3], [26.4], [10.8], [45.0], [27.0], [12.4], [219.1], [11.9], [45.0], [11.4], [8.9], [9.3], [14.6], [10.3], [12.6], [12.2], [9.4], [21.8], [8.4], [17.8], [10.4], [12], [15.3], [15.2], [40.0], [10.9], [48.8], [12.0], [15.0], [13.1], [5.5], [10.8], [13.9], [21.7], [31.8], [16.6], [17.1], [7.6], [14.8], [21.2], [13.9], [45.9], [27.3], [13.8], [25.6], [11.7], [12.1], [17.6]]
-num_iters = 10
-predictions = []
+"""
+y = [[1], [1], [1], [0], [0], [0], [0], [0], [0], [1], [1], [1], [1], [0], [0], [0], [1], [0], [1], [1], [1], [1], [0], [1], [0], [0], [0], [1], [0], [1], [1], [0], [1], [0], [1], [0], [1], [1], [1], [1], [0], [1], [1], [1], [1], [0], [0], [1], [1], [1], [1], [1], [0], [1], [1], [1], [1], [1], [1], [1], [0], [1], [1]]
+num_iters = 1
 with tf.Session() as sess:
     sess.run(tf.global_variables_initializer())
     for i in range(num_iters):
@@ -233,19 +233,27 @@ with tf.Session() as sess:
                      initial_state_placeholder:b._zero_state
                 }
         )
-        
-        print("Iteration {0}: {1}".format(i, loss_))
+        viscosity_pred, final_hidden_layer = sess.run([prediction, final_hidden],
+                feed_dict={
+                     x_placeholder: batch,
+                     batch_size_placeholder: batch_size,
+                     seq_length_placeholder:length,
+                     initial_state_placeholder:b._zero_state})
+        print("Iteration {0}: {1}".format(i,loss_))
+#    print(np.hstack([viscosity_pred, y])
+    print(final_hidden_layer)
+    plt.scatter(viscosity_pred, y)
+    plt.show()
+"""
 
 
 # We can also jointly train the top model and the mLSTM. Note that if using the 1900-unit (full) model, you will need a GPU with at least 16GB RAM. To see a demonstration of joint training with fewer computational resources, please run this notebook using the 64-unit model.
 
-# In[56]:
+# In[ ]:
 
 
-y = [[16.8], [348.0], [22.7], [6.0], [8.1], [6.1], [8.9], [11.9], [11.7], [19.7], [180.0], [14.6], [12.6], [9.9], [8.6], [10.3], [26.4], [10.8], [45.0], [27.0], [12.4], [219.1], [11.9], [45.0], [11.4], [8.9], [9.3], [14.6], [10.3], [12.6], [12.2], [9.4], [21.8], [8.4], [17.8], [10.4], [12], [15.3], [15.2], [40.0], [10.9], [48.8], [12.0], [15.0], [13.1], [5.5], [10.8], [13.9], [21.7], [31.8], [16.6], [17.1], [7.6], [14.8], [21.2], [13.9], [45.9], [27.3], [13.8], [25.6], [11.7], [12.1], [17.6]]
-print(y)
-print(batch)
-num_iters = 2
+"""y = [[1], [1], [1], [0], [0], [0], [0], [0], [0], [1], [1], [1], [1], [0], [0], [0], [1], [0], [1], [1], [1], [1], [0], [1], [0], [0], [0], [1], [0], [1], [1], [0], [1], [0], [1], [0], [1], [1], [1], [1], [0], [1], [1], [1], [1], [0], [0], [1], [1], [1], [1], [1], [0], [1], [1], [1], [1], [1], [1], [1], [0], [1], [1]]
+num_iters = 25
 with tf.Session() as sess:
     sess.run(tf.global_variables_initializer())
     for i in range(num_iters):
@@ -260,19 +268,60 @@ with tf.Session() as sess:
                      initial_state_placeholder:b._zero_state
                 }
         )
-        prediction = tf.argmax(y,1)
-        print(prediction.eval(feed_dict={x_placeholder: batch}))
-        print(prediction)
+        viscosity_pred = sess.run(prediction,
+                feed_dict={
+                     x_placeholder: batch,
+                     batch_size_placeholder: batch_size,
+                     seq_length_placeholder:length,
+                     initial_state_placeholder:b._zero_state})
         print("Iteration {0}: {1}".format(i,loss_))
+    print(np.hstack([viscosity_pred, y]))
+"""
+
+
+# In[6]:
+
+
+average_hidden = []
+final_hidden_list = []
+
+num2 = range(0, 50)
+x = 0
+y = 50
+for i in num2:
+    num1 = range(x, y)
+    for j in num1:
+        avg_hidden, final_hidden, final_cell = (b.get_rep(sequences[j]))
+        average_hidden.append(avg_hidden)
+        final_hidden_list.append(final_hidden)
+        print('rep')
+    x = x + 50
+    y = y + 50
+    
+
+
+# In[7]:
+
+
+average_hidden_pd = pd.DataFrame(np.row_stack(average_hidden))
+final_hidden_pd = pd.DataFrame(np.row_stack(final_hidden_list))
+print(final_hidden_pd)
+
+
+# In[10]:
+
+
+average_hidden_pd.to_csv("emi_iso_reps.csv")
+final_hidden_pd.to_csv("emi_iso_finalhidden.csv")
+
+
+# In[4]:
+
+
+avg_hidden, final_hidden, final_cell = (b.get_rep(QVQLVQSGAEVKKPGASVKVSCKASGYTFTDYYMHWVRQAPGQGLEWMGRVNPNRRGTTYNQKFEGRVTMTTDTSTSTAYMELRSLRSDDTAVYYCARANWLDYWGQGTTVTVSS))
 
 
 # In[ ]:
-
-
-
-
-
-# In[17]:
 
 
 

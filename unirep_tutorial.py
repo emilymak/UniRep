@@ -53,7 +53,7 @@ else:
 # In[3]:
 
 
-batch_size = 12
+batch_size = 1
 b = babbler(batch_size=batch_size, model_path=MODEL_WEIGHT_PATH)
 
 
@@ -85,14 +85,16 @@ b.is_valid_seq(seq)
 # 
 # Sequence formatting can be done as follows:
 
-# In[7]:
+# In[4]:
 
 
 # Before you can train your model, 
-with open("seqs.txt", "r") as source:
+sequences = []
+with open("emi_iso_seqs_new.txt", "r") as source:
     with open("formatted.txt", "w") as destination:
         for i,seq in enumerate(source):
             seq = seq.strip()
+            sequences.append(seq)
             if b.is_valid_seq(seq) and len(seq) < 275: 
                 formatted = ",".join(map(str,b.format_seq(seq)))
                 destination.write(formatted)
@@ -252,6 +254,44 @@ with tf.Session() as sess:
         )
         
         print("Iteration {0}: {1}".format(i,loss_))
+
+
+# In[5]:
+
+
+average_hidden = []
+final_hidden_list = []
+
+num2 = range(0, 50)
+x = 0
+y = 50
+for i in num2:
+    num1 = range(x, y)
+    for j in num1:
+        avg_hidden, final_hidden, final_cell = (b.get_rep(sequences[j]))
+        average_hidden.append(avg_hidden)
+        final_hidden_list.append(final_hidden)
+        print('rep')
+    x = x + 50
+    y = y + 50
+    
+
+
+# In[6]:
+
+
+import pandas as pd
+average_hidden_pd = pd.DataFrame(np.row_stack(average_hidden))
+final_hidden_pd = pd.DataFrame(np.row_stack(final_hidden_list))
+
+average_hidden_pd.to_csv("emi_iso_reps_new.csv")
+final_hidden_pd.to_csv("emi_iso_final_hidden_new.csv")
+
+
+# In[7]:
+
+
+print(average_hidden)
 
 
 # In[ ]:
