@@ -15,7 +15,7 @@ import scipy as sc
 import seaborn as sns
 
 residue_info = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\residue_dict_new.csv", header = 0, index_col = 0)
-emi_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_iso_mutations.csv", header = 0, index_col = 0)
+emi_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_seqs_stringent.csv", header = 0, index_col = None)
 emi_seqs.columns = ['Sequences']
 
 #%%
@@ -25,7 +25,6 @@ for i in emi_seqs['Sequences']:
     mutations.append([characters[32], characters[49], characters[54], characters[55], characters[56], characters[98], characters[100], characters[103]])
 mutations = pd.DataFrame(mutations)
 
-#%%
 mutations_biophys = []
 for i in mutations.iterrows():
     seq_mutations_biophys = []
@@ -157,5 +156,5 @@ for i in mutations_biophys.iterrows():
 
 
 #%%
-mutations_biophys.to_csv('emi_iso_biophys.csv', header = True, index = True)
+#mutations_biophys.to_csv('emi_iso_biophys.csv', header = True, index = True)
 

@@ -217,8 +217,7 @@ for index, row in emi_iso_binding_test.iterrows():
         iso_transform_psy[index] = 1
     if (emi_ant_iso_transform_test_stringent.iloc[index,1] > 0.7) & (emi_psy_iso_transform_test_stringent.iloc[index,1] < 0.65):
         iso_transform_conf[index] = 1    
-print(confusion_matrix(iso_optimal_conf, iso_transform_conf, labels = [0,1]))
-#%%        
+     
 iso_transform_ant = pd.DataFrame(iso_transform_ant)
 iso_transform_psy = pd.DataFrame(iso_transform_psy)
 cohen_ant_mean = (np.mean(emi_ant_iso_transform_stringent[iso_transform_ant.iloc[:,0] == 1]['Fraction ANT Binding']-np.mean(emi_ant_iso_transform_stringent[iso_transform_ant.iloc[:,0] == 0]['Fraction ANT Binding'])))
@@ -228,7 +227,7 @@ cohen_ant = (cohen_ant_mean/(math.sqrt((statistics.stdev(emi_ant_iso_transform_s
 cohen_psy = (cohen_psy_mean/(math.sqrt((statistics.stdev(emi_psy_iso_transform_stringent[iso_transform_psy.iloc[:,0] == 1]['Fraction PSY Binding']) ** 2) + (statistics.stdev(emi_psy_iso_transform_stringent[iso_transform_psy.iloc[:,0] == 0]['Fraction PSY Binding']) ** 2) / (2))))
 
 iso_transform_conf_pd = pd.DataFrame(iso_transform_conf)
-
+print(confusion_matrix(iso_optimal_conf, iso_transform_conf, labels = [0,1]))
 print(np.mean(emi_ant_iso_transform_stringent[iso_transform_conf_pd.iloc[:,0] == 1]['Fraction ANT Binding']))
 print(np.mean(emi_ant_iso_transform_stringent[iso_transform_conf_pd.iloc[:,0] == 0]['Fraction ANT Binding']))
 
@@ -259,7 +258,7 @@ sample_size_psy = power_analysis.solve_power(effect_size = d_psy, power = power,
 
 
 #%%
-"""
+
 ### figure showing LDA transform_stringentswarmplot divided by FACS ANT binding classification colored by PSY
 plt.figure(0, figsize = (8,5))
 ax = sns.swarmplot(emi_labels_stringent.iloc[:,3], emi_ant_transform_stringent.iloc[:,0], hue = emi_labels_stringent.iloc[:,2], palette = colormap1, edgecolor = 'k', linewidth = 0.10)
@@ -377,7 +376,6 @@ nonoptimal_patch = mpatches.Patch(facecolor = 'white', label = 'Not Optimal', ed
 lessoptimal_patch = mpatches.Patch(facecolor='grey', label = 'Less Optimal', edgecolor = 'black', linewidth = 0.1)
 ax2.legend(handles=[optimal_patch, lessoptimal_patch, nonoptimal_patch], fontsize = 12)
 
-"""
 
 fig, ax = plt.subplots(figsize = (7,4.5))
 #plt.errorbar(emi_iso_binding.iloc[:,1], emi_iso_binding.iloc[:,2], xerr = ant_lower, yerr = psy_lower, fmt = 'none', ecolor = 'Grey')

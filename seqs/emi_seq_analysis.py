@@ -87,11 +87,27 @@ emi_seqs.drop('Drop', axis = 1, inplace = True)
 emi_seqs.reset_index(drop = True, inplace = True)
 emi_labels.reset_index(drop = False, inplace = True)
 emi_labels.columns = ['Sequences','PSY Binding']
-emi_seqs.set_index('Sequences', drop = True, inplace = True)
 
 #%%
 emi_pos_seqs = emi_seqs.iloc[0:25675,:]
+emi_pos_seqs_char = []
+for seq in emi_pos_seqs['Sequences']:
+    char = list(seq)
+    if char[103] == 'Y':
+        char = ''.join(str(i) for i in char)
+        emi_pos_seqs_char.append(char)
+emi_pos_seqs_char = pd.DataFrame(emi_pos_seqs_char)
+emi_pos_seqs.set_index('Sequences', drop = True, inplace = True)
+
 emi_neg_seqs = emi_seqs.iloc[25675:40734,:]
+emi_neg_seqs_char = []
+for seq in emi_neg_seqs['Sequences']:
+    char = list(seq)
+    if char[103] == 'Y':
+        char = ''.join(str(i) for i in char)
+        emi_neg_seqs_char.append(char)
+emi_neg_seqs_char = pd.DataFrame(emi_neg_seqs_char)
+emi_neg_seqs.set_index('Sequences', drop = True, inplace = True)
 
 emi_pos_seq = []
 for index, row in emi_pos_seqs.iterrows():
@@ -165,17 +181,6 @@ for index, row in emi_neg_seq_stringent.iterrows():
         emi_neg_seq_stringent.loc[index,'ANT Binding'] = 1
 emi_neg_seq_stringent = emi_neg_seq_stringent[emi_neg_seq_stringent['ANT Binding'] != 2]
 
-#%%
-emi_seqs_used = pd.concat([emi_pos_seq.iloc[0:2000,:], emi_neg_seq.iloc[0:2000,:]], axis = 0)
-emi_seqs_used.drop('OVA Freq', inplace = True, axis = 1)
-emi_seqs_used.drop('PSR Freq', inplace = True, axis = 1)
-emi_seqs_used.drop('rep1', inplace = True, axis = 1)
-emi_seqs_used.drop('rep2', inplace = True, axis = 1)
-emi_seqs_used.reset_index(drop = True, inplace = True)
-#emi_seqs_used.to_csv('emi_rep_labels_lax.csv', header = True, index = True)
-
-#emi_pos_seq.iloc[1500:2000,0].to_csv('emi_pos_seqs_lax4.txt', header = False, index = False)
-#emi_neg_seq.iloc[1500:2000,0].to_csv('emi_neg_seqs_lax4.txt', header = False, index = False)
 
 #%%
 emi_seqs_used_stringent = pd.concat([emi_pos_seq_stringent.iloc[0:2000,:], emi_neg_seq_stringent.iloc[0:2000,:]], axis = 0)
@@ -183,9 +188,23 @@ emi_seqs_used_stringent.drop('OVA Freq', inplace = True, axis = 1)
 emi_seqs_used_stringent.drop('PSR Freq', inplace = True, axis = 1)
 emi_seqs_used_stringent.drop('rep1', inplace = True, axis = 1)
 emi_seqs_used_stringent.drop('rep2', inplace = True, axis = 1)
+
+
+#%%
+"""
 emi_seqs_used_stringent.reset_index(drop = True, inplace = True)
-#emi_seqs_used_stringent.to_csv('emi_rep_labels_stringent.csv', header = True, index = True)
+emi_seqs_used_stringent.to_csv('emi_rep_labels_7A.csv', header = True, index = True)
 
-#emi_pos_seq_stringent.iloc[0:500,0].to_csv('emi_pos_seqs_stringent1.txt', header = False, index = False)
-#emi_neg_seq_stringent.iloc[0:100,0].to_csv('emi_neg_seqs_stringent1.txt', header = False, index = False)
+emi_pos_seq_stringent.iloc[0:500,0].to_csv('emi_pos_seqs_7Y_1.txt', header = False, index = False)
+emi_neg_seq_stringent.iloc[0:100,0].to_csv('emi_neg_seqs_7Y_1.txt', header = False, index = False)
 
+emi_pos_seq_stringent.iloc[500:1000,0].to_csv('emi_pos_seqs_7Y_2.txt', header = False, index = False)
+emi_neg_seq_stringent.iloc[500:1000,0].to_csv('emi_neg_seqs_7Y_2.txt', header = False, index = False)
+
+emi_pos_seq_stringent.iloc[1000:1500,0].to_csv('emi_pos_seqs_7Y_3.txt', header = False, index = False)
+emi_neg_seq_stringent.iloc[1000:1500,0].to_csv('emi_neg_seqs_7Y_3.txt', header = False, index = False)
+
+emi_pos_seq_stringent.iloc[1500:2000,0].to_csv('emi_pos_seqs_7Y_4.txt', header = False, index = False)
+emi_neg_seq_stringent.iloc[15000:2000,0].to_csv('emi_neg_seqs_7Y_4.txt', header = False, index = False)
+
+"""
