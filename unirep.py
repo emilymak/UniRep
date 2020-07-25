@@ -689,6 +689,32 @@ class babbler256(babbler1900):
         avg_hidden = np.mean(hs, axis=0)
         return avg_hidden, final_hidden[0], final_cell[0]
 
+    def get_rep_hs(self,seq):
+        """
+        Input a valid amino acid sequence, outpust a tupel of average hidden, final hidden, final cell representation arrays, along with the full hidden state array
+        """
+        with tf.Session() as sess:
+            initialize_uninitialized(sess)
+            # Strip any whitespace and convert to integers with the correct coding
+            int_seq = aa_seq_to_int(seq.strip())[:-1]
+            # Final state is a cell_state, hidden_state tuple. Output is
+            # all hidden states
+            final_state_, hs = sess.run(
+                [self._final_state, self._output], feed_dict={
+                    self._batch_size_placeholder: 1,
+                    self._minibatch_x_placeholder: [int_seq],
+                    self._initial_state_placeholder: self._zero_state}
+            )
+
+        final_cell, final_hidden = final_state_
+        # Because this is a deep model, each of final hidden and final cell is tuple of num_layers
+        final_cell = final_cell[0]
+        final_hidden = final_hidden[0]
+        hs_all = hs.copy()
+        hs = hs[0]
+        avg_hidden = np.mean(hs, axis=0)
+        return avg_hidden, final_hidden[0], final_cell[0], hs
+
 
 class babbler64(babbler256):
     """

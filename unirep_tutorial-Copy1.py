@@ -55,7 +55,7 @@ else:
 # In[3]:
 
 
-batch_size = 1
+batch_size = 50
 b = babbler(batch_size=batch_size, model_path=MODEL_WEIGHT_PATH)
 
 
@@ -90,12 +90,12 @@ b.is_valid_seq(seq)
 # 
 # Sequence formatting can be done as follows:
 
-# In[5]:
+# In[4]:
 
 
 # Before you can train your model, 
 sequences = []
-with open("emi_iso_seqs.txt", "r") as source:
+with open("emi_pos_seqs_7Y_3.txt", "r") as source:
     with open("formatted.txt", "w") as destination:
         for i,seq in enumerate(source):
             seq = seq.strip()
@@ -279,11 +279,15 @@ with tf.Session() as sess:
 """
 
 
-# In[6]:
+# In[5]:
 
 
-average_hidden = []
+## 
+average_hidden_list = []
 final_hidden_list = []
+hs_list = []
+final_cell_list = []
+
 
 num2 = range(0, 50)
 x = 0
@@ -291,28 +295,37 @@ y = 50
 for i in num2:
     num1 = range(x, y)
     for j in num1:
-        avg_hidden, final_hidden, final_cell = (b.get_rep(sequences[j]))
-        average_hidden.append(avg_hidden)
+        avg_hidden, final_hidden, final_cell, hs_out = (b.get_rep_hs(sequences[j]))
+        average_hidden_list.append(avg_hidden)
         final_hidden_list.append(final_hidden)
+        final_cell_list.append(final_cell)
+        hs_list.append(hs_out)
         print('rep')
     x = x + 50
     y = y + 50
     
 
 
-# In[7]:
+# In[ ]:
 
 
-average_hidden_pd = pd.DataFrame(np.row_stack(average_hidden))
+
+
+
+# In[6]:
+
+
+average_hidden_pd = pd.DataFrame(np.row_stack(average_hidden_list))
 final_hidden_pd = pd.DataFrame(np.row_stack(final_hidden_list))
-print(final_hidden_pd)
+hidden_state = pd.DataFrame(np.row_stack(hs_list))
+print(hidden_state)
 
 
-# In[10]:
+# In[8]:
 
 
-average_hidden_pd.to_csv("emi_iso_reps.csv")
-final_hidden_pd.to_csv("emi_iso_finalhidden.csv")
+average_hidden_pd.to_csv("emi_pos_reps_7Y_3.csv")
+final_hidden_pd.to_csv("emi_pos_finalhidden_7Y_3.csv")
 
 
 # In[4]:
@@ -321,10 +334,34 @@ final_hidden_pd.to_csv("emi_iso_finalhidden.csv")
 avg_hidden, final_hidden, final_cell = (b.get_rep(QVQLVQSGAEVKKPGASVKVSCKASGYTFTDYYMHWVRQAPGQGLEWMGRVNPNRRGTTYNQKFEGRVTMTTDTSTSTAYMELRSLRSDDTAVYYCARANWLDYWGQGTTVTVSS))
 
 
-# In[ ]:
+# In[9]:
 
 
+import pickle
+save_loc = "C:\\Users\\pkinn\\Documents\\UniRep\\full representations\\emi larger set\\"
+data_name = 'emi_pos_reps_7Y_3'
+file_append = '.pickle'
 
+
+fn = save_loc + data_name + 'avg_hidden' + file_append
+with open(fn, 'wb') as f:
+    pickle.dump(average_hidden_list, f)
+
+fn = save_loc + data_name + 'final_hidden' + file_append
+with open(fn, 'wb') as f:
+    pickle.dump(final_hidden_list, f)
+
+fn = save_loc + data_name + 'final_cell' + file_append
+with open(fn, 'wb') as f:
+    pickle.dump(final_cell_list, f)
+   
+fn = save_loc + data_name + 'hidden_state' + file_append
+with open(fn, 'wb') as f:
+    pickle.dump(hs_list, f)
+   
+fn = save_loc + data_name + 'all_output_hs' + file_append
+with open(fn, 'wb') as f:
+    pickle.dump([average_hidden_list, final_hidden_list, final_cell_list, hs_list], f)
 
 
 # In[ ]:

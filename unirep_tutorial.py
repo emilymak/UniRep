@@ -90,7 +90,7 @@ b.is_valid_seq(seq)
 
 # Before you can train your model, 
 sequences = []
-with open("emi_iso_seqs_new.txt", "r") as source:
+with open("emi_neg_seqs_7Y_1.txt", "r") as source:
     with open("formatted.txt", "w") as destination:
         for i,seq in enumerate(source):
             seq = seq.strip()
@@ -261,6 +261,7 @@ with tf.Session() as sess:
 
 average_hidden = []
 final_hidden_list = []
+hs = []
 
 num2 = range(0, 50)
 x = 0
@@ -271,6 +272,7 @@ for i in num2:
         avg_hidden, final_hidden, final_cell = (b.get_rep(sequences[j]))
         average_hidden.append(avg_hidden)
         final_hidden_list.append(final_hidden)
+        hs.append(hs)
         print('rep')
     x = x + 50
     y = y + 50
@@ -283,6 +285,7 @@ for i in num2:
 import pandas as pd
 average_hidden_pd = pd.DataFrame(np.row_stack(average_hidden))
 final_hidden_pd = pd.DataFrame(np.row_stack(final_hidden_list))
+hidden_state = pd.DataFrame(hs)
 
 average_hidden_pd.to_csv("emi_iso_reps_new.csv")
 final_hidden_pd.to_csv("emi_iso_final_hidden_new.csv")
