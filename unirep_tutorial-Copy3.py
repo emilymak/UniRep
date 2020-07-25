@@ -95,7 +95,7 @@ b.is_valid_seq(seq)
 
 # Before you can train your model, 
 sequences = []
-with open("emi_neg_seqs_7Y_3.txt", "r") as source:
+with open("emi_pos_seqs_7NotY_4.txt", "r") as source:
     with open("formatted.txt", "w") as destination:
         for i,seq in enumerate(source):
             seq = seq.strip()
@@ -324,8 +324,8 @@ print(hidden_state)
 # In[7]:
 
 
-average_hidden_pd.to_csv("emi_neg_reps_7Y_3.csv")
-final_hidden_pd.to_csv("emi_neg_finalhidden_7Y_3.csv")
+average_hidden_pd.to_csv("emi_pos_reps_7NotY_4.csv")
+final_hidden_pd.to_csv("emi_pos_finalhidden_7NotY_4.csv")
 
 
 # In[4]:
@@ -334,12 +334,12 @@ final_hidden_pd.to_csv("emi_neg_finalhidden_7Y_3.csv")
 avg_hidden, final_hidden, final_cell = (b.get_rep(QVQLVQSGAEVKKPGASVKVSCKASGYTFTDYYMHWVRQAPGQGLEWMGRVNPNRRGTTYNQKFEGRVTMTTDTSTSTAYMELRSLRSDDTAVYYCARANWLDYWGQGTTVTVSS))
 
 
-# In[8]:
+# In[9]:
 
 
 import pickle
 save_loc = "C:\\Users\\pkinn\\Documents\\UniRep\\full representations\\emi larger set\\"
-data_name = 'emi_neg_reps_7Y_3'
+data_name = 'emi_pos_reps_7NotY_4'
 file_append = '.pickle'
 
 

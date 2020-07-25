@@ -7,7 +7,7 @@
 
 # Use the 64-unit or the 1900-unit model?
 
-# In[1]:
+# In[2]:
 
 
 USE_FULL_1900_DIM_MODEL = False # if True use 1900 dimensional model, else use 64 dimensional one.
@@ -15,7 +15,7 @@ USE_FULL_1900_DIM_MODEL = False # if True use 1900 dimensional model, else use 6
 
 # ## Setup
 
-# In[2]:
+# In[3]:
 
 
 import tensorflow as tf
@@ -52,7 +52,7 @@ else:
 
 # Initialize UniRep, also referred to as the "babbler" in our code. You need to provide the batch size you will use and the path to the weight directory.
 
-# In[3]:
+# In[4]:
 
 
 batch_size = 50
@@ -90,12 +90,12 @@ b.is_valid_seq(seq)
 # 
 # Sequence formatting can be done as follows:
 
-# In[4]:
+# In[5]:
 
 
 # Before you can train your model, 
 sequences = []
-with open("emi_pos_seqs_7Y_4.txt", "r") as source:
+with open("emi_pos_seqs_7NotY_3.txt", "r") as source:
     with open("formatted.txt", "w") as destination:
         for i,seq in enumerate(source):
             seq = seq.strip()
@@ -279,7 +279,7 @@ with tf.Session() as sess:
 """
 
 
-# In[5]:
+# In[6]:
 
 
 ## 
@@ -312,7 +312,7 @@ for i in num2:
 
 
 
-# In[6]:
+# In[7]:
 
 
 average_hidden_pd = pd.DataFrame(np.row_stack(average_hidden_list))
@@ -321,11 +321,11 @@ hidden_state = pd.DataFrame(np.row_stack(hs_list))
 print(hidden_state)
 
 
-# In[7]:
+# In[8]:
 
 
-average_hidden_pd.to_csv("emi_pos_reps_7Y_4.csv")
-final_hidden_pd.to_csv("emi_pos_finalhidden_7Y_4.csv")
+average_hidden_pd.to_csv("emi_pos_reps_7NotY_3.csv")
+final_hidden_pd.to_csv("emi_pos_finalhidden_7NotY_3.csv")
 
 
 # In[4]:
@@ -334,12 +334,12 @@ final_hidden_pd.to_csv("emi_pos_finalhidden_7Y_4.csv")
 avg_hidden, final_hidden, final_cell = (b.get_rep(QVQLVQSGAEVKKPGASVKVSCKASGYTFTDYYMHWVRQAPGQGLEWMGRVNPNRRGTTYNQKFEGRVTMTTDTSTSTAYMELRSLRSDDTAVYYCARANWLDYWGQGTTVTVSS))
 
 
-# In[8]:
+# In[9]:
 
 
 import pickle
 save_loc = "C:\\Users\\pkinn\\Documents\\UniRep\\full representations\\emi larger set\\"
-data_name = 'emi_pos_reps_7Y_2'
+data_name = 'emi_pos_reps_7NotY_3'
 file_append = '.pickle'
 
 
