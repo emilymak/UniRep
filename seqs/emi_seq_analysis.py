@@ -93,7 +93,7 @@ emi_pos_seqs = emi_seqs.iloc[0:25675,:]
 emi_pos_seqs_char = []
 for seq in emi_pos_seqs['Sequences']:
     char = list(seq)
-    if char[103] == 'Y':
+    if char[103] != 'Y':
         char = ''.join(str(i) for i in char)
         emi_pos_seqs_char.append(char)
 emi_pos_seqs_char = pd.DataFrame(emi_pos_seqs_char)
@@ -103,7 +103,7 @@ emi_neg_seqs = emi_seqs.iloc[25675:40734,:]
 emi_neg_seqs_char = []
 for seq in emi_neg_seqs['Sequences']:
     char = list(seq)
-    if char[103] == 'Y':
+    if char[103] != 'Y':
         char = ''.join(str(i) for i in char)
         emi_neg_seqs_char.append(char)
 emi_neg_seqs_char = pd.DataFrame(emi_neg_seqs_char)
