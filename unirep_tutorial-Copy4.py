@@ -90,12 +90,12 @@ b.is_valid_seq(seq)
 # 
 # Sequence formatting can be done as follows:
 
-# In[ ]:
+# In[4]:
 
 
 # Before you can train your model, 
 sequences = []
-with open("emi_neg_seqs_7NotY_2.txt", "r") as source:
+with open("emi_neg_seqs_7Y_4.txt", "r") as source:
     with open("formatted.txt", "w") as destination:
         for i,seq in enumerate(source):
             seq = seq.strip()
@@ -279,7 +279,7 @@ with tf.Session() as sess:
 """
 
 
-# In[ ]:
+# In[5]:
 
 
 ## 
@@ -312,7 +312,7 @@ for i in num2:
 
 
 
-# In[7]:
+# In[6]:
 
 
 average_hidden_pd = pd.DataFrame(np.row_stack(average_hidden_list))
@@ -321,11 +321,11 @@ hidden_state = pd.DataFrame(np.row_stack(hs_list))
 print(hidden_state)
 
 
-# In[8]:
+# In[7]:
 
 
-average_hidden_pd.to_csv("emi_neg_reps_7NotY_2.csv")
-final_hidden_pd.to_csv("emi_neg_finalhidden_7NotY_2.csv")
+average_hidden_pd.to_csv("emi_neg_reps_7Y_4.csv")
+final_hidden_pd.to_csv("emi_neg_finalhidden_7Y_4.csv")
 
 
 # In[4]:
@@ -339,7 +339,7 @@ avg_hidden, final_hidden, final_cell = (b.get_rep(QVQLVQSGAEVKKPGASVKVSCKASGYTFT
 
 import pickle
 save_loc = "C:\\Users\\pkinn\\Documents\\UniRep\\full representations\\emi larger set\\"
-data_name = 'emi_neg_reps_7NotY_2'
+data_name = 'emi_neg_reps_7Y_4'
 file_append = '.pickle'
 
 

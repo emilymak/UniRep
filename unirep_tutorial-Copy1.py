@@ -90,7 +90,7 @@ b.is_valid_seq(seq)
 # 
 # Sequence formatting can be done as follows:
 
-# In[4]:
+# In[5]:
 
 
 # Before you can train your model, 
@@ -279,7 +279,7 @@ with tf.Session() as sess:
 """
 
 
-# In[5]:
+# In[6]:
 
 
 ## 
@@ -312,7 +312,7 @@ for i in num2:
 
 
 
-# In[6]:
+# In[7]:
 
 
 average_hidden_pd = pd.DataFrame(np.row_stack(average_hidden_list))
@@ -321,7 +321,7 @@ hidden_state = pd.DataFrame(np.row_stack(hs_list))
 print(hidden_state)
 
 
-# In[7]:
+# In[8]:
 
 
 average_hidden_pd.to_csv("emi_neg_reps_7Y_1.csv")
@@ -334,7 +334,7 @@ final_hidden_pd.to_csv("emi_neg_finalhidden_7Y_1.csv")
 avg_hidden, final_hidden, final_cell = (b.get_rep(QVQLVQSGAEVKKPGASVKVSCKASGYTFTDYYMHWVRQAPGQGLEWMGRVNPNRRGTTYNQKFEGRVTMTTDTSTSTAYMELRSLRSDDTAVYYCARANWLDYWGQGTTVTVSS))
 
 
-# In[8]:
+# In[9]:
 
 
 import pickle
