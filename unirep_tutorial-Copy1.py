@@ -90,7 +90,7 @@ b.is_valid_seq(seq)
 # 
 # Sequence formatting can be done as follows:
 
-# In[ ]:
+# In[4]:
 
 
 # Before you can train your model, 
@@ -279,7 +279,7 @@ with tf.Session() as sess:
 """
 
 
-# In[ ]:
+# In[5]:
 
 
 ## 
