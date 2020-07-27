@@ -91,22 +91,22 @@ emi_labels.columns = ['Sequences','PSY Binding']
 #%%
 emi_pos_seqs = emi_seqs.iloc[0:25675,:]
 emi_pos_seqs_char = []
-for seq in emi_pos_seqs['Sequences']:
-    char = list(seq)
-    if char[103] == 'Y':
+for index, row in emi_pos_seqs.iterrows():
+    char = list(row[0])
+    if char[103] != 'Y':
         char = ''.join(str(i) for i in char)
-        emi_pos_seqs_char.append(char)
-emi_pos_seqs_char = pd.DataFrame(emi_pos_seqs_char)
+        emi_pos_seqs_char.append(row)
+emi_pos_seqs = pd.DataFrame(emi_pos_seqs_char)
 emi_pos_seqs.set_index('Sequences', drop = True, inplace = True)
 
 emi_neg_seqs = emi_seqs.iloc[25675:40734,:]
 emi_neg_seqs_char = []
-for seq in emi_neg_seqs['Sequences']:
-    char = list(seq)
-    if char[103] == 'Y':
+for index, row in emi_neg_seqs.iterrows():
+    char = list(row[0])
+    if char[103] != 'Y':
         char = ''.join(str(i) for i in char)
-        emi_neg_seqs_char.append(char)
-emi_neg_seqs_char = pd.DataFrame(emi_neg_seqs_char)
+        emi_neg_seqs_char.append(row)
+emi_neg_seqs = pd.DataFrame(emi_neg_seqs_char)
 emi_neg_seqs.set_index('Sequences', drop = True, inplace = True)
 
 emi_pos_seq = []
@@ -191,20 +191,19 @@ emi_seqs_used_stringent.drop('rep2', inplace = True, axis = 1)
 
 
 #%%
-
+"""
 emi_seqs_used_stringent.reset_index(drop = True, inplace = True)
-emi_seqs_used_stringent.to_csv('emi_rep_labels_7A.csv', header = True, index = True)
+emi_seqs_used_stringent.to_csv('emi_rep_labels_7NotY.csv', header = True, index = True)
 
-emi_pos_seq_stringent.iloc[0:500,0].to_csv('emi_pos_seqs_7Y_1.txt', header = False, index = False)
-emi_neg_seq_stringent.iloc[0:500,0].to_csv('emi_neg_seqs_7Y_1.txt', header = False, index = False)
+emi_pos_seq_stringent.iloc[0:500,0].to_csv('emi_pos_seqs_7NotY_1.txt', header = False, index = False)
+emi_neg_seq_stringent.iloc[0:500,0].to_csv('emi_neg_seqs_7NotY_1.txt', header = False, index = False)
 
-emi_pos_seq_stringent.iloc[500:1000,0].to_csv('emi_pos_seqs_7Y_2.txt', header = False, index = False)
-emi_neg_seq_stringent.iloc[500:1000,0].to_csv('emi_neg_seqs_7Y_2.txt', header = False, index = False)
+emi_pos_seq_stringent.iloc[500:1000,0].to_csv('emi_pos_seqs_7NotY_2.txt', header = False, index = False)
+emi_neg_seq_stringent.iloc[500:1000,0].to_csv('emi_neg_seqs_7NotY_2.txt', header = False, index = False)
 
-emi_pos_seq_stringent.iloc[1000:1500,0].to_csv('emi_pos_seqs_7Y_3.txt', header = False, index = False)
-emi_neg_seq_stringent.iloc[1000:1500,0].to_csv('emi_neg_seqs_7Y_3.txt', header = False, index = False)
+emi_pos_seq_stringent.iloc[1000:1500,0].to_csv('emi_pos_seqs_7NotY_3.txt', header = False, index = False)
+emi_neg_seq_stringent.iloc[1000:1500,0].to_csv('emi_neg_seqs_7NotY_3.txt', header = False, index = False)
 
-emi_pos_seq_stringent.iloc[1500:2000,0].to_csv('emi_pos_seqs_7Y_4.txt', header = False, index = False)
-emi_neg_seq_stringent.iloc[15000:2000,0].to_csv('emi_neg_seqs_7Y_4.txt', header = False, index = False)
-
-
+emi_pos_seq_stringent.iloc[1500:2000,0].to_csv('emi_pos_seqs_7NotY_4.txt', header = False, index = False)
+emi_neg_seq_stringent.iloc[1500:2000,0].to_csv('emi_neg_seqs_7NotY_4.txt', header = False, index = False)
+"""
