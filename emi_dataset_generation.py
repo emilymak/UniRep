@@ -100,7 +100,7 @@ emi_reps.to_csv('emi_reps_7Y.csv', header = True, index = True)
 emi_pos_seqs_7Y = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_pos_seqs_7Y.txt", header = None, index_col = 0)
 emi_neg_seqs_7Y = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_neg_seqs_7Y.txt", header = None, index_col = 0)
 emi_seqs_7Y = pd.concat([emi_pos_seqs_7Y, emi_neg_seqs_7Y], axis = 0)
-emi_seqs_7Y.to_csv('emi_seqs_7Y_.csv', header = True, index = True)
+emi_seqs_7Y.to_csv('emi_seqs_7Y.csv', header = True, index = True)
 
 
 #%%

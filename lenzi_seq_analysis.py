@@ -191,7 +191,6 @@ lenzi_seqs_used_stringent.drop('rep2', inplace = True, axis = 1)
 
 
 #%%
-
 lenzi_seqs_used_stringent.reset_index(drop = True, inplace = True)
 lenzi_seqs_used_stringent.to_csv('lenzi_rep_labels_10Y.csv', header = True, index = True)
 

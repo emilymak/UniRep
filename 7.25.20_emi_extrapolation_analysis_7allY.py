@@ -110,6 +110,7 @@ emi_wt_ant_transform = pd.DataFrame(-1*(emi_ant.transform(emi_wt_rep)))
 
 #%%
 ### obtaining transformand predicting antigen binding of experimental iso clones
+emi_iso_ant_transform_7YLDA_all = pd.DataFrame(-1*(emi_ant.transform(emi_iso_reps)))
 emi_iso_ant_transform_7Y = pd.DataFrame(-1*(emi_ant.transform(emi_iso_reps_7Y)))
 emi_iso_ant_transform_7NotY = pd.DataFrame(-1*(emi_ant.transform(emi_iso_reps_7NotY)))
 emi_fit_ant_transform = pd.DataFrame(-1*(emi_ant.transform(emi_fit_reps)))
@@ -156,6 +157,7 @@ emi_wt_psy_transform = pd.DataFrame(emi_psy.transform(emi_wt_rep))
 
 #%%
 ### obtaining transformand predicting poly-specificity binding of experimental iso clones
+emi_iso_psy_transform_7YLDA_all = pd.DataFrame(emi_psy.transform(emi_iso_reps))
 emi_iso_psy_transform_7Y = pd.DataFrame(emi_psy.transform(emi_iso_reps_7Y))
 emi_iso_psy_transform_7NotY = pd.DataFrame(emi_psy.transform(emi_iso_reps_7NotY))
 emi_fit_psy_transform = pd.DataFrame(emi_psy.transform(emi_fit_reps))
@@ -188,4 +190,8 @@ plt.xlim(-4.75,3.5)
 plt.ylim(0,1.5)
 plt.tight_layout()
 
+
+#%%
+plt.scatter(emi_iso_ant_transform.iloc[:,0], emi_iso_ant_transform_7YLDA_all.iloc[:,0], c = emi_iso_binding.iloc[:,1], s = 65, cmap = 'viridis', edgecolor = 'k')
+plt.scatter(emi_iso_psy_transform.iloc[:,0], emi_iso_psy_transform_7YLDA_all.iloc[:,0], c = emi_iso_binding.iloc[:,2], s = 65, cmap = 'viridis', edgecolor = 'k')
 
