@@ -90,12 +90,12 @@ b.is_valid_seq(seq)
 # 
 # Sequence formatting can be done as follows:
 
-# In[4]:
+# In[ ]:
 
 
 # Before you can train your model, 
 sequences = []
-with open("emi_neg_seqs_6W_4.txt", "r") as source:
+with open("emi_neg_seqs_5A_4.txt", "r") as source:
     with open("formatted.txt", "w") as destination:
         for i,seq in enumerate(source):
             seq = seq.strip()
@@ -279,7 +279,7 @@ with tf.Session() as sess:
 """
 
 
-# In[5]:
+# In[ ]:
 
 
 ## 
@@ -324,8 +324,8 @@ print(hidden_state)
 # In[7]:
 
 
-average_hidden_pd.to_csv("emi_neg_reps_6W_4.csv")
-final_hidden_pd.to_csv("emi_neg_finalhidden_6W_4.csv")
+average_hidden_pd.to_csv("emi_neg_reps_5A_4.csv")
+final_hidden_pd.to_csv("emi_neg_finalhidden_5A_4.csv")
 
 
 # In[4]:
@@ -339,7 +339,7 @@ avg_hidden, final_hidden, final_cell = (b.get_rep(QVQLVQSGAEVKKPGASVKVSCKASGYTFT
 
 import pickle
 save_loc = "C:\\Users\\pkinn\\Documents\\UniRep\\full representations\\emi larger set\\"
-data_name = 'emi_neg_reps_6W_4'
+data_name = 'emi_neg_reps_5A_4'
 file_append = '.pickle'
 
 
