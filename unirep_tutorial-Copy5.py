@@ -7,13 +7,13 @@
 
 # Use the 64-unit or the 1900-unit model?
 
+# ## Setup
+
 # In[1]:
 
 
 USE_FULL_1900_DIM_MODEL = False # if True use 1900 dimensional model, else use 64 dimensional one.
 
-
-# ## Setup
 
 # In[2]:
 
@@ -95,7 +95,7 @@ b.is_valid_seq(seq)
 
 # Before you can train your model, 
 sequences = []
-with open("lenzi_pos_seqs_10Y_3.txt", "r") as source:
+with open("emi_neg_seqs_6W_1.txt", "r") as source:
     with open("formatted.txt", "w") as destination:
         for i,seq in enumerate(source):
             seq = seq.strip()
@@ -324,8 +324,8 @@ print(hidden_state)
 # In[7]:
 
 
-average_hidden_pd.to_csv("lenzi_pos_reps_10Y_3.csv")
-final_hidden_pd.to_csv("lenzi_pos_finalhidden_10Y_3.csv")
+average_hidden_pd.to_csv("emi_neg_reps_6W_1.csv")
+final_hidden_pd.to_csv("emi_neg_finalhidden_6W_1.csv")
 
 
 # In[4]:
@@ -334,12 +334,12 @@ final_hidden_pd.to_csv("lenzi_pos_finalhidden_10Y_3.csv")
 avg_hidden, final_hidden, final_cell = (b.get_rep(QVQLVQSGAEVKKPGASVKVSCKASGYTFTDYYMHWVRQAPGQGLEWMGRVNPNRRGTTYNQKFEGRVTMTTDTSTSTAYMELRSLRSDDTAVYYCARANWLDYWGQGTTVTVSS))
 
 
-# In[ ]:
+# In[8]:
 
 
 import pickle
 save_loc = "C:\\Users\\pkinn\\Documents\\UniRep\\full representations\\emi larger set\\"
-data_name = 'lenzi_pos_reps_10Y_3'
+data_name = 'emi_neg_reps_6W_1'
 file_append = '.pickle'
 
 
