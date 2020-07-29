@@ -58,12 +58,12 @@ emi_labels = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_rep_l
 emi_biophys = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_biophys_stringent.csv", header = 0, index_col = 0)
 
 emi_iso_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_iso_reps.csv", header = 0, index_col = 0)
-emi_zero_rep = pd.DataFrame(emi_iso_reps.iloc[78,:]).T
+emi_zero_rep = pd.DataFrame(emi_iso_reps.iloc[61,:]).T
 emi_iso_binding = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_iso_binding.csv", header = 0, index_col = None)
 
 emi_wt_rep = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_wt_rep.csv", header = 0, index_col = 0)
 emi_wt_binding = pd.DataFrame([1,1])
-emi_zero_binding = pd.DataFrame([emi_iso_binding.iloc[78,1:3]]).T
+emi_zero_binding = pd.DataFrame([emi_iso_binding.iloc[61,1:3]]).T
 emi_wt_binding.index = ['ANT Normalized Binding', 'PSY Normalized Binding']
 emi_fit_reps = pd.concat([emi_wt_rep, emi_zero_rep])
 emi_fit_binding = pd.concat([emi_wt_binding, emi_zero_binding], axis = 1, ignore_index = True).T
@@ -276,3 +276,8 @@ cbar.set_ticks([])
 cbar.set_label('Hamming Distance from WT', fontsize = 14)
 plt.tight_layout()
 
+#%%
+"""
+emi_iso_ant_transform.iloc[:,0].to_csv('emi_iso_ant_transforms.csv', header = ['All Mutations'], index = True)
+emi_iso_psy_transform.iloc[:,0].to_csv('emi_iso_psy_transforms.csv', header = ['All Mutations'], index = True)
+"""
