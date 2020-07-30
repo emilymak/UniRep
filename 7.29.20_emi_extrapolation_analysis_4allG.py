@@ -53,8 +53,8 @@ sns.set_style("white")
 
 
 #%%
-emi_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_reps_6W.csv", header = 0, index_col = 0)
-emi_labels = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_rep_labels_6W.csv", header = 0, index_col = 0)
+emi_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_reps_4G.csv", header = 0, index_col = 0)
+emi_labels = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_rep_labels_4G.csv", header = 0, index_col = 0)
 
 emi_iso_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_iso_seqs.csv", header = None)
 emi_iso_seqs.columns = ['Sequences']
@@ -63,30 +63,30 @@ emi_iso_binding = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_
 emi_iso_ant_transforms = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_iso_ant_transforms.csv", header = 0, index_col = 0)
 emi_iso_psy_transforms = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_iso_psy_transforms.csv", header = 0, index_col = 0)
 
-emi_iso_seqs_6W = []
-emi_iso_reps_6W = []
-emi_iso_binding_6W = []
-emi_iso_seqs_6NotW = []
-emi_iso_reps_6NotW = []
-emi_iso_binding_6NotW = []
+emi_iso_seqs_4G = []
+emi_iso_reps_4G = []
+emi_iso_binding_4G = []
+emi_iso_seqs_4NotG = []
+emi_iso_reps_4NotG = []
+emi_iso_binding_4NotG = []
 for index, row in emi_iso_seqs.iterrows():
     char = list(row[0])
-    if char[100] == 'W':
+    if char[56] == 'G':
         char = ''.join(str(i) for i in char)
-        emi_iso_seqs_6W.append(char)
-        emi_iso_reps_6W.append(emi_iso_reps.loc[index,:])
-        emi_iso_binding_6W.append(emi_iso_binding.loc[index,:])
-    if char[100] != 'W':
+        emi_iso_seqs_4G.append(char)
+        emi_iso_reps_4G.append(emi_iso_reps.loc[index,:])
+        emi_iso_binding_4G.append(emi_iso_binding.loc[index,:])
+    if char[56] != 'G':
         char = ''.join(str(i) for i in char)
-        emi_iso_seqs_6NotW.append(char)
-        emi_iso_reps_6NotW.append(emi_iso_reps.loc[index,:])
-        emi_iso_binding_6NotW.append(emi_iso_binding.loc[index,:])
-emi_iso_seqs_6W = pd.DataFrame(emi_iso_seqs_6W)
-emi_iso_seqs_6NotW = pd.DataFrame(emi_iso_seqs_6NotW)
-emi_iso_reps_6W = pd.DataFrame(emi_iso_reps_6W)
-emi_iso_reps_6NotW = pd.DataFrame(emi_iso_reps_6NotW)
-emi_iso_binding_6W = pd.DataFrame(emi_iso_binding_6W)
-emi_iso_binding_6NotW = pd.DataFrame(emi_iso_binding_6NotW)
+        emi_iso_seqs_4NotG.append(char)
+        emi_iso_reps_4NotG.append(emi_iso_reps.loc[index,:])
+        emi_iso_binding_4NotG.append(emi_iso_binding.loc[index,:])
+emi_iso_seqs_4G = pd.DataFrame(emi_iso_seqs_4G)
+emi_iso_seqs_4NotG = pd.DataFrame(emi_iso_seqs_4NotG)
+emi_iso_reps_4G = pd.DataFrame(emi_iso_reps_4G)
+emi_iso_reps_4NotG = pd.DataFrame(emi_iso_reps_4NotG)
+emi_iso_binding_4G = pd.DataFrame(emi_iso_binding_4G)
+emi_iso_binding_4NotG = pd.DataFrame(emi_iso_binding_4NotG)
 
 emi_wt_rep = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_wt_rep.csv", header = 0, index_col = 0)
 emi_wt_binding = pd.DataFrame([1,1])
@@ -112,37 +112,37 @@ emi_wt_ant_transform = pd.DataFrame(-1*(emi_ant.transform(emi_wt_rep)))
 
 #%%
 ### obtaining transformand predicting antigen binding of experimental iso clones
-emi_iso_ant_transform_6WLDA_all = pd.DataFrame(-1*(emi_ant.transform(emi_iso_reps)))
-emi_iso_ant_transform_6W = pd.DataFrame(-1*(emi_ant.transform(emi_iso_reps_6W)))
-emi_iso_ant_transform_6NotW = pd.DataFrame(-1*(emi_ant.transform(emi_iso_reps_6NotW)))
+emi_iso_ant_transform_4GLDA_all = pd.DataFrame(-1*(emi_ant.transform(emi_iso_reps)))
+emi_iso_ant_transform_4G = pd.DataFrame(-1*(emi_ant.transform(emi_iso_reps_4G)))
+emi_iso_ant_transform_4NotG = pd.DataFrame(-1*(emi_ant.transform(emi_iso_reps_4NotG)))
 emi_fit_ant_transform = pd.DataFrame(-1*(emi_ant.transform(emi_fit_reps)))
-emi_iso_ant_predict_6W = pd.DataFrame(emi_ant.predict(emi_iso_reps_6W))
-emi_iso_ant_predict_6NotW = pd.DataFrame(emi_ant.predict(emi_iso_reps_6NotW))
+emi_iso_ant_predict_4G = pd.DataFrame(emi_ant.predict(emi_iso_reps_4G))
+emi_iso_ant_predict_4NotG = pd.DataFrame(emi_ant.predict(emi_iso_reps_4NotG))
 #emi_fit_ant_predict = pd.DataFrame(emi_ant.predict(emi_fit_reps))
-print(stats.spearmanr(emi_iso_ant_transform_6WLDA_all.iloc[:,0], emi_iso_binding.iloc[:,1]))
-print(stats.spearmanr(emi_iso_ant_transform_6W.iloc[:,0], emi_iso_binding_6W.iloc[:,1]))
-print(stats.spearmanr(emi_iso_ant_transform_6NotW.iloc[:,0], emi_iso_binding_6NotW.iloc[:,1]))
+print(stats.spearmanr(emi_iso_ant_transform_4GLDA_all.iloc[:,0], emi_iso_binding.iloc[:,1]))
+print(stats.spearmanr(emi_iso_ant_transform_4G.iloc[:,0], emi_iso_binding_4G.iloc[:,1]))
+print(stats.spearmanr(emi_iso_ant_transform_4NotG.iloc[:,0], emi_iso_binding_4NotG.iloc[:,1]))
 
 x1 = np.polyfit(emi_fit_ant_transform.iloc[:,0], emi_fit_binding.iloc[:,0],1)
 emi_ant_transform['Fraction ANT Binding'] = ((emi_ant_transform.iloc[:,0]*x1[0])+x1[1])
-emi_iso_ant_transform_6W['Fraction ANT Binding'] = ((emi_iso_ant_transform_6W.iloc[:,0]*x1[0])+x1[1])
-emi_iso_ant_transform_6NotW['Fraction ANT Binding'] = ((emi_iso_ant_transform_6NotW.iloc[:,0]*x1[0])+x1[1])
+emi_iso_ant_transform_4G['Fraction ANT Binding'] = ((emi_iso_ant_transform_4G.iloc[:,0]*x1[0])+x1[1])
+emi_iso_ant_transform_4NotG['Fraction ANT Binding'] = ((emi_iso_ant_transform_4NotG.iloc[:,0]*x1[0])+x1[1])
 emi_fit_ant_transform['Fraction ANT Binding'] = ((emi_fit_ant_transform.iloc[:,0]*x1[0])+x1[1])
 
 plt.figure(1)
-plt.scatter(emi_iso_ant_transform_6NotW.iloc[:,0], emi_iso_binding_6NotW.iloc[:,1], c = emi_iso_ant_predict_6NotW.iloc[:,0], cmap = cmap3, edgecolor = 'k', s = 75)
-plt.scatter(emi_iso_ant_transform_6W.iloc[:,0], emi_iso_binding_6W.iloc[:,1], c = 'k', edgecolor = 'k', s = 75)
+plt.scatter(emi_iso_ant_transform_4NotG.iloc[:,0], emi_iso_binding_4NotG.iloc[:,1], c = emi_iso_ant_predict_4NotG.iloc[:,0], cmap = cmap3, edgecolor = 'k', s = 75)
+plt.scatter(emi_iso_ant_transform_4G.iloc[:,0], emi_iso_binding_4G.iloc[:,1], c = 'k', edgecolor = 'k', s = 75)
 plt.scatter(emi_wt_ant_transform, 1, s = 75, c = 'crimson', edgecolor = 'k')
 xd = np.linspace(-3.5, 0, 100)
 plt.plot(xd, ((xd*x1[0])+x1[1]), c= 'k', lw = 2, linestyle= ':')
 plt.tick_params(labelsize = 12)
-y_patch = mpatches.Patch(facecolor='black', label = 'Sequence 97=W', edgecolor = 'black', linewidth = 0.5)
+y_patch = mpatches.Patch(facecolor='black', label = 'Sequence 56=W', edgecolor = 'black', linewidth = 0.5)
 neg_gate_patch = mpatches.Patch(facecolor='dodgerblue', label = 'LDA Predicted No ANT Binding', edgecolor = 'black', linewidth = 0.5)
 pos_gate_patch = mpatches.Patch(facecolor = 'darkorange', label = 'LDA Predicted ANT Binding', edgecolor = 'black', linewidth = 0.5)
 legend = plt.legend(handles=[y_patch, neg_gate_patch, pos_gate_patch], fontsize = 11)
 plt.ylabel('Display Normalalized Antigen Binding', fontsize = 16)
 plt.xlabel('LDA Transform', fontsize = 16)
-plt.title('Experimental Antigen Binding vs LDA Transform 97=W', fontsize = 17)
+plt.title('Experimental Antigen Binding vs LDA Transform 56=W', fontsize = 17)
 plt.tight_layout()
 
 
@@ -161,37 +161,37 @@ emi_wt_psy_transform = pd.DataFrame(emi_psy.transform(emi_wt_rep))
 
 #%%
 ### obtaining transformand predicting poly-specificity binding of experimental iso clones
-emi_iso_psy_transform_6WLDA_all = pd.DataFrame(emi_psy.transform(emi_iso_reps))
-emi_iso_psy_transform_6W = pd.DataFrame(emi_psy.transform(emi_iso_reps_6W))
-emi_iso_psy_transform_6NotW = pd.DataFrame(emi_psy.transform(emi_iso_reps_6NotW))
+emi_iso_psy_transform_4GLDA_all = pd.DataFrame(emi_psy.transform(emi_iso_reps))
+emi_iso_psy_transform_4G = pd.DataFrame(emi_psy.transform(emi_iso_reps_4G))
+emi_iso_psy_transform_4NotG = pd.DataFrame(emi_psy.transform(emi_iso_reps_4NotG))
 emi_fit_psy_transform = pd.DataFrame(emi_psy.transform(emi_fit_reps))
-emi_iso_psy_predict_6W = pd.DataFrame(emi_psy.predict(emi_iso_reps_6W))
-emi_iso_psy_predict_6NotW = pd.DataFrame(emi_psy.predict(emi_iso_reps_6NotW))
+emi_iso_psy_predict_4G = pd.DataFrame(emi_psy.predict(emi_iso_reps_4G))
+emi_iso_psy_predict_4NotG = pd.DataFrame(emi_psy.predict(emi_iso_reps_4NotG))
 #emi_fit_psy_predict = pd.DataFrame(emi_psy.predict(emi_fit_reps))
-print(stats.spearmanr(emi_iso_psy_transform_6WLDA_all.iloc[:,0], emi_iso_binding.iloc[:,1]))
-print(stats.spearmanr(emi_iso_psy_transform_6W.iloc[:,0], emi_iso_binding_6W.iloc[:,1]))
-print(stats.spearmanr(emi_iso_psy_transform_6NotW.iloc[:,0], emi_iso_binding_6NotW.iloc[:,1]))
+print(stats.spearmanr(emi_iso_psy_transform_4GLDA_all.iloc[:,0], emi_iso_binding.iloc[:,1]))
+print(stats.spearmanr(emi_iso_psy_transform_4G.iloc[:,0], emi_iso_binding_4G.iloc[:,1]))
+print(stats.spearmanr(emi_iso_psy_transform_4NotG.iloc[:,0], emi_iso_binding_4NotG.iloc[:,1]))
 
 x2 = np.polyfit(emi_fit_psy_transform.iloc[:,0], emi_fit_binding.iloc[:,1],1)
 emi_psy_transform['Fraction PSY Binding'] = ((emi_psy_transform.iloc[:,0]*x2[0])+x2[1])
-emi_iso_psy_transform_6W['Fraction PSY Binding'] = ((emi_iso_psy_transform_6W.iloc[:,0]*x2[0])+x2[1])
-emi_iso_psy_transform_6NotW['Fraction PSY Binding'] = ((emi_iso_psy_transform_6NotW.iloc[:,0]*x2[0])+x2[1])
+emi_iso_psy_transform_4G['Fraction PSY Binding'] = ((emi_iso_psy_transform_4G.iloc[:,0]*x2[0])+x2[1])
+emi_iso_psy_transform_4NotG['Fraction PSY Binding'] = ((emi_iso_psy_transform_4NotG.iloc[:,0]*x2[0])+x2[1])
 emi_fit_psy_transform['Fraction PSY Binding'] = ((emi_fit_psy_transform.iloc[:,0]*x2[0])+x2[1])
 
 plt.figure(3)
-plt.scatter(emi_iso_psy_transform_6NotW.iloc[:,0], emi_iso_binding_6NotW.iloc[:,2], c = emi_iso_psy_predict_6NotW.iloc[:,0], cmap = cmap1, edgecolor = 'k', s = 75)
-plt.scatter(emi_iso_psy_transform_6W.iloc[:,0], emi_iso_binding_6W.iloc[:,2], c = 'k', edgecolor = 'k', s = 75)
+plt.scatter(emi_iso_psy_transform_4NotG.iloc[:,0], emi_iso_binding_4NotG.iloc[:,2], c = emi_iso_psy_predict_4NotG.iloc[:,0], cmap = cmap1, edgecolor = 'k', s = 75)
+plt.scatter(emi_iso_psy_transform_4G.iloc[:,0], emi_iso_binding_4G.iloc[:,2], c = 'k', edgecolor = 'k', s = 75)
 plt.scatter(emi_wt_psy_transform, 1, s = 75, c = 'crimson', edgecolor = 'k')
 xd = np.linspace(-1.5, 2.5, 100)
 plt.plot(xd, ((xd*x2[0])+x2[1]), c= 'k', lw = 2, linestyle= ':')
 plt.tick_params(labelsize = 12)
-y_patch = mpatches.Patch(facecolor='black', label = 'Sequence 97=W', edgecolor = 'black', linewidth = 0.5)
+y_patch = mpatches.Patch(facecolor='black', label = 'Sequence 56=W', edgecolor = 'black', linewidth = 0.5)
 neg_gate_patch = mpatches.Patch(facecolor='mediumspringgreen', label = 'LDA Predicted No PSY Binding', edgecolor = 'black', linewidth = 0.5)
 pos_gate_patch = mpatches.Patch(facecolor = 'darkviolet', label = 'LDA Predicted PSY Binding', edgecolor = 'black', linewidth = 0.5)
 legend = plt.legend(handles=[y_patch, neg_gate_patch, pos_gate_patch], fontsize = 11)
 plt.ylabel('Display Normalalized PSY Binding', fontsize = 16)
 plt.xlabel('LDA Transform', fontsize = 16)
-plt.title('Experimental PSY Binding vs LDA Transform 97=W', fontsize = 18)
+plt.title('Experimental PSY Binding vs LDA Transform 56=W', fontsize = 18)
 plt.xlim(-4.5,5)
 plt.ylim(0,1.35)
 plt.tight_layout()
@@ -199,9 +199,9 @@ plt.tight_layout()
 
 #%%
 """
-emi_iso_ant_transforms = pd.concat([emi_iso_ant_transforms, emi_iso_ant_transform_6WLDA_all.iloc[:,0]], axis = 1)
-emi_iso_psy_transforms = pd.concat([emi_iso_psy_transforms, emi_iso_psy_transform_6WLDA_all.iloc[:,0]], axis = 1)
+emi_iso_ant_transforms = pd.concat([emi_iso_ant_transforms, emi_iso_ant_transform_4GLDA_all.iloc[:,0]], axis = 1)
+emi_iso_psy_transforms = pd.concat([emi_iso_psy_transforms, emi_iso_psy_transform_4GLDA_all.iloc[:,0]], axis = 1)
 
-emi_iso_ant_transforms.to_csv('emi_iso_ant_transforms.csv', header = ['All Mutations', 'LO 7', 'LO 6'], index = True)
-emi_iso_psy_transforms.to_csv('emi_iso_psy_transforms.csv', header = ['All Mutations', 'LO 7', 'LO 6'], index = True)
+emi_iso_ant_transforms.to_csv('emi_iso_ant_transforms.csv', header = ['All Mutations', 'LO 7', 'LO 6', 'LO 5', 'LO 4'], index = True)
+emi_iso_psy_transforms.to_csv('emi_iso_psy_transforms.csv', header = ['All Mutations', 'LO 7', 'LO 6', 'LO 5', 'LO 4'], index = True)
 """
