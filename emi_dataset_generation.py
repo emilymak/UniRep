@@ -84,38 +84,38 @@ emi_seqs_stringent.to_csv('emi_seqs_stringent.csv', header = True, index = True)
 
 
 #%%
-emi_pos_reps_4G_1 = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_pos_reps_4G_1.csv", header = 0, index_col = 0)
-emi_pos_reps_4G_2 = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_pos_reps_4G_2.csv", header = 0, index_col = 0)
-emi_pos_reps_4G_3 = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_pos_reps_4G_3.csv", header = 0, index_col = 0)
-emi_pos_reps_4G_4 = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_pos_reps_4G_4.csv", header = 0, index_col = 0) 
+emi_pos_reps_0Y_1 = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_pos_reps_0Y_1.csv", header = 0, index_col = 0)
+emi_pos_reps_0Y_2 = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_pos_reps_0Y_2.csv", header = 0, index_col = 0)
+emi_pos_reps_0Y_3 = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_pos_reps_0Y_3.csv", header = 0, index_col = 0)
+emi_pos_reps_0Y_4 = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_pos_reps_0Y_4.csv", header = 0, index_col = 0) 
 
-emi_neg_reps_4G_1 = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_neg_reps_4G_1.csv", header = 0, index_col = 0)
-emi_neg_reps_4G_2 = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_neg_reps_4G_2.csv", header = 0, index_col = 0)
-emi_neg_reps_4G_3 = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_neg_reps_4G_3.csv", header = 0, index_col = 0)
-emi_neg_reps_4G_4 = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_neg_reps_4G_4.csv", header = 0, index_col = 0)
+emi_neg_reps_0Y_1 = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_neg_reps_0Y_1.csv", header = 0, index_col = 0)
+emi_neg_reps_0Y_2 = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_neg_reps_0Y_2.csv", header = 0, index_col = 0)
+emi_neg_reps_0Y_3 = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_neg_reps_0Y_3.csv", header = 0, index_col = 0)
+emi_neg_reps_0Y_4 = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_neg_reps_0Y_4.csv", header = 0, index_col = 0)
 
-emi_reps = pd.concat([emi_pos_reps_4G_1, emi_pos_reps_4G_2, emi_pos_reps_4G_3, emi_pos_reps_4G_4, emi_neg_reps_4G_1, emi_neg_reps_4G_2, emi_neg_reps_4G_3, emi_neg_reps_4G_4], axis = 0)
-emi_reps.to_csv('emi_reps_4G.csv', header = True, index = True)
+emi_reps = pd.concat([emi_pos_reps_0Y_1, emi_pos_reps_0Y_2, emi_pos_reps_0Y_3, emi_pos_reps_0Y_4, emi_neg_reps_0Y_1, emi_neg_reps_0Y_2, emi_neg_reps_0Y_3, emi_neg_reps_0Y_4], axis = 0)
+emi_reps.to_csv('emi_reps_0Y.csv', header = True, index = True)
 
-emi_pos_seqs_4G = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_pos_seqs_4G.txt", header = None, index_col = 0)
-emi_neg_seqs_4G = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_neg_seqs_4G.txt", header = None, index_col = 0)
-emi_seqs_4G = pd.concat([emi_pos_seqs_4G, emi_neg_seqs_4G], axis = 0)
-emi_seqs_4G.to_csv('emi_seqs_4G.csv', header = True, index = True)
+emi_pos_seqs_0Y = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_pos_seqs_0Y.txt", header = None, index_col = 0)
+emi_neg_seqs_0Y = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_neg_seqs_0Y.txt", header = None, index_col = 0)
+emi_seqs_0Y = pd.concat([emi_pos_seqs_0Y, emi_neg_seqs_0Y], axis = 0)
+emi_seqs_0Y.to_csv('emi_seqs_0Y.csv', header = True, index = True)
 
 
 #%%
-emi_pos_final_hidden_4G_1 = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_pos_finalhidden_4G_1.csv", header = 0, index_col = 0)
-emi_pos_final_hidden_4G_2 = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_pos_finalhidden_4G_2.csv", header = 0, index_col = 0)
-emi_pos_final_hidden_4G_3 = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_pos_finalhidden_4G_3.csv", header = 0, index_col = 0)
-emi_pos_final_hidden_4G_4 = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_pos_finalhidden_4G_4.csv", header = 0, index_col = 0) 
+emi_pos_final_hidden_0Y_1 = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_pos_finalhidden_0Y_1.csv", header = 0, index_col = 0)
+emi_pos_final_hidden_0Y_2 = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_pos_finalhidden_0Y_2.csv", header = 0, index_col = 0)
+emi_pos_final_hidden_0Y_3 = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_pos_finalhidden_0Y_3.csv", header = 0, index_col = 0)
+emi_pos_final_hidden_0Y_4 = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_pos_finalhidden_0Y_4.csv", header = 0, index_col = 0) 
 
-emi_neg_final_hidden_4G_1 = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_neg_finalhidden_4G_1.csv", header = 0, index_col = 0)
-emi_neg_final_hidden_4G_2 = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_neg_finalhidden_4G_2.csv", header = 0, index_col = 0)
-emi_neg_final_hidden_4G_3 = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_neg_finalhidden_4G_3.csv", header = 0, index_col = 0)
-emi_neg_final_hidden_4G_4 = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_neg_finalhidden_4G_4.csv", header = 0, index_col = 0)
+emi_neg_final_hidden_0Y_1 = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_neg_finalhidden_0Y_1.csv", header = 0, index_col = 0)
+emi_neg_final_hidden_0Y_2 = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_neg_finalhidden_0Y_2.csv", header = 0, index_col = 0)
+emi_neg_final_hidden_0Y_3 = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_neg_finalhidden_0Y_3.csv", header = 0, index_col = 0)
+emi_neg_final_hidden_0Y_4 = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_neg_finalhidden_0Y_4.csv", header = 0, index_col = 0)
 
-emi_final_hidden = pd.concat([emi_pos_final_hidden_4G_1, emi_pos_final_hidden_4G_2, emi_pos_final_hidden_4G_3, emi_pos_final_hidden_4G_4, emi_neg_final_hidden_4G_1, emi_neg_final_hidden_4G_2, emi_neg_final_hidden_4G_3, emi_neg_final_hidden_4G_4], axis = 0)
-emi_final_hidden.to_csv('emi_final_hidden_4G.csv', header = True, index = True)
+emi_final_hidden = pd.concat([emi_pos_final_hidden_0Y_1, emi_pos_final_hidden_0Y_2, emi_pos_final_hidden_0Y_3, emi_pos_final_hidden_0Y_4, emi_neg_final_hidden_0Y_1, emi_neg_final_hidden_0Y_2, emi_neg_final_hidden_0Y_3, emi_neg_final_hidden_0Y_4], axis = 0)
+emi_final_hidden.to_csv('emi_final_hidden_0Y.csv', header = True, index = True)
 
 
 #%%
