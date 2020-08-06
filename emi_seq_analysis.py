@@ -93,7 +93,7 @@ emi_pos_seqs = emi_seqs.iloc[0:25675,:]
 emi_pos_seqs_char = []
 for index, row in emi_pos_seqs.iterrows():
     char = list(row[0])
-    if (char[49] == 'R') & (char[98] == 'A'):
+    if (char[54] == 'R') & (char[100] == 'W'):
         char = ''.join(str(i) for i in char)
         emi_pos_seqs_char.append(row)
 emi_pos_seqs = pd.DataFrame(emi_pos_seqs_char)
@@ -103,7 +103,7 @@ emi_neg_seqs = emi_seqs.iloc[25675:40734,:]
 emi_neg_seqs_char = []
 for index, row in emi_neg_seqs.iterrows():
     char = list(row[0])
-    if (char[49] == 'R') & (char[98] == 'A'):
+    if (char[54] == 'R') & (char[100] == 'W'):
         char = ''.join(str(i) for i in char)
         emi_neg_seqs_char.append(row)
 emi_neg_seqs = pd.DataFrame(emi_neg_seqs_char)
@@ -191,7 +191,7 @@ emi_seqs_used_stringent.drop('rep2', inplace = True, axis = 1)
 
 
 #%%
-
+"""
 emi_seqs_used_stringent.reset_index(drop = True, inplace = True)
 emi_seqs_used_stringent.to_csv('emi_rep_labels_1R5A.csv', header = True, index = True)
 
@@ -207,3 +207,4 @@ emi_neg_seq_stringent.iloc[1000:1500,0].to_csv('emi_neg_seqs_1R5A_3.txt', header
 emi_pos_seq_stringent.iloc[1500:2000,0].to_csv('emi_pos_seqs_1R5A_4.txt', header = False, index = False)
 emi_neg_seq_stringent.iloc[1500:2000,0].to_csv('emi_neg_seqs_1R5A_4.txt', header = False, index = False)
 
+"""

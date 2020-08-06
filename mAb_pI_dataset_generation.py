@@ -14,8 +14,9 @@ from collections import Counter
 
 #%%
 ### residue counts
-seqs = pd.read_csv("C:\\Users\\makow\\Documents\\Research\\Code\\mAb pI Investigation\\mAb_seqs_psr.csv")
-residues_info = pd.read_csv("C:\\Users\\makow\\Documents\\Research\\Code\\mAb pI Investigation\\residue_dict.csv", header = 0, index_col = 0)
+seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_iso_seqs.csv", header = None)
+seqs.columns = ['VH']
+residues_info = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\residue_dict_new.csv", header = 0, index_col = 0)
 amino_acids_vh = pd.DataFrame(index = residues_info.index)
 amino_acids_vl = pd.DataFrame(index = residues_info.index)
 
@@ -28,6 +29,7 @@ amino_acids_vh.fillna(0, inplace = True)
 
 amino_acids_vh = amino_acids_vh.T
 
+"""
 for i in seqs['VL']:
     residues = list(i)
     counts = pd.DataFrame(list(Counter(residues).items())).set_index([0])
@@ -40,7 +42,7 @@ amino_acids_vl = amino_acids_vl.T
 amino_acids = amino_acids_vh + amino_acids_vl
 
 #amino_acids.to_csv('mAb_residue_counts.csv', header = True, index = True)
-
+"""
 
 #%%
 ### tripeptide frequencies
@@ -103,7 +105,7 @@ for i in seqs['VH']:
     vh_residue_dict_stack['Sum'] = vh_residue_dict_stack.mean(axis = 1)
     vh_residue_dict.append(vh_residue_dict_stack['Sum'].values)
 vh_residue_dict = pd.DataFrame(vh_residue_dict)
-
+"""
 vl_residue_dict = []
 for i in seqs['VL']:
     vl_residue_dict_stack = []
@@ -136,6 +138,9 @@ cdr_residue_dict = pd.DataFrame(cdr_residue_dict)
 mAb_residue_prop = pd.concat([vh_residue_dict, vl_residue_dict, cdr_residue_dict], axis = 1)
 mAb_residue_prop.index = tripep_counts.index
 mAb_residue_prop.columns = ['VH Positive Charge', 'VH Negative Charge', 'VH HM', 'VH pI', 'VH Charged', 'VH Polar', 'VH Hydrophobic', 'VH Aromatic', 'VH Amphipathic', 'VH Atoms', 'VH Bond A', 'VH Bond D', 'VL Positive Charge', 'VL Negative Charge', 'VL HM', 'VL pI', 'VL Charged' ,'VL Polar', 'VL Hydrophobic', 'VL Aromatic', 'VL Amphipathic', 'VL Atoms', 'VL Bond A', 'VL Bond D', 'CDR Positive Charge', 'CDR Negative Charge', 'CDR HM', 'CDR pI', 'CDR Charged', 'CDR Polar', 'CDR Hydrophobic', 'CDR Aromatic', 'CDR Amphipathic', 'CDR Atoms', 'CDR Bond A', 'CDR Bond D']
+"""
+mAb_residue_prop = vh_residue_dict
+mAb_residue_prop.columns = ['VH Positive Charge', 'VH Negative Charge', 'VH HM', 'VH pI', 'VH Charged', 'VH Polar', 'VH Hydrophobic', 'VH Aromatic', 'VH Amphipathic', 'VH Atoms', 'VH Bond A', 'VH Bond D']
 
 #mAb_residue_prop.to_csv('mAb_residue_prop.csv', index = True, header= True)
 
