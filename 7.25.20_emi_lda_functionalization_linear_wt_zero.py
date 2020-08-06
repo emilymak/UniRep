@@ -282,3 +282,94 @@ emi_iso_ant_transform.iloc[:,0].to_csv('emi_iso_ant_transforms.csv', header = ['
 emi_iso_psy_transform.iloc[:,0].to_csv('emi_iso_psy_transforms.csv', header = ['All Mutations'], index = True)
 """
 
+
+#%%
+colormap6 = np.array(['gold', 'darkviolet'])
+colormap7 = np.array(['mediumvioletred','darkblue'])
+cmap6 = LinearSegmentedColormap.from_list("mycmap", colormap6)
+cmap7 = LinearSegmentedColormap.from_list("mycmap", colormap7)
+
+
+fig, (ax1, ax2) = plt.subplots(1,2, figsize = (9,4))
+
+ax1.scatter(emi_iso_ant_transform.iloc[:,0], emi_iso_binding.iloc[:,1], c = emi_iso_ant_predict.iloc[:,0], cmap = cmap7, edgecolor = 'k', s = 50)
+ax1.tick_params(labelsize = 14)
+neg_gate_patch = mpatches.Patch(facecolor='darkblue', label = 'Predicted High Affinity', edgecolor = 'black', linewidth = 0.5)
+pos_gate_patch = mpatches.Patch(facecolor = 'mediumvioletred', label = 'Predicted Low Affinity', edgecolor = 'black', linewidth = 0.5)
+legend = ax1.legend(handles=[pos_gate_patch, neg_gate_patch], fontsize = 12)
+ax1.set_xlim(-3.5,4.5)
+ax1.set_ylabel('Normalalized Affinity', fontsize = 19)
+ax1.set_xlabel('Affinity Transform', fontsize = 19)
+
+ax2.scatter(emi_iso_psy_transform.iloc[:,0], emi_iso_binding.iloc[:,2], c = emi_iso_psy_predict.iloc[:,0], cmap = cmap6, edgecolor = 'k', s = 50)
+ax2.tick_params(labelsize = 14)
+neg_gate_patch = mpatches.Patch(facecolor='gold', label = 'Predicted High Specificity', edgecolor = 'black', linewidth = 0.5)
+pos_gate_patch = mpatches.Patch(facecolor = 'darkviolet', label = 'Predicted Low Specificity', edgecolor = 'black', linewidth = 0.5)
+legend = ax2.legend(handles=[pos_gate_patch, neg_gate_patch], fontsize = 12, loc = 2)
+ax2.set_ylabel('Normalized Polyspecificity', fontsize = 19)
+ax2.set_xlabel('Polyspecificity Transform', fontsize = 19)
+ax2.set_xlim(-4.5,3.5)
+ax2.set_xticks(np.arange(-4, 3.1, step=2))
+ax2.set_yticks(np.arange(0, 1.6, step=0.5))
+ax2.set_ylim(0,1.5)
+fig.tight_layout(pad = 1.5)
+
+
+#%%
+emi_color = [0]*4000
+emi_optimal_sequences = []
+for index, row in emi_ant_transform.iterrows():
+    if (emi_ant_transform.iloc[index,1] > 0.45) & (emi_psy_transform.iloc[index,1] < 1):
+        emi_color[index] = 1
+    if (emi_ant_transform.iloc[index,1] > 0.50) & (emi_psy_transform.iloc[index,1] < 0.95):
+        emi_color[index] = 2
+    if (emi_ant_transform.iloc[index,1] > 0.55) & (emi_psy_transform.iloc[index,1] < 0.90):
+        emi_color[index] = 3
+    if (emi_ant_transform.iloc[index,1] > 0.60) & (emi_psy_transform.iloc[index,1] < 0.85):
+        emi_color[index] = 4
+    if (emi_ant_transform.iloc[index,1] > 0.65) & (emi_psy_transform.iloc[index,1] < 0.80):
+        emi_color[index] = 5
+    if (emi_ant_transform.iloc[index,1] > 0.70) & (emi_psy_transform.iloc[index,1] < 0.75):
+        emi_color[index] = 6
+    if (emi_ant_transform.iloc[index,1] > 0.75) & (emi_psy_transform.iloc[index,1] < 0.70):
+        emi_color[index] = 7
+    if (emi_ant_transform.iloc[index,1] > 0.80) & (emi_psy_transform.iloc[index,1] < 0.65):
+        emi_color[index] = 8
+    if (emi_ant_transform.iloc[index,1] > 0.85) & (emi_psy_transform.iloc[index,1] < 0.60):
+        emi_color[index] = 9
+    if (emi_ant_transform.iloc[index,1] > 0.90) & (emi_psy_transform.iloc[index,1] < 0.55):
+        emi_color[index] = 10
+    if (emi_ant_transform.iloc[index,1] > 0.95) & (emi_psy_transform.iloc[index,1] < 0.50):
+        emi_color[index] = 11
+    if (emi_ant_transform.iloc[index,1] > 1) & (emi_psy_transform.iloc[index,1] < .45):
+        emi_color[index] = 12
+
+
+#%%
+emi_ant_transform['Function'] = emi_ant_transform.iloc[:,1]
+for index, row in emi_ant_transform.iterrows():
+    if emi_ant_transform.loc[index, 'Function'] < 0:
+        emi_ant_transform.loc[index,'Function'] = 0
+    
+fig, ax4 = plt.subplots(1,1, figsize = (5.25,4.75))
+img = plt.scatter(emi_ant_transform.iloc[:,0], emi_psy_transform.iloc[:,0], c = emi_ant_transform.iloc[:,2], cmap = 'plasma')
+cbar = plt.colorbar(img, ax = ax4)
+cbar.set_ticks([])
+cbar.set_label('Normalized Binding Affinity      ', fontsize = 18)
+plt.ylabel('            Increasing Specificity', fontsize = 20)
+plt.yticks([])
+plt.xticks([])
+plt.xlabel('            Increasing Affinity', fontsize = 20)
+
+
+#%%
+fig = plt.figure()
+ax = fig.gca(projection='3d')
+
+surf = ax.plot_trisurf(emi_ant_transform.iloc[:,0], emi_psy_transform.iloc[:,0], emi_biophys.loc[:,'pI'], cmap = 'plasma',
+                       linewidth=0, antialiased=False)
+
+plt.show()
+
+
+

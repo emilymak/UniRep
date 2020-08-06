@@ -43,11 +43,13 @@ colormap2 = np.array(['mediumspringgreen', 'darkturquoise', 'navy', 'darkviolet'
 colormap3 = np.array(['dodgerblue', 'darkorange'])
 colormap4 = np.array(['black', 'orangered', 'darkorange', 'yellow'])
 colormap5 = np.array(['darkgrey', 'black', 'darkgrey', 'grey'])
+colormap6 = np.array(['darkviolet'])
 cmap1 = LinearSegmentedColormap.from_list("mycmap", colormap1)
 cmap2 = LinearSegmentedColormap.from_list("mycmap", colormap2)
 cmap3 = LinearSegmentedColormap.from_list("mycmap", colormap3)
 cmap4 = LinearSegmentedColormap.from_list("mycmap", colormap4)
 cmap5 = LinearSegmentedColormap.from_list("mycmap", colormap5)
+cmap6 = LinearSegmentedColormap.from_list("mycmap", colormap5)
 
 sns.set_style("white")
 
@@ -71,12 +73,12 @@ emi_iso_reps_0NotY = []
 emi_iso_binding_0NotY = []
 for index, row in emi_iso_seqs.iterrows():
     char = list(row[0])
-    if char[56] == 'G':
+    if char[32] == 'Y':
         char = ''.join(str(i) for i in char)
         emi_iso_seqs_0Y.append(char)
         emi_iso_reps_0Y.append(emi_iso_reps.loc[index,:])
         emi_iso_binding_0Y.append(emi_iso_binding.loc[index,:])
-    if char[56] != 'G':
+    if char[32] != 'Y':
         char = ''.join(str(i) for i in char)
         emi_iso_seqs_0NotY.append(char)
         emi_iso_reps_0NotY.append(emi_iso_reps.loc[index,:])
@@ -130,19 +132,20 @@ emi_iso_ant_transform_0NotY['Fraction ANT Binding'] = ((emi_iso_ant_transform_0N
 emi_fit_ant_transform['Fraction ANT Binding'] = ((emi_fit_ant_transform.iloc[:,0]*x1[0])+x1[1])
 
 plt.figure(1)
-plt.scatter(emi_iso_ant_transform_0NotY.iloc[:,0], emi_iso_binding_0NotY.iloc[:,1], c = emi_iso_ant_predict_0NotY.iloc[:,0], cmap = cmap3, edgecolor = 'k', s = 75)
 plt.scatter(emi_iso_ant_transform_0Y.iloc[:,0], emi_iso_binding_0Y.iloc[:,1], c = 'k', edgecolor = 'k', s = 75)
+plt.scatter(emi_iso_ant_transform_0NotY.iloc[:,0], emi_iso_binding_0NotY.iloc[:,1], c = emi_iso_ant_predict_0NotY.iloc[:,0], cmap = cmap3, edgecolor = 'k', s = 75)
+
 plt.scatter(emi_wt_ant_transform, 1, s = 75, c = 'crimson', edgecolor = 'k')
 xd = np.linspace(-3.5, 0, 100)
 plt.plot(xd, ((xd*x1[0])+x1[1]), c= 'k', lw = 2, linestyle= ':')
 plt.tick_params(labelsize = 12)
-y_patch = mpatches.Patch(facecolor='black', label = 'Sequence 56=W', edgecolor = 'black', linewidth = 0.5)
+y_patch = mpatches.Patch(facecolor='black', label = 'Sequence 33=Y', edgecolor = 'black', linewidth = 0.5)
 neg_gate_patch = mpatches.Patch(facecolor='dodgerblue', label = 'LDA Predicted No ANT Binding', edgecolor = 'black', linewidth = 0.5)
 pos_gate_patch = mpatches.Patch(facecolor = 'darkorange', label = 'LDA Predicted ANT Binding', edgecolor = 'black', linewidth = 0.5)
 legend = plt.legend(handles=[y_patch, neg_gate_patch, pos_gate_patch], fontsize = 11)
 plt.ylabel('Display Normalalized Antigen Binding', fontsize = 16)
 plt.xlabel('LDA Transform', fontsize = 16)
-plt.title('Experimental Antigen Binding vs LDA Transform 56=W', fontsize = 17)
+plt.title('Experimental Antigen Binding vs LDA Transform 33=Y', fontsize = 17)
 plt.tight_layout()
 
 
@@ -185,20 +188,20 @@ plt.scatter(emi_wt_psy_transform, 1, s = 75, c = 'crimson', edgecolor = 'k')
 xd = np.linspace(-1.5, 2.5, 100)
 plt.plot(xd, ((xd*x2[0])+x2[1]), c= 'k', lw = 2, linestyle= ':')
 plt.tick_params(labelsize = 12)
-y_patch = mpatches.Patch(facecolor='black', label = 'Sequence 56=W', edgecolor = 'black', linewidth = 0.5)
+y_patch = mpatches.Patch(facecolor='black', label = 'Sequence 33=Y', edgecolor = 'black', linewidth = 0.5)
 neg_gate_patch = mpatches.Patch(facecolor='mediumspringgreen', label = 'LDA Predicted No PSY Binding', edgecolor = 'black', linewidth = 0.5)
 pos_gate_patch = mpatches.Patch(facecolor = 'darkviolet', label = 'LDA Predicted PSY Binding', edgecolor = 'black', linewidth = 0.5)
 legend = plt.legend(handles=[y_patch, neg_gate_patch, pos_gate_patch], fontsize = 11)
 plt.ylabel('Display Normalalized PSY Binding', fontsize = 16)
 plt.xlabel('LDA Transform', fontsize = 16)
-plt.title('Experimental PSY Binding vs LDA Transform 56=W', fontsize = 18)
+plt.title('Experimental PSY Binding vs LDA Transform 33=Y', fontsize = 18)
 plt.xlim(-4.5,5)
 plt.ylim(0,1.35)
 plt.tight_layout()
 
 
 #%%
-
+"""
 emi_iso_ant_transforms = pd.concat([emi_iso_ant_transforms, emi_iso_ant_transform_0YLDA_all.iloc[:,0]], axis = 1)
 emi_iso_psy_transforms = pd.concat([emi_iso_psy_transforms, emi_iso_psy_transform_0YLDA_all.iloc[:,0]], axis = 1)
 
@@ -206,9 +209,40 @@ emi_iso_ant_transforms.to_csv('emi_iso_ant_transforms.csv', header = ['All Mutat
 emi_iso_psy_transforms.to_csv('emi_iso_psy_transforms.csv', header = ['All Mutations', 'LO 7', 'LO 6', 'LO 5', 'LO 4', 'LO 3', 'LO 2', 'LO 1', 'LO 0'], index = True)
 
 
-sns.pairplot(emi_iso_ant_transforms)
+#%%
+yes = ['yes']*177
+yes = pd.DataFrame(yes)
+yes_index = emi_iso_ant_transforms.index
+yes.columns = ['Yes']
+emi_iso_ant_transforms = pd.concat([emi_iso_ant_transforms, yes], axis = 1)
+
+
+#%%
+#fig, ax = plt.figure(0, figsize = (10,8))
+ax = sns.pairplot(emi_iso_ant_transforms, hue = 'Yes', palette = colormap6)
+ax.fig.set_size_inches(12,12)
+
+
+#%%
+sns.pairplot(emi_iso_psy_transforms)
 plt.tight_layout()
 
-sns.pairplot(emi_iso_psy_transforms, palette = 'darkviolet')
-plt.tight_layout()
+
+#%%
+transform_corrmat_ant = emi_iso_ant_transforms.corr(method = 'spearman')
+sns.heatmap(transform_corrmat_ant, annot = True, cmap = 'plasma')
+
+plt.figure(1)
+transform_corrmat_psy = emi_iso_psy_transforms.corr(method = 'spearman')
+sns.heatmap(transform_corrmat_psy, annot = True, cmap = 'plasma')
+
+
+#%%
+mask = np.triu(np.ones_like(transform_corrmat_ant, dtype=np.bool))
+f, ax = plt.subplots(figsize=(10, 8))
+sns.heatmap(transform_corrmat_ant, mask = mask, cmap = 'plasma', annot = True, annot_kws = {'fontsize': 18})
+ax.set_xticklabels([])
+ax.set_yticklabels([])
+"""
+
 

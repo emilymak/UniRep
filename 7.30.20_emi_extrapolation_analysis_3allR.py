@@ -71,12 +71,12 @@ emi_iso_reps_3NotR = []
 emi_iso_binding_3NotR = []
 for index, row in emi_iso_seqs.iterrows():
     char = list(row[0])
-    if char[56] == 'G':
+    if char[55] == 'R':
         char = ''.join(str(i) for i in char)
         emi_iso_seqs_3R.append(char)
         emi_iso_reps_3R.append(emi_iso_reps.loc[index,:])
         emi_iso_binding_3R.append(emi_iso_binding.loc[index,:])
-    if char[56] != 'G':
+    if char[55] != 'R':
         char = ''.join(str(i) for i in char)
         emi_iso_seqs_3NotR.append(char)
         emi_iso_reps_3NotR.append(emi_iso_reps.loc[index,:])
@@ -136,13 +136,13 @@ plt.scatter(emi_wt_ant_transform, 1, s = 75, c = 'crimson', edgecolor = 'k')
 xd = np.linspace(-3.5, 0, 100)
 plt.plot(xd, ((xd*x1[0])+x1[1]), c= 'k', lw = 2, linestyle= ':')
 plt.tick_params(labelsize = 12)
-y_patch = mpatches.Patch(facecolor='black', label = 'Sequence 56=W', edgecolor = 'black', linewidth = 0.5)
+y_patch = mpatches.Patch(facecolor='black', label = 'Sequence 55=R', edgecolor = 'black', linewidth = 0.5)
 neg_gate_patch = mpatches.Patch(facecolor='dodgerblue', label = 'LDA Predicted No ANT Binding', edgecolor = 'black', linewidth = 0.5)
 pos_gate_patch = mpatches.Patch(facecolor = 'darkorange', label = 'LDA Predicted ANT Binding', edgecolor = 'black', linewidth = 0.5)
 legend = plt.legend(handles=[y_patch, neg_gate_patch, pos_gate_patch], fontsize = 11)
 plt.ylabel('Display Normalalized Antigen Binding', fontsize = 16)
 plt.xlabel('LDA Transform', fontsize = 16)
-plt.title('Experimental Antigen Binding vs LDA Transform 56=W', fontsize = 17)
+plt.title('Experimental Antigen Binding vs LDA Transform 55=R', fontsize = 17)
 plt.tight_layout()
 
 
@@ -185,13 +185,13 @@ plt.scatter(emi_wt_psy_transform, 1, s = 75, c = 'crimson', edgecolor = 'k')
 xd = np.linspace(-1.5, 2.5, 100)
 plt.plot(xd, ((xd*x2[0])+x2[1]), c= 'k', lw = 2, linestyle= ':')
 plt.tick_params(labelsize = 12)
-y_patch = mpatches.Patch(facecolor='black', label = 'Sequence 56=W', edgecolor = 'black', linewidth = 0.5)
+y_patch = mpatches.Patch(facecolor='black', label = 'Sequence 55=R', edgecolor = 'black', linewidth = 0.5)
 neg_gate_patch = mpatches.Patch(facecolor='mediumspringgreen', label = 'LDA Predicted No PSY Binding', edgecolor = 'black', linewidth = 0.5)
 pos_gate_patch = mpatches.Patch(facecolor = 'darkviolet', label = 'LDA Predicted PSY Binding', edgecolor = 'black', linewidth = 0.5)
 legend = plt.legend(handles=[y_patch, neg_gate_patch, pos_gate_patch], fontsize = 11)
 plt.ylabel('Display Normalalized PSY Binding', fontsize = 16)
 plt.xlabel('LDA Transform', fontsize = 16)
-plt.title('Experimental PSY Binding vs LDA Transform 56=W', fontsize = 18)
+plt.title('Experimental PSY Binding vs LDA Transform 55=R', fontsize = 18)
 plt.xlim(-4.5,5)
 plt.ylim(0,1.35)
 plt.tight_layout()
