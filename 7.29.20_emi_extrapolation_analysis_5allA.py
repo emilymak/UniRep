@@ -135,11 +135,13 @@ emi_ant_transform['Fraction ANT Binding'] = ((emi_ant_transform.iloc[:,0]*x1[0])
 emi_iso_ant_transform_5A['Fraction ANT Binding'] = ((emi_iso_ant_transform_5A.iloc[:,0]*x1[0])+x1[1])
 emi_iso_ant_transform_5NotA['Fraction ANT Binding'] = ((emi_iso_ant_transform_5NotA.iloc[:,0]*x1[0])+x1[1])
 emi_fit_ant_transform['Fraction ANT Binding'] = ((emi_fit_ant_transform.iloc[:,0]*x1[0])+x1[1])
-
-plt.figure(1)
-plt.scatter(emi_iso_ant_transform_5NotA.iloc[:,0], emi_iso_binding_5NotA.iloc[:,1], c = emi_iso_biophys_5NotA.iloc[:,2], cmap = cmap3, edgecolor = 'k', s = 75)
-plt.scatter(emi_iso_ant_transform_5A.iloc[:,0], emi_iso_binding_5A.iloc[:,1], c = 'k', edgecolor = 'k', s = 75)
-plt.scatter(emi_wt_ant_transform, 1, s = 75, c = 'crimson', edgecolor = 'k')
+colormap7 = np.array(['mediumvioletred','darkblue'])
+cmap7 = LinearSegmentedColormap.from_list("mycmap", colormap7)
+plt.figure(1, figsize = (4.5,4))
+plt.scatter(emi_iso_ant_transform_5NotA.iloc[:,0], emi_iso_binding_5NotA.iloc[:,1], c = emi_iso_ant_predict_5NotA.iloc[:,0], cmap = cmap7, edgecolor = 'k', s = 75, zorder = 4)
+plt.scatter(emi_iso_ant_transform_5A.iloc[:,0], emi_iso_binding_5A.iloc[:,1], c = 'white', edgecolor = 'k', s = 75)
+#plt.scatter(emi_wt_ant_transform, 1, s = 75, c = 'crimson', edgecolor = 'k')
+"""
 xd = np.linspace(-3.5, 0, 100)
 plt.plot(xd, ((xd*x1[0])+x1[1]), c= 'k', lw = 2, linestyle= ':')
 plt.tick_params(labelsize = 12)
@@ -147,9 +149,17 @@ y_patch = mpatches.Patch(facecolor='black', label = 'Sequence 95=A', edgecolor =
 neg_gate_patch = mpatches.Patch(facecolor='dodgerblue', label = 'LDA Predicted No ANT Binding', edgecolor = 'black', linewidth = 0.5)
 pos_gate_patch = mpatches.Patch(facecolor = 'darkorange', label = 'LDA Predicted ANT Binding', edgecolor = 'black', linewidth = 0.5)
 legend = plt.legend(handles=[y_patch, neg_gate_patch, pos_gate_patch], fontsize = 11)
-plt.ylabel('Display Normalalized Antigen Binding', fontsize = 16)
-plt.xlabel('LDA Transform', fontsize = 16)
-plt.title('Experimental Antigen Binding vs LDA Transform 95=A', fontsize = 17)
+"""
+neg_gate_patch = mpatches.Patch(facecolor='darkblue', label = 'Predicted High Affinity', edgecolor = 'black', linewidth = 0.5)
+pos_gate_patch = mpatches.Patch(facecolor = 'mediumvioletred', label = 'Predicted Low Affinity', edgecolor = 'black', linewidth = 0.5)
+
+legend = plt.legend(handles=[pos_gate_patch, neg_gate_patch], fontsize = 12)
+
+plt.tick_params(labelsize = 14)
+plt.ylabel('Normalized Affinity', fontsize = 19)
+plt.xlabel('Affinity Transform', fontsize = 19)
+#plt.title('Experimental Antigen Binding vs LDA Transform 95=A', fontsize = 17)
+
 plt.tight_layout()
 
 
