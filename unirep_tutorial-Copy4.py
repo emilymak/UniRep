@@ -47,7 +47,7 @@ batch_size = 50
 b = babbler(batch_size=batch_size, model_path=MODEL_WEIGHT_PATH)
 
 
-# In[ ]:
+# In[4]:
 
 
 # Before you can train your model, 
@@ -63,7 +63,7 @@ with open("emi_pos_seqs_5G6A_4.txt", "r") as source:
                 destination.write('\n')
 
 
-# In[ ]:
+# In[5]:
 
 
 ## 
