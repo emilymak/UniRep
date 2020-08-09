@@ -47,12 +47,12 @@ batch_size = 50
 b = babbler(batch_size=batch_size, model_path=MODEL_WEIGHT_PATH)
 
 
-# In[4]:
+# In[ ]:
 
 
 # Before you can train your model, 
 sequences = []
-with open("emi_pos_seqs_0Y1R_3.txt", "r") as source:
+with open("emi_pos_seqs_5G6A_3.txt", "r") as source:
     with open("formatted.txt", "w") as destination:
         for i,seq in enumerate(source):
             seq = seq.strip()
@@ -63,7 +63,7 @@ with open("emi_pos_seqs_0Y1R_3.txt", "r") as source:
                 destination.write('\n')
 
 
-# In[5]:
+# In[ ]:
 
 
 ## 
@@ -102,8 +102,8 @@ print(hidden_state)
 # In[7]:
 
 
-average_hidden_pd.to_csv("emi_pos_reps_0Y1R_3.csv")
-final_hidden_pd.to_csv("emi_pos_finalhidden_0Y1R_3.csv")
+average_hidden_pd.to_csv("emi_pos_reps_5G6A_3.csv")
+final_hidden_pd.to_csv("emi_pos_finalhidden_5G6A_3.csv")
 
 
 # In[8]:
@@ -111,7 +111,7 @@ final_hidden_pd.to_csv("emi_pos_finalhidden_0Y1R_3.csv")
 
 import pickle
 save_loc = "C:\\Users\\pkinn\\Documents\\UniRep\\full representations\\emi larger set\\"
-data_name = 'emi_pos_reps_0Y1R_3'
+data_name = 'emi_pos_reps_5G6A_3'
 file_append = '.pickle'
 
 
