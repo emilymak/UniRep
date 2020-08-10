@@ -259,6 +259,8 @@ cbar.set_ticks([])
 cbar.set_label('Stringency of Property Requirements', fontsize = 14)
 plt.tight_layout()
 
+sns.distplot(emi_iso_binding[emi_iso_binding.index <= 139]['PSY Normalized Binding'], bins = 10, norm_hist = False, color = 'darkviolet', label = 'Early')
+sns.distplot(emi_iso_binding[emi_iso_binding.index >= 139]['PSY Normalized Binding'], bins = 10, norm_hist = False, color = 'mediumspringgreen', label = 'Later')
 
 #%%
 fig, ax = plt.subplots(figsize = (7,4.5))
@@ -360,16 +362,6 @@ plt.ylabel('            Increasing Specificity', fontsize = 20)
 plt.yticks([])
 plt.xticks([])
 plt.xlabel('            Increasing Affinity', fontsize = 20)
-
-
-#%%
-fig = plt.figure()
-ax = fig.gca(projection='3d')
-
-surf = ax.plot_trisurf(emi_ant_transform.iloc[:,0], emi_psy_transform.iloc[:,0], emi_biophys.loc[:,'pI'], cmap = 'plasma',
-                       linewidth=0, antialiased=False)
-
-plt.show()
 
 
 
