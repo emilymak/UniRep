@@ -60,6 +60,13 @@ emi_iso_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_iso
 emi_iso_seqs.columns = ['Sequences']
 emi_iso_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_iso_reps.csv", header = 0, index_col = 0)
 emi_iso_binding = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_iso_binding.csv", header = 0, index_col = None)
+emi_iso_binding['CLF'] = 0
+emi_iso_binding['CLF PSY'] = 0
+for index, row in emi_iso_binding.iterrows():
+    if row[1] > 0.1:
+        emi_iso_binding.loc[index,'CLF'] = 1
+    if row[2] > 0.6:
+        emi_iso_binding.loc[index, 'CLF PSY'] = 1
 emi_iso_ant_transforms = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_iso_ant_transforms.csv", header = 0, index_col = 0)
 emi_iso_psy_transforms = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_iso_psy_transforms.csv", header = 0, index_col = 0)
 
@@ -122,6 +129,7 @@ emi_iso_ant_predict_1NotR = pd.DataFrame(emi_ant.predict(emi_iso_reps_1NotR))
 print(stats.spearmanr(emi_iso_ant_transform_1RLDA_all.iloc[:,0], emi_iso_binding.iloc[:,1]))
 print(stats.spearmanr(emi_iso_ant_transform_1R.iloc[:,0], emi_iso_binding_1R.iloc[:,1]))
 print(stats.spearmanr(emi_iso_ant_transform_1NotR.iloc[:,0], emi_iso_binding_1NotR.iloc[:,1]))
+print(accuracy_score(emi_iso_ant_predict_1NotR.iloc[:,0], emi_iso_binding_1NotR.iloc[:,3]))
 
 x1 = np.polyfit(emi_fit_ant_transform.iloc[:,0], emi_fit_binding.iloc[:,0],1)
 emi_ant_transform['Fraction ANT Binding'] = ((emi_ant_transform.iloc[:,0]*x1[0])+x1[1])
@@ -171,6 +179,7 @@ emi_iso_psy_predict_1NotR = pd.DataFrame(emi_psy.predict(emi_iso_reps_1NotR))
 print(stats.spearmanr(emi_iso_psy_transform_1RLDA_all.iloc[:,0], emi_iso_binding.iloc[:,1]))
 print(stats.spearmanr(emi_iso_psy_transform_1R.iloc[:,0], emi_iso_binding_1R.iloc[:,1]))
 print(stats.spearmanr(emi_iso_psy_transform_1NotR.iloc[:,0], emi_iso_binding_1NotR.iloc[:,1]))
+print(accuracy_score(emi_iso_psy_predict_1NotR.iloc[:,0], emi_iso_binding_1NotR.iloc[:,4]))
 
 x2 = np.polyfit(emi_fit_psy_transform.iloc[:,0], emi_fit_binding.iloc[:,1],1)
 emi_psy_transform['Fraction PSY Binding'] = ((emi_psy_transform.iloc[:,0]*x2[0])+x2[1])
@@ -204,11 +213,11 @@ emi_iso_psy_transforms = pd.concat([emi_iso_psy_transforms, emi_iso_psy_transfor
 
 emi_iso_ant_transforms.to_csv('emi_iso_ant_transforms.csv', header = ['All Mutations', 'LO 7', 'LO 6', 'LO 5', 'LO 4', 'LO 3', 'LO 2', 'LO 1'], index = True)
 emi_iso_psy_transforms.to_csv('emi_iso_psy_transforms.csv', header = ['All Mutations', 'LO 7', 'LO 6', 'LO 5', 'LO 4', 'LO 3', 'LO 2', 'LO 1'], index = True)
-"""
+
 
 sns.pairplot(emi_iso_ant_transforms)
 plt.tight_layout()
 
 sns.pairplot(emi_iso_psy_transforms, palette = 'darkviolet')
 plt.tight_layout()
-
+"""

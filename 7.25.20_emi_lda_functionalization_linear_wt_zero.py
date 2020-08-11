@@ -72,6 +72,14 @@ wt_seq = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_wt_seq.cs
 emi_iso_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_iso_seqs.csv", header = None)
 emi_iso_seqs.columns = ['Sequences']
 
+emi_iso_binding['CLF'] = 0
+emi_iso_binding['CLF PSY'] = 0
+for index, row in emi_iso_binding.iterrows():
+    if row[1] > 0.1:
+        emi_iso_binding.loc[index,'CLF'] = 1
+    if row[2] > 0.6:
+        emi_iso_binding.loc[index, 'CLF PSY'] = 1
+
 hamming_distance_iso_from_wt_seq = []
 for i in emi_iso_seqs['Sequences']:
     characters = list(i)
@@ -259,8 +267,9 @@ cbar.set_ticks([])
 cbar.set_label('Stringency of Property Requirements', fontsize = 14)
 plt.tight_layout()
 
-sns.distplot(emi_iso_binding[emi_iso_binding.index <= 139]['PSY Normalized Binding'], bins = 10, norm_hist = False, color = 'darkviolet', label = 'Early')
-sns.distplot(emi_iso_binding[emi_iso_binding.index >= 139]['PSY Normalized Binding'], bins = 10, norm_hist = False, color = 'mediumspringgreen', label = 'Later')
+sns.distplot(emi_iso_binding[emi_iso_binding.index <= 139]['PSY Normalized Binding'], bins = 10, norm_hist = False, color = 'darkviolet', label = 'Early Clones')
+sns.distplot(emi_iso_binding[emi_iso_binding.index >= 139]['PSY Normalized Binding'], bins = 10, norm_hist = False, color = 'mediumspringgreen', label = 'Later Clones')
+plt.legend()
 
 #%%
 fig, ax = plt.subplots(figsize = (7,4.5))
@@ -364,4 +373,7 @@ plt.xticks([])
 plt.xlabel('            Increasing Affinity', fontsize = 20)
 
 
+#%%
+print(accuracy_score(emi_iso_ant_predict.iloc[:,0], emi_iso_binding.iloc[:,3]))
+print(accuracy_score(emi_iso_psy_predict.iloc[:,0], emi_iso_binding.iloc[:,4]))
 

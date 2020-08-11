@@ -71,6 +71,9 @@ emi_fit_binding = pd.concat([emi_wt_binding, emi_zero_binding], axis = 1, ignore
 
 emi_iso_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_iso_seqs.csv", header = None)
 emi_iso_seqs.columns = ['Sequences']
+emi_iso_seqs = emi_iso_seqs.iloc[0:139,:]
+emi_iso_reps = emi_iso_reps.iloc[0:139,:]
+emi_iso_binding = emi_iso_binding.iloc[0:139,:]
 
 emi_iso_seqs_0Y1NotR = []
 emi_iso_reps_0Y1NotR = []

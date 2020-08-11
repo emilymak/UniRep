@@ -24,6 +24,8 @@ from matplotlib.colors import ListedColormap, LinearSegmentedColormap
 from sklearn.metrics import confusion_matrix
 from sklearn.linear_model import LinearRegression as LR
 from sklearn.preprocessing import MinMaxScaler
+from statsmodels.stats.weightstats import ztest
+from scipy.spatial.distance import jensenshannon
 
 colormap1 = np.array(['mediumspringgreen','darkviolet'])
 colormap2 = np.array(['mediumspringgreen', 'darkturquoise', 'navy', 'darkviolet'])
@@ -58,91 +60,30 @@ emi_labels = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_rep_l
 
 #%%
 reps_train, reps_test, labels_train, labels_test = train_test_split(emi_reps, emi_labels)
-c = np.arange(0.0001, 0.05, 0.0001)
+c = np.arange(0.0001, 0.005, 0.0001)
 
-svc_accuracy_1 = []
-svc_coefs_1 = []
-num_coefs_1 = []
+svc_accuracy = []
+svc_coefs = []
+num_coefs = []
 for i in c:
     svc = LinearSVC(penalty = 'l1', C = i, dual = False, max_iter = 100000)
     svc.fit(reps_train, labels_train.iloc[:,2])
     test_pred = svc.predict(reps_test)
-    svc_accuracy_1.append(accuracy_score(test_pred, labels_test.iloc[:,2]))
-    svc_coefs_1.append(svc.coef_)
-    num_coefs_1.append(np.count_nonzero(svc.coef_))
+    svc_accuracy.append(accuracy_score(test_pred, labels_test.iloc[:,2]))
+    svc_coefs.append(svc.coef_)
+    num_coefs.append(np.count_nonzero(svc.coef_))
 
-svc_coef_stack_1 = np.vstack(svc_coefs_1)
-svc_coef_stack_pd_1 = pd.DataFrame(svc_coef_stack_1)
-
-#%%
-reps_train, reps_test, labels_train, labels_test = train_test_split(emi_reps, emi_labels)
-
-svc_accuracy_2 = []
-svc_coefs_2 = []
-num_coefs_2 = []
-for i in c:
-    svc = LinearSVC(penalty = 'l1', C = i, dual = False)
-    svc.fit(emi_reps, emi_labels.iloc[:,3])
-    svc_accuracy_2.append(svc.score(reps_test, labels_test.iloc[:,3]))
-    svc_coefs_2.append(svc.coef_)
-    num_coefs_2.append(np.count_nonzero(svc.coef_))
-
-svc_coef_stack_2 = np.vstack(svc_coefs_2)
-svc_coef_stack_pd_2 = pd.DataFrame(svc_coef_stack_2)
-
-#%%
-reps_train, reps_test, labels_train, labels_test = train_test_split(emi_reps, emi_labels)
-
-svc_accuracy_3 = []
-svc_coefs_3 = []
-num_coefs_3 = []
-for i in c:
-    svc = LinearSVC(penalty = 'l1', C = i, dual = False)
-    svc.fit(reps_train, labels_train.iloc[:,2])
-    svc_accuracy_3.append(svc.score(reps_test, labels_test.iloc[:,2]))
-    svc_coefs_3.append(svc.coef_)
-    num_coefs_3.append(np.count_nonzero(svc.coef_))
-
-svc_coef_stack_3 = np.vstack(svc_coefs_3)
-svc_coef_stack_pd_3 = pd.DataFrame(svc_coef_stack_3)
-
-#%%
-reps_train, reps_test, labels_train, labels_test = train_test_split(emi_reps, emi_labels)
-
-svc_accuracy_4 = []
-svc_coefs_4 = []
-num_coefs_4 = []
-for i in c:
-    svc = LinearSVC(penalty = 'l1', C = i, dual = False)
-    svc.fit(reps_train, labels_train.iloc[:,2])
-    svc_accuracy_4.append(svc.score(reps_test, labels_test.iloc[:,2]))
-    svc_coefs_4.append(svc.coef_)
-    num_coefs_4.append(np.count_nonzero(svc.coef_))
-
-svc_coef_stack_4 = np.vstack(svc_coefs_4)
-svc_coef_stack_pd_4 = pd.DataFrame(svc_coef_stack_4)
+svc_coef_stack = np.vstack(svc_coefs)
+svc_coef_stack_pd = pd.DataFrame(svc_coef_stack)
 
 
 #%%
-num_coefs = []
-for i in np.arange(0,199,1):
-    nums = np.mean([num_coefs_1[i], num_coefs_2[i], num_coefs_3[i], num_coefs_4[i]])
-    num_coefs.append(nums)
-
-svc_accuracy = []
-for i in np.arange(0,199,1):
-    svc_acc = np.mean([svc_accuracy_1[i], svc_accuracy_2[i], svc_accuracy_3[i], svc_accuracy_4[i]])
-    svc_accuracy.append(svc_acc)
-
-#svc_coef_stack_pd = np.mean([svc_coef_stack_pd_1, svc_coef_stack_pd_2, svc_coef_stack_pd_3, svc_coef_stack_pd_4])
-
-#%%
-plt.scatter(num_coefs_1, svc_accuracy_1)
-plt.plot(svc_coef_stack_pd_1.iloc[5:30,:])
+plt.scatter(num_coefs, svc_accuracy)
+plt.plot(svc_coef_stack_pd.iloc[5:25,:])
 
 
 #%%
-emi_feats = pd.DataFrame(emi_reps.iloc[:,1146])
+emi_feats = pd.DataFrame(emi_reps.iloc[:,1899])
 emi_feats.columns = ['Second']
 emi_feats['First'] = emi_reps.iloc[:,849]
 
@@ -154,5 +95,121 @@ for i in emi_biophys.columns:
     plt.figure()
     plt.scatter(emi_feats.iloc[:,0], emi_feats.iloc[:,1], c = emi_biophys.loc[:,i], alpha = 0.5, cmap = 'viridis', edgecolor = 'k')
 
+
+#%%
+emi_pos_hs = pd.read_pickle("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_PS_pos_hidden_state.pickle")
+emi_neg_hs = pd.read_pickle("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_PS_neg_hidden_state.pickle")
+
+#%%
+### 849
+pos_849 = []
+for i in np.arange(0,116):
+    pos_849_act = []
+    for j in np.arange(0,2000):
+         pos_849_act.append(emi_pos_hs[j][i][849])
+    pos_849.append(np.mean(pos_849_act))
+    
+neg_849 = []
+for i in np.arange(0,116):
+    neg_849_act = []
+    for j in np.arange(0,2000):
+         neg_849_act.append(emi_neg_hs[j][i][849])
+    neg_849.append(np.mean(neg_849_act))
+   
+diff_849 = []
+for i in np.arange(0,116):
+    diff_849.append(neg_849[i]-pos_849[i])
+    
+plt.plot(diff_849)    
+    
+    
+#%%
+### 1146
+pos_1146 = []
+for i in np.arange(0,116):
+    pos_1146_act = []
+    for j in np.arange(0,2000):
+         pos_1146_act.append(emi_pos_hs[j][i][1146])
+    pos_1146.append(np.mean(pos_1146_act))
+    
+neg_1146 = []
+for i in np.arange(0,116):
+    neg_1146_act = []
+    for j in np.arange(0,2000):
+         neg_1146_act.append(emi_neg_hs[j][i][1146])
+    neg_1146.append(np.mean(neg_1146_act))
+   
+diff_1146 = []
+for i in np.arange(0,116):
+    diff_1146.append(neg_1146[i]-pos_1146[i])
+    
+plt.plot(diff_1146)  
+    
+#%%
+### 1899
+pos_1899 = []
+for i in np.arange(0,116):
+    pos_1899_act = []
+    for j in np.arange(0,2000):
+         pos_1899_act.append(emi_pos_hs[j][i][1899])
+    pos_1899.append(np.mean(pos_1899_act))
+    
+neg_1899 = []
+for i in np.arange(0,116):
+    neg_1899_act = []
+    for j in np.arange(0,2000):
+         neg_1899_act.append(emi_neg_hs[j][i][1899])
+    neg_1899.append(np.mean(neg_1899_act))
+   
+diff_1899 = []
+for i in np.arange(0,116):
+    diff_1899.append(neg_1899[i]-pos_1899[i])
+    
+plt.plot(diff_1899) 
+
+
+#%%
+pval_1899 = []
+for i in np.arange(0,116):
+    pos_1899_act = []
+    neg_1899_act = []
+    for j in np.arange(0,2000):
+         pos_1899_act.append(emi_pos_hs[j][i][1899])
+         neg_1899_act.append(emi_neg_hs[j][i][1899])
+    ttest = jensenshannon(pos_1899_act, neg_1899_act)
+    pval_1899.append(ttest**2)
+
+
+plt.plot(pval_1899)
+
+sns.distplot(neg_1899_act)
+sns.distplot(pos_1899_act)
+
+#%%
+pval_1146 = []
+for i in np.arange(0,116):
+    pos_1146_act = []
+    neg_1146_act = []
+    for j in np.arange(0,2000):
+         pos_1146_act.append(emi_pos_hs[j][i][1146])
+         neg_1146_act.append(emi_neg_hs[j][i][1146])
+    ttest = jensenshannon(pos_1146_act, neg_1146_act)
+    pval_1146.append(ttest)
+
+plt.plot(pval_1146)
+
+
+#%%
+pval_849 = []
+for i in np.arange(0,116):
+    pos_849_act = []
+    neg_849_act = []
+    for j in np.arange(0,2000):
+         pos_849_act.append(emi_pos_hs[j][i][849])
+         neg_849_act.append(emi_neg_hs[j][i][849])
+    ttest = jensenshannon(pos_849_act, neg_849_act)
+    pval_849.append(ttest)
+
+plt.plot(pval_849)
 
 

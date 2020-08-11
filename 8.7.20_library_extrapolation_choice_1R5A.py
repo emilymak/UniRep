@@ -53,7 +53,7 @@ sns.set_style("white")
 
 
 #%%
-emi_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_reps_1R5A.csv", header = 0, index_col = None)
+emi_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_reps_1R5A.csv", header = 0, index_col = 0)
 emi_labels = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_rep_labels_1R5A.csv", header = 0, index_col = 0)
 emi_biophys = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_biophys_stringent.csv", header = 0, index_col = 0)
 
@@ -65,8 +65,19 @@ emi_wt_rep = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_wt_re
 emi_wt_binding = pd.DataFrame([1,1])
 emi_wt_binding.index = ['ANT Normalized Binding', 'PSY Normalized Binding']
 
+emi_wt_rep = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_wt_rep.csv", header = 0, index_col = 0)
+emi_wt_binding = pd.DataFrame([1,1])
+emi_zero_rep = pd.DataFrame(emi_iso_reps.iloc[61,:]).T
+emi_zero_binding = pd.DataFrame([emi_iso_binding.iloc[61,1:3]]).T
+emi_wt_binding.index = ['ANT Normalized Binding', 'PSY Normalized Binding']
+emi_fit_reps = pd.concat([emi_wt_rep, emi_zero_rep])
+emi_fit_binding = pd.concat([emi_wt_binding, emi_zero_binding], axis = 1, ignore_index = True).T
+
 emi_iso_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_iso_seqs.csv", header = None)
 emi_iso_seqs.columns = ['Sequences']
+emi_iso_seqs = emi_iso_seqs.iloc[0:139,:]
+emi_iso_reps = emi_iso_reps.iloc[0:139,:]
+emi_iso_binding = emi_iso_binding.iloc[0:139,:]
 
 emi_iso_seqs_1R5NotA = []
 emi_iso_reps_1R5NotA = []
