@@ -40,16 +40,16 @@ cmap1 = LinearSegmentedColormap.from_list("mycmap", colormap1)
 
 
 #%%
-mAb_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\Research\\Code\\mAb pI Investigation\\mAb_seqs_psr.csv", index_col = 0)
-mAb_moe = pd.read_csv("C:\\Users\\makow\\Documents\\Research\\Code\\mAb pI Investigation\\moe_descriptors_reduced.csv", index_col = 0)
+mAb_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\mAb pI Investigation\\mAb_seqs_psr.csv", index_col = 0)
+mAb_moe = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\mAb pI Investigation\\moe_descriptors_reduced.csv", index_col = 0)
 mAb_psr = pd.DataFrame(mAb_seqs.iloc[:,8])
 mAb_moe.index = mAb_psr.index
-mAb_residue_count = pd.read_csv("C:\\Users\\makow\\Documents\\Research\\Code\\mAb pI Investigation\\mAb_residue_counts.csv", index_col = 0)
-mAb_tripeptide_count = pd.read_csv("C:\\Users\\makow\\Documents\\Research\\Code\\mAb pI Investigation\\tripeptide_counts.csv", index_col = 0)
+mAb_residue_count = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\mAb pI Investigation\\mAb_residue_counts.csv", index_col = 0)
+mAb_tripeptide_count = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\mAb pI Investigation\\tripeptide_counts.csv", index_col = 0)
 mAb_residue_count.dropna(inplace = True)
-mAb_residue_prop = pd.read_csv("C:\\Users\\makow\\Documents\\Research\\Code\\mAb pI Investigation\\mAb_residue_prop_reduced.csv", index_col = 0)
+mAb_residue_prop = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\mAb pI Investigation\\mAb_residue_prop_reduced.csv", index_col = 0)
 
-emi_iso_clones = pd.read_csv("C:\\Users\\makow\\Documents\\Research\\Code\\mAb pI Investigation\\emi_iso_residue_prop.csv", header = 0, index_col = 0)
+emi_iso_clones = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\mAb pI Investigation\\emi_iso_residue_prop.csv", header = 0, index_col = 0)
 iso_index = emi_iso_clones.index
 emi_iso_binding = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_iso_binding.csv", header = 0, index_col = None)
 
@@ -257,8 +257,8 @@ plt.scatter(mAb_features.loc[:,'pro_zeta'], mAb_features.loc[:,'CDR Amphipathic'
 
 """
 #%%
-feat_train, feat_test, labels_train, labels_test = train_test_split(mAb_features.iloc[:,0:3], mAb_psr_high_pI)
-i_it = np.arange(0.3, 2.01, 0.05)
+feat_train, feat_test, labels_train, labels_test = train_test_split(mAb_features, mAb_psr_high_pI)
+i_it = np.arange(0.8, 2.01, 0.05)
 Z_predict_acc = []
 iso_spear = []
 feat_train = np.array(feat_train)
@@ -270,33 +270,35 @@ for i in i_it:
 #    Z = Z[:,1]
     Z_predict = pd.DataFrame(gpc.predict(feat_test))
     Z_predict_acc.append(accuracy_score(Z_predict.iloc[:,0], labels_test.iloc[:,1]))
-    emi_iso_clones_predict_proba = pd.DataFrame(gpc.predict_proba(emi_iso_clones.iloc[:,0:3]))
-    iso_spear.append((stats.spearmanr(emi_iso_clones_predict_proba.iloc[0:139,0], emi_iso_binding.iloc[0:139,2])))
+    emi_iso_clones_predict_proba = pd.DataFrame(gpc.predict_proba(emi_iso_clones))
+    spear = stats.spearmanr(emi_iso_clones_predict_proba.iloc[0:139,0], emi_iso_binding.iloc[0:139,2])
+    iso_spear.append(spear[0])
 
-plt.scatter(i_it, Z_predict_acc, c = 'darkviolet')
+plt.scatter(i_it, Z_predict_acc, c = 'darkviolet', edgecolor = 'k')
+plt.scatter(i_it, iso_spear, c = 'springgreen', edgecolor = 'k')
 plt.tick_params(labelsize = 14)
 plt.xlabel('RBF Kernel Length Scale', fontsize = 20)
 plt.ylabel('Test Accuracy', fontsize = 20)
-
 plt.tight_layout()
 
 #%%
 feat_train, feat_test, labels_train, labels_test = train_test_split(mAb_features, mAb_psr_high_pI)
 feat_train = np.array(feat_train)
 
-gpc = GPC(kernel = (1.0*RBF(0.8)))
+gpc = GPC(kernel = (1.0*RBF(1.6)))
 cv_gpc = cv(gpc, mAb_features, mAb_psr_high_pI.iloc[:,1], cv = 5)
 print(np.mean(cv_gpc['test_score']))
 print(np.std(cv_gpc['test_score']))
 
 
 #%%
-feat_train, feat_test, labels_train, labels_test = train_test_split(mAb_features, mAb_psr_high_pI)
+feat_train, feat_test, labels_train, labels_test = train_test_split(mAb_features.iloc[:,:3], mAb_psr_high_pI)
 feat_train = np.array(feat_train)
+feat_test = np.array(feat_test)
 
-gpc = GPC(kernel = (1.0*RBF(1)))
-gpc.fit(feat_train[:,0:3], labels_train.iloc[:,1])
-gpc_predict_proba_train = gpc.predict_proba(feat_train[:,0:3])
+gpc = GPC(kernel = (1.0*RBF(1.6)))
+gpc.fit(feat_train, labels_train.iloc[:,1])
+gpc_predict_proba_train = gpc.predict_proba(feat_train)
 
 gpc_predict = pd.DataFrame(gpc.predict(feat_test))
 print(accuracy_score(gpc_predict.iloc[:,0], labels_test.iloc[:,1]))
@@ -321,14 +323,14 @@ fig = plt.figure(7)
 ax = fig.add_subplot(111, projection='3d')
 #ax.scatter(mAb_features.iloc[:,0], mAb_features.iloc[:,1], mAb_features.iloc[:,2], s = 50, c = mAb_psr_high_pI.iloc[:,0], cmap = 'seismic', edgecolor = 'k', alpha = 0.5)
 ax.scatter(ravel_feat_num.iloc[:,0], ravel_feat_num.iloc[:,1], ravel_feat_num.iloc[:,2], c=Z_num.iloc[:,0], s = 50, cmap = 'viridis', alpha = 0.25)
-ax.scatter(emi_iso_clones.iloc[:,0], emi_iso_clones.iloc[:,1], emi_iso_clones.iloc[:,2], c='k', s = 50)
+#ax.scatter(emi_iso_clones.iloc[:,0], emi_iso_clones.iloc[:,1], emi_iso_clones.iloc[:,2], c='k', s = 50)
 
 ax.set_xlabel('Dipole Moment', fontsize = 16)
 ax.set_ylabel('Hydrophobic Moment', fontsize = 16)
 ax.set_zlabel('Net Charge', fontsize = 16)
 
-emi_iso_clones_predict_proba = pd.DataFrame(gpc.predict_proba(emi_iso_clones.iloc[:,0:3]))
-emi_iso_clones_predict = pd.DataFrame(gpc.predict(emi_iso_clones.iloc[:,0:3]))
+emi_iso_clones_predict_proba = pd.DataFrame(gpc.predict_proba(emi_iso_clones.iloc[:,:3]))
+emi_iso_clones_predict = pd.DataFrame(gpc.predict(emi_iso_clones.iloc[:,:3]))
 
 plt.figure(3)
 plt.scatter(emi_iso_clones_predict_proba.iloc[0:139,0], emi_iso_binding.iloc[0:139,2], c = emi_iso_clones_predict.iloc[0:139,0], cmap = 'viridis', edgecolor = 'k', s = 75)
