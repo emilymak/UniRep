@@ -72,6 +72,10 @@ wt_seq = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_wt_seq.cs
 emi_iso_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_iso_seqs.csv", header = None)
 emi_iso_seqs.columns = ['Sequences']
 
+emi_iso_binding = emi_iso_binding.iloc[0:137,:]
+emi_iso_reps = emi_iso_reps.iloc[0:137,:]
+emi_iso_seqs = emi_iso_seqs.iloc[0:137,:]
+
 emi_iso_binding['CLF'] = 0
 emi_iso_binding['CLF PSY'] = 0
 for index, row in emi_iso_binding.iterrows():
@@ -203,7 +207,7 @@ for index, row in emi_ant_transform.iterrows():
         clones_score[index] = 3
         emi_optimal_sequences.append([index, emi_labels.iloc[index, 0]])
 
-iso_score = [0]*177
+iso_score = [0]*137
 for index, row in emi_iso_ant_transform.iterrows():
     if (emi_iso_ant_transform.iloc[index,1] > 0.45) & (emi_iso_psy_transform.iloc[index,1] < 0.75):
         iso_score[index] = 1
@@ -212,8 +216,8 @@ for index, row in emi_iso_ant_transform.iterrows():
     if (emi_iso_ant_transform.iloc[index,1] > 0.55) & (emi_iso_psy_transform.iloc[index,1] < 0.65):
         iso_score[index] = 3
 
-iso_optimal_conf = [0]*177
-iso_transform_conf = [0]*177
+iso_optimal_conf = [0]*137
+iso_transform_conf = [0]*137
 
 for index, row in emi_iso_binding.iterrows():
     if (emi_iso_binding.iloc[index,1] > 0.5) & (emi_iso_binding.iloc[index,2] < 0.7):
@@ -267,9 +271,6 @@ cbar.set_ticks([])
 cbar.set_label('Stringency of Property Requirements', fontsize = 14)
 plt.tight_layout()
 
-sns.distplot(emi_iso_binding[emi_iso_binding.index <= 139]['PSY Normalized Binding'], bins = 10, norm_hist = False, color = 'darkviolet', label = 'Early Clones')
-sns.distplot(emi_iso_binding[emi_iso_binding.index >= 139]['PSY Normalized Binding'], bins = 10, norm_hist = False, color = 'mediumspringgreen', label = 'Later Clones')
-plt.legend()
 
 #%%
 fig, ax = plt.subplots(figsize = (7,4.5))
@@ -293,7 +294,7 @@ emi_iso_ant_transform.iloc[:,0].to_csv('emi_iso_ant_transforms.csv', header = ['
 emi_iso_psy_transform.iloc[:,0].to_csv('emi_iso_psy_transforms.csv', header = ['All Mutations'], index = True)
 """
 
-
+"""
 #%%
 colormap6 = np.array(['gold', 'darkviolet'])
 colormap7 = np.array(['mediumvioletred','darkblue'])
@@ -377,3 +378,4 @@ plt.xlabel('            Increasing Affinity', fontsize = 20)
 print(accuracy_score(emi_iso_ant_predict.iloc[:,0], emi_iso_binding.iloc[:,3]))
 print(accuracy_score(emi_iso_psy_predict.iloc[:,0], emi_iso_binding.iloc[:,4]))
 
+"""

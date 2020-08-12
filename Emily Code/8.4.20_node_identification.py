@@ -27,6 +27,15 @@ from sklearn.preprocessing import MinMaxScaler
 from statsmodels.stats.weightstats import ztest
 from scipy.spatial.distance import jensenshannon
 
+def js_entropy(P,Q):
+    #Calculate Jensen Shannon entropy - a symmetric, nonnegative, noninfinite "version" of KL divergence
+    #From https://stats.stackexchange.com/questions/6907/an-adaptation-of-the-kullback-leibler-distance/6937#6937
+    #Assumes that P and Q are defined at the same points
+    R = 0.5*(P + Q)
+    k_PR = stats.entropy(P,R)
+    k_QR = stats.entropy(Q,R)
+    return k_PR + k_QR
+
 colormap1 = np.array(['mediumspringgreen','darkviolet'])
 colormap2 = np.array(['mediumspringgreen', 'darkturquoise', 'navy', 'darkviolet'])
 colormap3 = np.array(['dodgerblue', 'darkorange'])
@@ -56,6 +65,8 @@ emi_biophys = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_biop
 
 #emi_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_reps_stringent.csv", header = 0, index_col = None)
 emi_labels = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_rep_labels_stringent.csv", header = 0, index_col = 0)
+mutation_x = [33, 50, 55, 56, 57, 99, 101, 104]
+mutation_x_diff = [32, 49, 54, 55, 56, 98, 100, 103]
 
 
 #%%
@@ -165,51 +176,92 @@ diff_1899 = []
 for i in np.arange(0,116):
     diff_1899.append(neg_1899[i]-pos_1899[i])
     
-plt.plot(diff_1899) 
+plt.plot(diff_1899)
 
 
 #%%
+n_kl_bins = 20
 pval_1899 = []
 for i in np.arange(0,116):
     pos_1899_act = []
     neg_1899_act = []
+    act_1899 = []
     for j in np.arange(0,2000):
          pos_1899_act.append(emi_pos_hs[j][i][1899])
          neg_1899_act.append(emi_neg_hs[j][i][1899])
-    ttest = jensenshannon(pos_1899_act, neg_1899_act)
-    pval_1899.append(ttest**2)
-
+         act_1899.append(emi_pos_hs[j][i][1899])
+         act_1899.append(emi_neg_hs[j][i][1899])
+    kl_bins = np.linspace(np.min(act_1899), np.max(act_1899), n_kl_bins)
+    hist_pos = np.histogram(pos_1899_act, kl_bins)     
+    hist_neg = np.histogram(neg_1899_act, kl_bins)
+    ttest = js_entropy(hist_pos[0], hist_neg[0])
+    pval_1899.append(ttest)
 
 plt.plot(pval_1899)
+plt.scatter(mutation_x, [pval_1899[i] for i in mutation_x], c = 'red')
 
-sns.distplot(neg_1899_act)
-sns.distplot(pos_1899_act)
+pval_1899_diff = []
+for i in np.arange(0,115):
+    pval_1899_diff.append(pval_1899[i+1] - pval_1899[i])
+   
+plt.plot(pval_1899_diff)
+plt.scatter(mutation_x_diff, [pval_1899_diff[i-1] for i in mutation_x], c = 'red', edgecolor = 'k')
+
 
 #%%
+n_kl_bins = 20
 pval_1146 = []
 for i in np.arange(0,116):
     pos_1146_act = []
     neg_1146_act = []
+    act_1146 = []
     for j in np.arange(0,2000):
          pos_1146_act.append(emi_pos_hs[j][i][1146])
          neg_1146_act.append(emi_neg_hs[j][i][1146])
-    ttest = jensenshannon(pos_1146_act, neg_1146_act)
+         act_1146.append(emi_pos_hs[j][i][1146])
+         act_1146.append(emi_neg_hs[j][i][1146])
+    kl_bins = np.linspace(np.min(act_1146), np.max(act_1146), n_kl_bins)
+    hist_pos = np.histogram(pos_1146_act, kl_bins)     
+    hist_neg = np.histogram(neg_1146_act, kl_bins)
+    ttest = js_entropy(hist_pos[0], hist_neg[0])
     pval_1146.append(ttest)
 
 plt.plot(pval_1146)
+plt.scatter(mutation_x, [pval_1146[i] for i in mutation_x], c = 'red')
+
+pval_1146_diff = []
+for i in np.arange(0,115):
+    pval_1146_diff.append(pval_1146[i+1] - pval_1146[i])
+   
+plt.plot(pval_1146_diff)
+plt.scatter(mutation_x_diff, [pval_1146_diff[i-1] for i in mutation_x], c = 'orange', edgecolor = 'k')
 
 
 #%%
+n_kl_bins = 20
 pval_849 = []
 for i in np.arange(0,116):
     pos_849_act = []
     neg_849_act = []
+    act_849 = []
     for j in np.arange(0,2000):
          pos_849_act.append(emi_pos_hs[j][i][849])
          neg_849_act.append(emi_neg_hs[j][i][849])
-    ttest = jensenshannon(pos_849_act, neg_849_act)
+         act_849.append(emi_pos_hs[j][i][849])
+         act_849.append(emi_neg_hs[j][i][849])
+    kl_bins = np.linspace(np.min(act_849), np.max(act_849), n_kl_bins)
+    hist_pos = np.histogram(pos_849_act, kl_bins)     
+    hist_neg = np.histogram(neg_849_act, kl_bins)
+    ttest = js_entropy(hist_pos[0], hist_neg[0])
     pval_849.append(ttest)
 
 plt.plot(pval_849)
+plt.scatter(mutation_x, [pval_849[i] for i in mutation_x], c = 'red')
 
+pval_849_diff = []
+for i in np.arange(0,115):
+    pval_849_diff.append(pval_849[i+1] - pval_849[i])
+   
+plt.plot(pval_849_diff)
+plt.scatter(mutation_x_diff, [pval_849_diff[i-1] for i in mutation_x], c = 'yellow', edgecolor = 'k')
 
