@@ -51,9 +51,9 @@ sns.set_style("white")
 
 
 #%%
-emi_pos_reps = pd.read_pickle("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_PS_pos_avg_hidden.pickle")
+emi_pos_reps = pd.read_pickle("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_PS_pos_avg_hidden.pickle")
 emi_pos_reps = pd.DataFrame(np.vstack(emi_pos_reps))
-emi_neg_reps = pd.read_pickle("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_PS_neg_avg_hidden.pickle")
+emi_neg_reps = pd.read_pickle("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_PS_neg_avg_hidden.pickle")
 emi_neg_reps = pd.DataFrame(np.vstack(emi_neg_reps))
 
 emi_reps = pd.concat([emi_pos_reps, emi_neg_reps], axis = 0)
@@ -61,12 +61,14 @@ emi_reps.reset_index(inplace = True, drop = True)
 scaler = MinMaxScaler()
 emi_reps = pd.DataFrame(scaler.fit_transform(emi_reps))
 
-emi_biophys = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_biophys_stringent.csv", header = 0, index_col = 0)
+emi_biophys = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_biophys_stringent.csv", header = 0, index_col = 0)
 
-#emi_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_reps_stringent.csv", header = 0, index_col = None)
-emi_labels = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_rep_labels_stringent.csv", header = 0, index_col = 0)
+#emi_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_reps_stringent.csv", header = 0, index_col = None)
+emi_labels = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_rep_labels_stringent.csv", header = 0, index_col = 0)
 mutation_x = [33, 50, 55, 56, 57, 99, 101, 104]
 mutation_x_diff = [32, 49, 54, 55, 56, 98, 100, 103]
+interesting_mut = [52, 53, 56, 57, 58, 60, 95]
+interesting_mut_diff = [51, 52, 55, 56, 57, 59, 94]
 
 
 #%%
@@ -108,8 +110,8 @@ for i in emi_biophys.columns:
 
 
 #%%
-emi_pos_hs = pd.read_pickle("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_PS_pos_hidden_state.pickle")
-emi_neg_hs = pd.read_pickle("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_PS_neg_hidden_state.pickle")
+emi_pos_hs = pd.read_pickle("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_PS_pos_hidden_state.pickle")
+emi_neg_hs = pd.read_pickle("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_PS_neg_hidden_state.pickle")
 
 #%%
 ### 849
@@ -197,15 +199,23 @@ for i in np.arange(0,116):
     ttest = js_entropy(hist_pos[0], hist_neg[0])
     pval_1899.append(ttest)
 
-plt.plot(pval_1899)
-plt.scatter(mutation_x, [pval_1899[i] for i in mutation_x], c = 'red')
+fig, ax = plt.subplots()
+ax.plot(pval_1899)
+ax.scatter(mutation_x, [pval_1899[i] for i in mutation_x], c = 'orange')
+ax.scatter(interesting_mut, [pval_1899[i] for i in interesting_mut], c = 'red')
+ax.axvspan(49, 65, alpha = 0.25, color='grey')
+ax.axvspan(92, 102, alpha = 0.25, color='grey')
 
 pval_1899_diff = []
 for i in np.arange(0,115):
     pval_1899_diff.append(pval_1899[i+1] - pval_1899[i])
    
-plt.plot(pval_1899_diff)
-plt.scatter(mutation_x_diff, [pval_1899_diff[i-1] for i in mutation_x], c = 'red', edgecolor = 'k')
+fig, ax = plt.subplots()
+ax.plot(pval_1899_diff)
+ax.scatter(mutation_x_diff, [pval_1899_diff[i-1] for i in mutation_x], c = 'orange', edgecolor = 'k')
+ax.scatter(interesting_mut_diff, [pval_1899_diff[i-1] for i in interesting_mut], c = 'red', edgecolor = 'k', s = 75, marker = '^')
+ax.axvspan(49, 65, alpha = 0.25, color='grey')
+ax.axvspan(92, 102, alpha = 0.25, color='grey')
 
 
 #%%
@@ -226,15 +236,23 @@ for i in np.arange(0,116):
     ttest = js_entropy(hist_pos[0], hist_neg[0])
     pval_1146.append(ttest)
 
-plt.plot(pval_1146)
-plt.scatter(mutation_x, [pval_1146[i] for i in mutation_x], c = 'red')
+fig, ax = plt.subplots()
+ax.plot(pval_1146)
+ax.scatter(mutation_x, [pval_1146[i] for i in mutation_x], c = 'orange')
+ax.scatter(interesting_mut, [pval_1146[i] for i in interesting_mut], c = 'red')
+ax.axvspan(49, 65, alpha = 0.25, color='grey')
+ax.axvspan(92, 102, alpha = 0.25, color='grey')
 
 pval_1146_diff = []
 for i in np.arange(0,115):
     pval_1146_diff.append(pval_1146[i+1] - pval_1146[i])
    
-plt.plot(pval_1146_diff)
-plt.scatter(mutation_x_diff, [pval_1146_diff[i-1] for i in mutation_x], c = 'orange', edgecolor = 'k')
+fig, ax = plt.subplots()
+ax.plot(pval_1146_diff)
+ax.scatter(mutation_x_diff, [pval_1146_diff[i-1] for i in mutation_x], c = 'orange', edgecolor = 'k')
+ax.scatter(interesting_mut_diff, [pval_1146_diff[i-1] for i in interesting_mut], c = 'red', edgecolor = 'k', s = 75, marker = '^')
+ax.axvspan(49, 65, alpha = 0.25, color='grey')
+ax.axvspan(92, 102, alpha = 0.25, color='grey')
 
 
 #%%
@@ -255,13 +273,66 @@ for i in np.arange(0,116):
     ttest = js_entropy(hist_pos[0], hist_neg[0])
     pval_849.append(ttest)
 
-plt.plot(pval_849)
-plt.scatter(mutation_x, [pval_849[i] for i in mutation_x], c = 'red')
+fig, ax = plt.subplots()
+ax.plot(pval_849)
+ax.scatter(mutation_x, [pval_849[i] for i in mutation_x], c = 'orange')
+ax.scatter(interesting_mut, [pval_849[i] for i in interesting_mut], c = 'red')
+ax.axvspan(49, 65, alpha = 0.25, color='grey')
+ax.axvspan(92, 102, alpha = 0.25, color='grey')
 
 pval_849_diff = []
 for i in np.arange(0,115):
     pval_849_diff.append(pval_849[i+1] - pval_849[i])
    
-plt.plot(pval_849_diff)
-plt.scatter(mutation_x_diff, [pval_849_diff[i-1] for i in mutation_x], c = 'yellow', edgecolor = 'k')
+fig, ax = plt.subplots()
+ax.plot(pval_849_diff)
+ax.scatter(mutation_x_diff, [pval_849_diff[i-1] for i in mutation_x], c = 'orange', edgecolor = 'k')
+ax.scatter(interesting_mut_diff, [pval_849_diff[i-1] for i in interesting_mut], c = 'red', edgecolor = 'k', s = 75, marker = '^')
+ax.axvspan(49, 65, alpha = 0.25, color='grey')
+ax.axvspan(92, 102, alpha = 0.25, color='grey')
+
+
+#%%
+fig, ax = plt.subplots()
+ax.plot(pval_849)
+ax.scatter(mutation_x, [pval_849[i] for i in mutation_x], c = 'orange')
+ax.scatter(interesting_mut, [pval_849[i] for i in interesting_mut], c = 'red')
+ax.axvspan(49, 65, alpha = 0.25, color='grey')
+ax.axvspan(92, 102, alpha = 0.25, color='grey')
+
+fig, ax = plt.subplots()
+ax.plot(pval_1146)
+ax.scatter(mutation_x, [pval_1146[i] for i in mutation_x], c = 'orange')
+ax.scatter(interesting_mut, [pval_1146[i] for i in interesting_mut], c = 'red')
+ax.axvspan(49, 65, alpha = 0.25, color='grey')
+ax.axvspan(92, 102, alpha = 0.25, color='grey')
+
+fig, ax = plt.subplots()
+ax.plot(pval_1899)
+ax.scatter(mutation_x, [pval_1899[i] for i in mutation_x], c = 'orange')
+ax.scatter(interesting_mut, [pval_1899[i] for i in interesting_mut], c = 'red')
+ax.axvspan(49, 65, alpha = 0.25, color='grey')
+ax.axvspan(92, 102, alpha = 0.25, color='grey')
+
+#%%
+fig, ax = plt.subplots()
+ax.plot(pval_849_diff)
+ax.scatter(mutation_x_diff, [pval_849_diff[i-1] for i in mutation_x], c = 'orange', edgecolor = 'k')
+ax.scatter(interesting_mut_diff, [pval_849_diff[i-1] for i in interesting_mut], c = 'red', edgecolor = 'k', s = 75, marker = '^')
+ax.axvspan(49, 65, alpha = 0.25, color='grey')
+ax.axvspan(92, 102, alpha = 0.25, color='grey')
+
+fig, ax = plt.subplots()
+ax.plot(pval_1146_diff)
+ax.scatter(mutation_x_diff, [pval_1146_diff[i-1] for i in mutation_x], c = 'orange', edgecolor = 'k')
+ax.scatter(interesting_mut_diff, [pval_1146_diff[i-1] for i in interesting_mut], c = 'red', edgecolor = 'k', s = 75, marker = '^')
+ax.axvspan(49, 65, alpha = 0.25, color='grey')
+ax.axvspan(92, 102, alpha = 0.25, color='grey')
+
+fig, ax = plt.subplots()
+ax.plot(pval_1899_diff)
+ax.scatter(mutation_x_diff, [pval_1899_diff[i-1] for i in mutation_x], c = 'orange', edgecolor = 'k')
+ax.scatter(interesting_mut_diff, [pval_1899_diff[i-1] for i in interesting_mut], c = 'red', edgecolor = 'k', s = 75, marker = '^')
+ax.axvspan(49, 65, alpha = 0.25, color='grey')
+ax.axvspan(92, 102, alpha = 0.25, color='grey')
 
