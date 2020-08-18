@@ -78,10 +78,16 @@ emi_iso_seqs = emi_iso_seqs.iloc[0:137,:]
 
 
 #%%
+### creating a few biophysical descriptors of the new mutations and the overal mutations of the novel sequences
+
+### importing residue dict that has 6 desciptors of amino acids
 residue_dict = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\residue_dict_new_novel_clones.csv", header = 0, index_col = 0)
+
 emi_novel_seqs = pd.read_pickle("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\mutation scans\\2020_08_13 emi screen\\emi_mut_CDR2and3_64_AH_multiclone.pickle")
 emi_novel_reps = pd.DataFrame(np.vstack(emi_novel_seqs.iloc[:,3]))
 
+### compares residue to the base sequence residue at that position
+### subtracting the lists results in the novel mutation being appended to #mutation_added with sequence index and residue index
 mutation_added = []
 for index, row in emi_novel_seqs.iterrows():
     base_char = list(row[1])
@@ -91,6 +97,7 @@ for index, row in emi_novel_seqs.iterrows():
         if len(char_diff) != 0:
             mutation_added.append([index, char_diff[0], i])
 
+### making a dataframe of the data
 mutation_added = pd.DataFrame(np.vstack(mutation_added))
 mutation_added.set_index(0, inplace = True)
 mutation_added.columns = ['Residue', 'Number']
@@ -99,26 +106,31 @@ mutation_added['Number'] = mutation_added['Number'].to_numpy().astype(int)
 emi_novel_seqs = emi_novel_seqs[emi_novel_seqs.index.isin(mutation_added.index)]
 emi_novel_reps = emi_novel_reps[emi_novel_reps.index.isin(mutation_added.index)]
 
-
-mutations = []
+### creating biophysical decriptors of mutation set already in library - no novel mutations
+library_mutations = []
 for i in emi_novel_seqs['Sequences']:
     characters = list(i)
-    mutations.append([characters[32], characters[49], characters[54], characters[55], characters[56], characters[98], characters[100], characters[103]])
-mutations = pd.DataFrame(mutations)
+    library_mutations.append([characters[32], characters[49], characters[54], characters[55], characters[56], characters[98], characters[100], characters[103]])
+library_mutations = pd.DataFrame(library_mutations)
 
-mutations_biophys_novel = []
-for i in mutations.iterrows():
-    seq_mutations_biophys = []
-    seq_mutations_biophys_stack = []
+library_mutations_biophys_novel = []
+for i in library_mutations.iterrows():
+    seq_library_mutations_biophys = []
+    seq_library_mutations_biophys_stack = []
     for j in i[1]:
-        seq_mutations_biophys.append(residue_dict.loc[j,:].values)
-    seq_mutations_biophys_stack = np.hstack(seq_mutations_biophys)
-    mutations_biophys_novel.append(seq_mutations_biophys_stack)
+        seq_library_mutations_biophys.append(residue_dict.loc[j,:].values)
+    seq_library_mutations_biophys_stack = np.hstack(seq_library_mutations_biophys)
+    library_mutations_biophys_novel.append(seq_library_mutations_biophys_stack)
 
-mutations_biophys = pd.DataFrame(mutations_biophys_novel)
-mutations_biophys_col_names = ['33Charge','33HM','33pI','33Atoms','33HBondA','33HBondD','50Charge','50HM','50pI','50Atoms','50HBondA','50HBondD','55Charge','55HM','55pI','55Atoms','55HBondA','55HBondD','56Charge','56HM','56pI','56Atoms','56HBondA','56HBondD','57Charge','57HM','57pI','57Atoms','57HBondA','57HBondD','99Charge','99HM','99pI','99Atoms','99HBondA','99HBondD','101Charge','101HM','101pI','101Atoms','101HBondA','101HBondD','104Charge','104HM','104pI','104Atoms','104HBondA','104HBondD']
-mutations_biophys.columns = mutations_biophys_col_names
+### creating dataframe and naming columns
+library_mutations_biophys = pd.DataFrame(library_mutations_biophys_novel)
+library_mutations_biophys_col_names = ['33Charge','33HM','33pI','33Atoms','33HBondA','33HBondD','50Charge','50HM','50pI','50Atoms','50HBondA','50HBondD','55Charge','55HM','55pI','55Atoms','55HBondA','55HBondD','56Charge','56HM','56pI','56Atoms','56HBondA','56HBondD','57Charge','57HM','57pI','57Atoms','57HBondA','57HBondD','99Charge','99HM','99pI','99Atoms','99HBondA','99HBondD','101Charge','101HM','101pI','101Atoms','101HBondA','101HBondD','104Charge','104HM','104pI','104Atoms','104HBondA','104HBondD']
+library_mutations_biophys.columns = library_mutations_biophys_col_names
 
+
+### creating biophysical descriptor of novel mutation at any residue position in the sequence
+### mutation_added has sequence, residue index, and new residue
+### append new mutation biophysical values to list
 mutation_biophys = []
 for i in mutation_added.iterrows():
     seq_mutation_biophys = []
@@ -130,26 +142,28 @@ for i in mutation_added.iterrows():
 
 mutation_biophys = pd.DataFrame(mutation_biophys)
 
-for i in mutations_biophys.iterrows():
+### creating dataframe for average mutation values including novel mutation at any residue
+for i in library_mutations_biophys.iterrows():
     j = i[0]
-    mutations_biophys.loc[j,'Charge Score'] = ((mutations_biophys.iloc[j,0]) + (mutations_biophys.iloc[j,6]) + (mutations_biophys.iloc[j,12]) + (mutations_biophys.iloc[j,18]) + (mutations_biophys.iloc[j,24]) + (mutations_biophys.iloc[j,30]) + (mutations_biophys.iloc[j,36]) + (mutations_biophys.iloc[j,42]) + (mutation_biophys.iloc[j,0]))
+    library_mutations_biophys.loc[j,'Charge Score'] = ((library_mutations_biophys.iloc[j,0]) + (library_mutations_biophys.iloc[j,6]) + (library_mutations_biophys.iloc[j,12]) + (library_mutations_biophys.iloc[j,18]) + (library_mutations_biophys.iloc[j,24]) + (library_mutations_biophys.iloc[j,30]) + (library_mutations_biophys.iloc[j,36]) + (library_mutations_biophys.iloc[j,42]) + (mutation_biophys.iloc[j,0]))
 
-for i in mutations_biophys.iterrows():
+for i in library_mutations_biophys.iterrows():
     j = i[0]
-    mutations_biophys.loc[j,'Hydrophobic Moment'] = (mutations_biophys.iloc[j,1]) + (mutations_biophys.iloc[j,7]) + (mutations_biophys.iloc[j,13]) + (mutations_biophys.iloc[j,25]) + (mutations_biophys.iloc[j,17]) + (mutations_biophys.iloc[j,31]) + (mutations_biophys.iloc[j,37]) + (mutations_biophys.iloc[j,43]) + (mutation_biophys.iloc[j,1])
+    library_mutations_biophys.loc[j,'Hydrophobic Moment'] = (library_mutations_biophys.iloc[j,1]) + (library_mutations_biophys.iloc[j,7]) + (library_mutations_biophys.iloc[j,13]) + (library_mutations_biophys.iloc[j,25]) + (library_mutations_biophys.iloc[j,17]) + (library_mutations_biophys.iloc[j,31]) + (library_mutations_biophys.iloc[j,37]) + (library_mutations_biophys.iloc[j,43]) + (mutation_biophys.iloc[j,1])
 
-for i in mutations_biophys.iterrows():
+for i in library_mutations_biophys.iterrows():
     j = i[0]
-    mutations_biophys.loc[j,'pI'] = ((mutations_biophys.iloc[j,2]) + (mutations_biophys.iloc[j,8]) + (mutations_biophys.iloc[j,14]) + (mutations_biophys.iloc[j,20]) + (mutations_biophys.iloc[j,26]) + (mutations_biophys.iloc[j,32]) + (mutations_biophys.iloc[j,38]) + (mutations_biophys.iloc[j,44]) + (mutation_biophys.iloc[j,2]))
+    library_mutations_biophys.loc[j,'pI'] = ((library_mutations_biophys.iloc[j,2]) + (library_mutations_biophys.iloc[j,8]) + (library_mutations_biophys.iloc[j,14]) + (library_mutations_biophys.iloc[j,20]) + (library_mutations_biophys.iloc[j,26]) + (library_mutations_biophys.iloc[j,32]) + (library_mutations_biophys.iloc[j,38]) + (library_mutations_biophys.iloc[j,44]) + (mutation_biophys.iloc[j,2]))
 
-for i in mutations_biophys.iterrows():
+for i in library_mutations_biophys.iterrows():
     j = i[0]
-    mutations_biophys.loc[j,'# Atoms'] = (mutations_biophys.iloc[j,3]) + (mutations_biophys.iloc[j,9]) + (mutations_biophys.iloc[j,15]) + (mutations_biophys.iloc[j,21]) + (mutations_biophys.iloc[j,27]) + (mutations_biophys.iloc[j,33]) + (mutations_biophys.iloc[j,39] + (mutations_biophys.iloc[j,45]) + (mutation_biophys.iloc[j,3]))
+    library_mutations_biophys.loc[j,'# Atoms'] = (library_mutations_biophys.iloc[j,3]) + (library_mutations_biophys.iloc[j,9]) + (library_mutations_biophys.iloc[j,15]) + (library_mutations_biophys.iloc[j,21]) + (library_mutations_biophys.iloc[j,27]) + (library_mutations_biophys.iloc[j,33]) + (library_mutations_biophys.iloc[j,39] + (library_mutations_biophys.iloc[j,45]) + (mutation_biophys.iloc[j,3]))
 
 mutation_biophys = pd.DataFrame(mutation_biophys)
 
+
 #%%
-### stringent antigen binding LDA evaluation
+### stringent antigen binding LDA trainging and evaluation
 emi_reps_train, emi_reps_test, emi_ant_train, emi_ant_test = train_test_split(emi_reps, emi_labels.iloc[:,3])
 
 emi_ant = LDA()
@@ -163,12 +177,13 @@ emi_wt_ant_transform = pd.DataFrame(-1*(emi_ant.transform(emi_wt_rep)))
 
 
 #%%
-### obtaining transformand predicting antigen binding of experimental iso clones
+### obtaining transformand predicting antigen binding of novel reps
+### fit reps are the two sequences used to functionalize the LDA from Lina's isolated set
 emi_novel_ant_transform= pd.DataFrame(-1*(emi_ant.transform(emi_novel_reps)))
 emi_fit_ant_transform= pd.DataFrame(-1*(emi_ant.transform(emi_fit_reps)))
 emi_novel_ant_predict = pd.DataFrame(emi_ant.predict(emi_novel_reps))
-#emi_fit_ant_predict = pd.DataFrame(emi_ant.predict(emi_fit_reps))
 
+### fit transform is used to create a linear function that describes percentage of ANT binding predicted for a clone
 x1 = np.polyfit(emi_fit_ant_transform.iloc[:,0], emi_fit_binding.iloc[:,0],1)
 emi_ant_transform['Fraction ANT Binding'] = ((emi_ant_transform.iloc[:,0]*x1[0])+x1[1])
 emi_novel_ant_transform['Fraction ANT Binding'] = ((emi_novel_ant_transform.iloc[:,0]*x1[0])+x1[1])
@@ -176,7 +191,7 @@ emi_fit_ant_transform['Fraction ANT Binding'] = ((emi_fit_ant_transform.iloc[:,0
 
 
 #%%
-### stringent psyigen binding LDA evaluation
+### stringent psyigen binding LDA training and evaluation
 emi_reps_train, emi_reps_test, emi_psy_train, emi_psy_test = train_test_split(emi_reps, emi_labels.iloc[:,2])
 
 emi_psy = LDA()
@@ -190,12 +205,12 @@ emi_wt_psy_transform = pd.DataFrame(emi_psy.transform(emi_wt_rep))
 
 
 #%%
-### obtaining transformand predicting poly-specificity binding of experimental iso clones
+### obtaining transformand predicting poly-specificity binding of novel reps
 emi_novel_psy_transform= pd.DataFrame(emi_psy.transform(emi_novel_reps))
 emi_fit_psy_transform= pd.DataFrame(emi_psy.transform(emi_fit_reps))
 emi_novel_psy_predict = pd.DataFrame(emi_psy.predict(emi_novel_reps))
-#emi_fit_psy_predict = pd.DataFrame(emi_psy.predict(emi_fit_reps))
 
+### fit transform is used to create a linear function that describes percentage of PSY binding predicted for a clone
 x2 = np.polyfit(emi_fit_psy_transform.iloc[:,0], emi_fit_binding.iloc[:,1],1)
 emi_psy_transform['Fraction PSY Binding'] = ((emi_psy_transform.iloc[:,0]*x2[0])+x2[1])
 emi_novel_psy_transform['Fraction PSY Binding'] = ((emi_novel_psy_transform.iloc[:,0]*x2[0])+x2[1])
@@ -204,6 +219,8 @@ emi_fit_psy_transform['Fraction PSY Binding'] = ((emi_fit_psy_transform.iloc[:,0
 
 #%%
 ### pareto subplots colored by functionalized transforms
+### appending scores representing increasing stringency/quality of clones
+### percentages are based off of fit reps functionalization
 clones_score = [0]*4000
 emi_optimal_sequences = []
 for index, row in emi_ant_transform.iterrows():
@@ -215,6 +232,7 @@ for index, row in emi_ant_transform.iterrows():
         clones_score[index] = 3
         emi_optimal_sequences.append([index, emi_labels.iloc[index, 0]])
 
+### creating list of stringency/qulity of novel sequences that matches old library evaluation
 novel_clones_score = [0]*3535
 emi_optimal_sequences = []
 for index, row in emi_novel_ant_transform.iterrows():
@@ -226,21 +244,23 @@ for index, row in emi_novel_ant_transform.iterrows():
         novel_clones_score[index] = 3
         emi_optimal_sequences.append([index, emi_labels.iloc[index, 0]])
 
+### creating list of stringency/quality of novel sequences based on new criteria that is very subject to change
 novel_clones_optimal_score = [0]*3535
 emi_novel_optimal_sequences = []
 for index, row in emi_novel_ant_transform.iterrows():
-    if (emi_novel_ant_transform.iloc[index,1] > 1.15) & (emi_novel_psy_transform.iloc[index,1] < 0.95):
+    if (emi_novel_ant_transform.iloc[index,1] > 1.30) & (emi_novel_psy_transform.iloc[index,1] < 0.85):
         novel_clones_optimal_score[index] = 1
         emi_novel_optimal_sequences.append([index, 1, emi_novel_seqs.iloc[index, 2]])
     if (emi_novel_ant_transform.iloc[index,1] > 1.15) & (emi_novel_psy_transform.iloc[index,1] < 0.70):
         novel_clones_optimal_score[index] = 2
         emi_novel_optimal_sequences.append([index, 2, emi_novel_seqs.iloc[index, 2]])
-    if (emi_novel_ant_transform.iloc[index,1] > 1.00) & (emi_novel_psy_transform.iloc[index,1] < 0.50):
+    if (emi_novel_ant_transform.iloc[index,1] > 1.05) & (emi_novel_psy_transform.iloc[index,1] < 0.50):
         novel_clones_optimal_score[index] = 3
         emi_novel_optimal_sequences.append([index, 3, emi_novel_seqs.iloc[index, 2]])
 
 emi_novel_optimal_sequences = pd.DataFrame(emi_novel_optimal_sequences)
 
+### creating a dataframe of sequences, indices, and residue mutated of clones chosen with criteria set above
 novel_optimal_seqs = []
 for i in emi_novel_optimal_sequences.iloc[:,0]:
     base_char = list(emi_novel_seqs.iloc[i, 1])
@@ -254,6 +274,7 @@ novel_optimal_seqs = np.vstack(novel_optimal_seqs)
 novel_optimal_seqs = pd.DataFrame(novel_optimal_seqs)
 
 #%%
+### pareto plot cmparison of old library vs new clones
 fig, ([ax0, ax1, ax2], [ax3, ax4, ax5]) = plt.subplots(2, 3, figsize = (16,9))
 ax00 = ax0.scatter(emi_ant_transform.iloc[:,0], emi_psy_transform.iloc[:,0], c = emi_ant_transform['Fraction ANT Binding'], cmap = cmap2)
 ax0.scatter(emi_wt_ant_transform.iloc[:,0], emi_wt_psy_transform.iloc[:,0], c = 'crimson', s = 65, edgecolor = 'k')
@@ -315,7 +336,7 @@ plt.tight_layout()
 
 #%%
 fig, ax = plt.subplots(figsize = (7,4.5))
-img = ax.scatter(emi_novel_ant_transform.iloc[:,0], emi_novel_psy_transform.iloc[:,0], c = mutations_biophys.loc[:,'pI'], s = 25, cmap = 'viridis')
+img = ax.scatter(emi_novel_ant_transform.iloc[:,0], emi_novel_psy_transform.iloc[:,0], c = library_mutations_biophys.loc[:,'pI'], s = 25, cmap = 'viridis')
 ax.scatter(emi_wt_ant_transform.iloc[:,0], emi_wt_psy_transform.iloc[:,0], c = 'crimson', s = 65, edgecolor = 'k')
 plt.xlabel('Antigen Binding (WT Normal)', fontsize = 18)
 plt.ylabel('PSY Binding (WT Normal)', fontsize = 18)
@@ -325,5 +346,4 @@ plt.tight_layout()
 
 #49-65
 #92-102
-
 
