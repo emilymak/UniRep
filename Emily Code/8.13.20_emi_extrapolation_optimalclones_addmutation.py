@@ -78,17 +78,15 @@ emi_iso_seqs = emi_iso_seqs.iloc[0:137,:]
 
 
 #%%
-<<<<<<< HEAD
 residue_dict = pd.read_csv("..\\Datasets\\residue_dict_new_novel_clones.csv", header = 0, index_col = 0)
 emi_novel_seqs = pd.read_pickle("..\\Datasets\\mutation scans\\2020_08_13 emi screen\\emi_mut_CDR2and3_64_AH_multiclone.pickle")
-=======
+
 ### creating a few biophysical descriptors of the new mutations and the overal mutations of the novel sequences
 
 ### importing residue dict that has 6 desciptors of amino acids
-residue_dict = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\residue_dict_new_novel_clones.csv", header = 0, index_col = 0)
+residue_dict = pd.read_csv("..\\Datasets\\residue_dict_new_novel_clones.csv", header = 0, index_col = 0)
 
-emi_novel_seqs = pd.read_pickle("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\mutation scans\\2020_08_13 emi screen\\emi_mut_CDR2and3_64_AH_multiclone.pickle")
->>>>>>> b88fa6bb97f9a37ea64e3ff440f3abf98186fdec
+emi_novel_seqs = pd.read_pickle("..\\Datasets\\mutation scans\\2020_08_13 emi screen\\emi_mut_CDR2and3_64_AH_multiclone.pickle")
 emi_novel_reps = pd.DataFrame(np.vstack(emi_novel_seqs.iloc[:,3]))
 
 ### compares residue to the base sequence residue at that position
