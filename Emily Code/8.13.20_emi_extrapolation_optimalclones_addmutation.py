@@ -53,23 +53,23 @@ sns.set_style("white")
 
 
 #%%
-emi_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_reps_stringent.csv", header = 0, index_col = None)
-emi_labels = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_rep_labels_stringent.csv", header = 0, index_col = 0)
-emi_biophys = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_biophys_stringent.csv", header = 0, index_col = 0)
+emi_reps = pd.read_csv("..\\Datasets\\emi_reps_stringent.csv", header = 0, index_col = None)
+emi_labels = pd.read_csv("..\\Datasets\\emi_rep_labels_stringent.csv", header = 0, index_col = 0)
+emi_biophys = pd.read_csv("..\\Datasets\\emi_biophys_stringent.csv", header = 0, index_col = 0)
 
-emi_iso_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_iso_reps.csv", header = 0, index_col = 0)
+emi_iso_reps = pd.read_csv("..\\Datasets\\emi_iso_reps.csv", header = 0, index_col = 0)
 emi_zero_rep = pd.DataFrame(emi_iso_reps.iloc[61,:]).T
-emi_iso_binding = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_iso_binding.csv", header = 0, index_col = None)
+emi_iso_binding = pd.read_csv("..\\Datasets\\emi_iso_binding.csv", header = 0, index_col = None)
 
-emi_wt_rep = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_wt_rep.csv", header = 0, index_col = 0)
+emi_wt_rep = pd.read_csv("..\\Datasets\\emi_wt_rep.csv", header = 0, index_col = 0)
 emi_wt_binding = pd.DataFrame([1,1])
 emi_zero_binding = pd.DataFrame([emi_iso_binding.iloc[61,1:3]]).T
 emi_wt_binding.index = ['ANT Normalized Binding', 'PSY Normalized Binding']
 emi_fit_reps = pd.concat([emi_wt_rep, emi_zero_rep])
 emi_fit_binding = pd.concat([emi_wt_binding, emi_zero_binding], axis = 1, ignore_index = True).T
 
-wt_seq = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_wt_seq.csv", header = None, index_col = None)
-emi_iso_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_iso_seqs.csv", header = None)
+wt_seq = pd.read_csv("..\\Datasets\\emi_wt_seq.csv", header = None, index_col = None)
+emi_iso_seqs = pd.read_csv("..\\Datasets\\emi_iso_seqs.csv", header = None)
 emi_iso_seqs.columns = ['Sequences']
 
 emi_iso_binding = emi_iso_binding.iloc[0:137,:]
@@ -78,8 +78,8 @@ emi_iso_seqs = emi_iso_seqs.iloc[0:137,:]
 
 
 #%%
-residue_dict = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\residue_dict_new_novel_clones.csv", header = 0, index_col = 0)
-emi_novel_seqs = pd.read_pickle("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\mutation scans\\2020_08_13 emi screen\\emi_mut_CDR2and3_64_AH_multiclone.pickle")
+residue_dict = pd.read_csv("..\\Datasets\\residue_dict_new_novel_clones.csv", header = 0, index_col = 0)
+emi_novel_seqs = pd.read_pickle("..\\Datasets\\mutation scans\\2020_08_13 emi screen\\emi_mut_CDR2and3_64_AH_multiclone.pickle")
 emi_novel_reps = pd.DataFrame(np.vstack(emi_novel_seqs.iloc[:,3]))
 
 mutation_added = []
