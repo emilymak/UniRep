@@ -48,6 +48,7 @@ cmap4 = LinearSegmentedColormap.from_list("mycmap", colormap4)
 cmap5 = LinearSegmentedColormap.from_list("mycmap", colormap5)
 
 sns.set_style("white")
+%matplotlib automatic
 
 
 #%%
@@ -253,6 +254,7 @@ ax.scatter(mutation_x_diff, [pval_1146_diff[i-1] for i in mutation_x], c = 'oran
 ax.scatter(interesting_mut_diff, [pval_1146_diff[i-1] for i in interesting_mut], c = 'red', edgecolor = 'k', s = 75, marker = '^')
 ax.axvspan(49, 65, alpha = 0.25, color='grey')
 ax.axvspan(92, 102, alpha = 0.25, color='grey')
+plt.show()
 
 
 #%%
@@ -293,46 +295,59 @@ ax.axvspan(92, 102, alpha = 0.25, color='grey')
 
 
 #%%
-fig, ax = plt.subplots()
+xticks = np.arange(0,115,5)
+fig, ax = plt.subplots(figsize = (18,4.5))
 ax.plot(pval_849)
-ax.scatter(mutation_x, [pval_849[i] for i in mutation_x], c = 'orange')
-ax.scatter(interesting_mut, [pval_849[i] for i in interesting_mut], c = 'red')
+ax.scatter(mutation_x, [pval_849[i] for i in mutation_x], c = 'blue', s = 75, edgecolor = 'k')
 ax.axvspan(49, 65, alpha = 0.25, color='grey')
-ax.axvspan(92, 102, alpha = 0.25, color='grey')
+ax.axvspan(96, 103, alpha = 0.25, color='grey')
+plt.xticks(ticks = xticks, fontsize = 20)
+plt.tight_layout()
 
-fig, ax = plt.subplots()
-ax.plot(pval_1146)
-ax.scatter(mutation_x, [pval_1146[i] for i in mutation_x], c = 'orange')
-ax.scatter(interesting_mut, [pval_1146[i] for i in interesting_mut], c = 'red')
+fig, ax = plt.subplots(figsize = (18,4.5))
+ax.plot(pval_1146, c = 'darkorange')
+ax.scatter(mutation_x, [pval_1146[i] for i in mutation_x], c = 'orange', s = 75, edgecolor = 'k')
 ax.axvspan(49, 65, alpha = 0.25, color='grey')
-ax.axvspan(92, 102, alpha = 0.25, color='grey')
+ax.axvspan(96, 103, alpha = 0.25, color='grey')
+plt.xticks(ticks = xticks, fontsize = 20)
+plt.tight_layout()
 
-fig, ax = plt.subplots()
-ax.plot(pval_1899)
-ax.scatter(mutation_x, [pval_1899[i] for i in mutation_x], c = 'orange')
-ax.scatter(interesting_mut, [pval_1899[i] for i in interesting_mut], c = 'red')
+fig, ax = plt.subplots(figsize = (18,4.5))
+ax.plot(pval_1899, c = 'green')
+ax.scatter(mutation_x, [pval_1899[i] for i in mutation_x], c = 'green', s = 75, edgecolor = 'k')
 ax.axvspan(49, 65, alpha = 0.25, color='grey')
-ax.axvspan(92, 102, alpha = 0.25, color='grey')
+ax.axvspan(96, 103, alpha = 0.25, color='grey')
+plt.xticks(ticks = xticks, fontsize = 20)
+plt.tight_layout()
+
 
 #%%
-fig, ax = plt.subplots()
+xticks = np.arange(0,115,5)
+fig, ax = plt.subplots(figsize = (18,4.5))
 ax.plot(pval_849_diff)
-ax.scatter(mutation_x_diff, [pval_849_diff[i-1] for i in mutation_x], c = 'orange', edgecolor = 'k')
-ax.scatter(interesting_mut_diff, [pval_849_diff[i-1] for i in interesting_mut], c = 'red', edgecolor = 'k', s = 75, marker = '^')
+ax.scatter(mutation_x_diff, [pval_849_diff[i-1] for i in mutation_x], s = 75, c = 'blue', edgecolor = 'k', zorder = 25)
 ax.axvspan(49, 65, alpha = 0.25, color='grey')
-ax.axvspan(92, 102, alpha = 0.25, color='grey')
+ax.axvspan(96, 103, alpha = 0.25, color='grey')
+plt.xticks(ticks = xticks, fontsize = 20)
+plt.tight_layout()
 
-fig, ax = plt.subplots()
-ax.plot(pval_1146_diff)
-ax.scatter(mutation_x_diff, [pval_1146_diff[i-1] for i in mutation_x], c = 'orange', edgecolor = 'k')
-ax.scatter(interesting_mut_diff, [pval_1146_diff[i-1] for i in interesting_mut], c = 'red', edgecolor = 'k', s = 75, marker = '^')
-ax.axvspan(49, 65, alpha = 0.25, color='grey')
-ax.axvspan(92, 102, alpha = 0.25, color='grey')
 
-fig, ax = plt.subplots()
-ax.plot(pval_1899_diff)
-ax.scatter(mutation_x_diff, [pval_1899_diff[i-1] for i in mutation_x], c = 'orange', edgecolor = 'k')
-ax.scatter(interesting_mut_diff, [pval_1899_diff[i-1] for i in interesting_mut], c = 'red', edgecolor = 'k', s = 75, marker = '^')
+fig, ax = plt.subplots(figsize = (18,4.5))
+ax.plot(pval_1146_diff, c = 'darkorange')
+ax.scatter(mutation_x_diff, [pval_1146_diff[i-1] for i in mutation_x], s = 75, c = 'darkorange', edgecolor = 'k', zorder = 25)
+ax.axvspan(25, 34, alpha = 0.25, color = 'grey')
 ax.axvspan(49, 65, alpha = 0.25, color='grey')
-ax.axvspan(92, 102, alpha = 0.25, color='grey')
+ax.axvspan(96, 103, alpha = 0.25, color='grey')
+plt.xticks(ticks = xticks, fontsize = 20)
+plt.tight_layout()
+
+
+fig, ax = plt.subplots(figsize = (18,4.5))
+ax.plot(pval_1899_diff, c = 'green')
+ax.scatter(mutation_x_diff, [pval_1899_diff[i-1] for i in mutation_x], s = 75, c = 'green', edgecolor = 'k', zorder = 25)
+ax.axvspan(25, 34, alpha = 0.25, color = 'grey')
+ax.axvspan(49, 65, alpha = 0.25, color='grey')
+ax.axvspan(96, 103, alpha = 0.25, color='grey')
+plt.xticks(ticks = xticks, fontsize = 20)
+plt.tight_layout()
 
