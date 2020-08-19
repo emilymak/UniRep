@@ -86,7 +86,7 @@ emi_novel_seqs = pd.read_pickle("..\\Datasets\\mutation scans\\2020_08_18 emi sc
 ### importing residue dict that has 6 desciptors of amino acids
 residue_dict = pd.read_csv("..\\Datasets\\residue_dict_new_novel_clones.csv", header = 0, index_col = 0)
 
-emi_novel_seqs = pd.read_pickle("..\\Datasets\\mutation scans\\2020_08_13 emi screen\\emi_mut_CDR2and3_64_AH_multiclone.pickle")
+emi_novel_seqs = pd.read_pickle("..\\Datasets\\mutation scans\\2020_08_18 emi screen with proper CDR23 ranges\\emi_mut_CDR2and3_64_AH_multiclone.pickle")
 emi_novel_reps = pd.DataFrame(np.vstack(emi_novel_seqs.iloc[:,3]))
 
 ### compares residue to the base sequence residue at that position
@@ -236,7 +236,7 @@ for index, row in emi_ant_transform.iterrows():
         emi_optimal_sequences.append([index, emi_labels.iloc[index, 0]])
 
 ### creating list of stringency/qulity of novel sequences that matches old library evaluation
-novel_clones_score = [0]*3535
+novel_clones_score = [0]*3150
 emi_optimal_sequences = []
 for index, row in emi_novel_ant_transform.iterrows():
     if (emi_novel_ant_transform.iloc[index,1] > 0.65) & (emi_novel_psy_transform.iloc[index,1] < 0.95):
@@ -248,7 +248,7 @@ for index, row in emi_novel_ant_transform.iterrows():
         emi_optimal_sequences.append([index, emi_labels.iloc[index, 0]])
 
 ### creating list of stringency/quality of novel sequences based on new criteria that is very subject to change
-novel_clones_optimal_score = [0]*3535
+novel_clones_optimal_score = [0]*3150
 emi_novel_optimal_sequences = []
 for index, row in emi_novel_ant_transform.iterrows():
     if (emi_novel_ant_transform.iloc[index,1] > 1.30) & (emi_novel_psy_transform.iloc[index,1] < 0.85):
@@ -346,7 +346,4 @@ plt.ylabel('PSY Binding (WT Normal)', fontsize = 18)
 plt.xticks(fontsize = 14)
 plt.yticks(fontsize = 14)
 plt.tight_layout()
-
-#49-65
-#92-102
 

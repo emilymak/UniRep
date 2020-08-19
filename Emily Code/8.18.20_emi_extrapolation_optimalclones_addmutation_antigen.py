@@ -80,9 +80,9 @@ svc_coefs = []
 num_coefs = []
 for i in c:
     svc = LinearSVC(penalty = 'l1', C = i, dual = False, max_iter = 100000)
-    svc.fit(reps_train, labels_train.iloc[:,2])
+    svc.fit(reps_train, labels_train.iloc[:,3])
     test_pred = svc.predict(reps_test)
-    svc_accuracy.append(accuracy_score(test_pred, labels_test.iloc[:,2]))
+    svc_accuracy.append(accuracy_score(test_pred, labels_test.iloc[:,3]))
     svc_coefs.append(svc.coef_)
     num_coefs.append(np.count_nonzero(svc.coef_))
 
@@ -92,15 +92,15 @@ svc_coef_stack_pd = pd.DataFrame(svc_coef_stack)
 
 #%%
 plt.scatter(num_coefs, svc_accuracy)
-plt.plot(svc_coef_stack_pd.iloc[5:25,:])
+plt.plot(svc_coef_stack_pd.iloc[5:35,:])
 
 
 #%%
-emi_feats = pd.DataFrame(emi_reps.iloc[:,1899])
+emi_feats = pd.DataFrame(emi_reps.iloc[:,1830])
 emi_feats.columns = ['Second']
-emi_feats['First'] = emi_reps.iloc[:,849]
+emi_feats['First'] = emi_reps.iloc[:,1146]
 
-plt.scatter(emi_feats.iloc[:,0], emi_feats.iloc[:,1], c = emi_labels.iloc[:,2], alpha = 0.5, cmap = 'viridis', edgecolor = 'k')
+plt.scatter(emi_feats.iloc[:,0], emi_feats.iloc[:,1], c = emi_labels.iloc[:,3], alpha = 0.5, cmap = 'viridis', edgecolor = 'k')
 
 
 #%%
@@ -117,109 +117,84 @@ emi_neg_hs = pd.read_pickle("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datase
 #divergences for ant binding
 
 #%%
+### 1830
+pos_1830 = []
+neg_1830 = []
+for i in np.arange(0,116):
+    pos_1830_act = []
+    neg_1830_act = []
+    for j in np.arange(0,2000):
+        if emi_labels.iloc[j,3] == 1:
+            pos_1830_act.append(emi_pos_hs[j][i][1830])
+        if emi_labels.iloc[j,3] == 0:
+            neg_1830_act.append(emi_pos_hs[j][i][1830])
+    for j in np.arange(2000,4000):
+        if emi_labels.iloc[j,3] == 1:
+            pos_1830_act.append(emi_neg_hs[j-2000][i][1830])
+        if emi_labels.iloc[j,3] == 0:
+            neg_1830_act.append(emi_neg_hs[j-2000][i][1830])
+    neg_1830.append(np.mean(neg_1830_act))
+    pos_1830.append(np.mean(pos_1830_act))
+
+diff_1830 = []
+for i in np.arange(0,116):
+    diff_1830.append(neg_1830[i]-pos_1830[i])
+    
+plt.plot(diff_1830)    
+    
+    
+#%%
 ### 849
 pos_849 = []
-for i in np.arange(0,116):
-    pos_849_act = []
-    for j in np.arange(0,2000):
-         pos_849_act.append(emi_pos_hs[j][i][849])
-    pos_849.append(np.mean(pos_849_act))
-    
 neg_849 = []
 for i in np.arange(0,116):
+    pos_849_act = []
     neg_849_act = []
     for j in np.arange(0,2000):
-         neg_849_act.append(emi_neg_hs[j][i][849])
+        if emi_labels.iloc[j,3] == 1:
+            pos_849_act.append(emi_pos_hs[j][i][849])
+        if emi_labels.iloc[j,3] == 0:
+            neg_849_act.append(emi_pos_hs[j][i][849])
+    for j in np.arange(2000,4000):
+        if emi_labels.iloc[j,3] == 1:
+            pos_849_act.append(emi_neg_hs[j-2000][i][849])
+        if emi_labels.iloc[j,3] == 0:
+            neg_849_act.append(emi_neg_hs[j-2000][i][849])
     neg_849.append(np.mean(neg_849_act))
-   
+    pos_849.append(np.mean(pos_849_act))
+
 diff_849 = []
 for i in np.arange(0,116):
     diff_849.append(neg_849[i]-pos_849[i])
     
-plt.plot(diff_849)    
-    
+plt.plot(diff_849) 
+ 
     
 #%%
 ### 1146
 pos_1146 = []
-for i in np.arange(0,116):
-    pos_1146_act = []
-    for j in np.arange(0,2000):
-         pos_1146_act.append(emi_pos_hs[j][i][1146])
-    pos_1146.append(np.mean(pos_1146_act))
-    
 neg_1146 = []
 for i in np.arange(0,116):
+    pos_1146_act = []
     neg_1146_act = []
     for j in np.arange(0,2000):
-         neg_1146_act.append(emi_neg_hs[j][i][1146])
+        if emi_labels.iloc[j,3] == 1:
+            pos_1146_act.append(emi_pos_hs[j][i][1146])
+        if emi_labels.iloc[j,3] == 0:
+            neg_1146_act.append(emi_pos_hs[j][i][1146])
+    for j in np.arange(2000,4000):
+        if emi_labels.iloc[j,3] == 1:
+            pos_1146_act.append(emi_neg_hs[j-2000][i][1146])
+        if emi_labels.iloc[j,3] == 0:
+            neg_1146_act.append(emi_neg_hs[j-2000][i][1146])
     neg_1146.append(np.mean(neg_1146_act))
-   
+    pos_1146.append(np.mean(pos_1146_act))
+
 diff_1146 = []
 for i in np.arange(0,116):
     diff_1146.append(neg_1146[i]-pos_1146[i])
     
-plt.plot(diff_1146)  
-    
-#%%
-### 1899
-pos_1899 = []
-for i in np.arange(0,116):
-    pos_1899_act = []
-    for j in np.arange(0,2000):
-         pos_1899_act.append(emi_pos_hs[j][i][1899])
-    pos_1899.append(np.mean(pos_1899_act))
-    
-neg_1899 = []
-for i in np.arange(0,116):
-    neg_1899_act = []
-    for j in np.arange(0,2000):
-         neg_1899_act.append(emi_neg_hs[j][i][1899])
-    neg_1899.append(np.mean(neg_1899_act))
-   
-diff_1899 = []
-for i in np.arange(0,116):
-    diff_1899.append(neg_1899[i]-pos_1899[i])
-    
-plt.plot(diff_1899)
-
-
-#%%
-n_kl_bins = 20
-pval_1899 = []
-for i in np.arange(0,116):
-    pos_1899_act = []
-    neg_1899_act = []
-    act_1899 = []
-    for j in np.arange(0,2000):
-         pos_1899_act.append(emi_pos_hs[j][i][1899])
-         neg_1899_act.append(emi_neg_hs[j][i][1899])
-         act_1899.append(emi_pos_hs[j][i][1899])
-         act_1899.append(emi_neg_hs[j][i][1899])
-    kl_bins = np.linspace(np.min(act_1899), np.max(act_1899), n_kl_bins)
-    hist_pos = np.histogram(pos_1899_act, kl_bins)     
-    hist_neg = np.histogram(neg_1899_act, kl_bins)
-    ttest = js_entropy(hist_pos[0], hist_neg[0])
-    pval_1899.append(ttest)
-
-fig, ax = plt.subplots()
-ax.plot(pval_1899)
-ax.scatter(mutation_x, [pval_1899[i] for i in mutation_x], c = 'orange')
-ax.scatter(interesting_mut, [pval_1899[i] for i in interesting_mut], c = 'red')
-ax.axvspan(49, 65, alpha = 0.25, color='grey')
-ax.axvspan(92, 102, alpha = 0.25, color='grey')
-
-pval_1899_diff = []
-for i in np.arange(0,115):
-    pval_1899_diff.append(pval_1899[i+1] - pval_1899[i])
-   
-fig, ax = plt.subplots()
-ax.plot(pval_1899_diff)
-ax.scatter(mutation_x_diff, [pval_1899_diff[i-1] for i in mutation_x], c = 'orange', edgecolor = 'k')
-ax.scatter(interesting_mut_diff, [pval_1899_diff[i-1] for i in interesting_mut], c = 'red', edgecolor = 'k', s = 75, marker = '^')
-ax.axvspan(49, 65, alpha = 0.25, color='grey')
-ax.axvspan(92, 102, alpha = 0.25, color='grey')
-
+plt.plot(diff_1146) 
 
 #%%
 n_kl_bins = 20
@@ -256,7 +231,6 @@ ax.scatter(mutation_x_diff, [pval_1146_diff[i-1] for i in mutation_x], c = 'oran
 ax.scatter(interesting_mut_diff, [pval_1146_diff[i-1] for i in interesting_mut], c = 'red', edgecolor = 'k', s = 75, marker = '^')
 ax.axvspan(49, 65, alpha = 0.25, color='grey')
 ax.axvspan(92, 102, alpha = 0.25, color='grey')
-plt.show()
 
 
 #%%
@@ -294,13 +268,51 @@ ax.scatter(mutation_x_diff, [pval_849_diff[i-1] for i in mutation_x], c = 'orang
 ax.scatter(interesting_mut_diff, [pval_849_diff[i-1] for i in interesting_mut], c = 'red', edgecolor = 'k', s = 75, marker = '^')
 ax.axvspan(49, 65, alpha = 0.25, color='grey')
 ax.axvspan(92, 102, alpha = 0.25, color='grey')
+plt.show()
+
+
+#%%
+n_kl_bins = 20
+pval_1830 = []
+for i in np.arange(0,116):
+    pos_1830_act = []
+    neg_1830_act = []
+    act_1830 = []
+    for j in np.arange(0,2000):
+         pos_1830_act.append(emi_pos_hs[j][i][1830])
+         neg_1830_act.append(emi_neg_hs[j][i][1830])
+         act_1830.append(emi_pos_hs[j][i][1830])
+         act_1830.append(emi_neg_hs[j][i][1830])
+    kl_bins = np.linspace(np.min(act_1830), np.max(act_1830), n_kl_bins)
+    hist_pos = np.histogram(pos_1830_act, kl_bins)     
+    hist_neg = np.histogram(neg_1830_act, kl_bins)
+    ttest = js_entropy(hist_pos[0], hist_neg[0])
+    pval_1830.append(ttest)
+
+fig, ax = plt.subplots()
+ax.plot(pval_1830)
+ax.scatter(mutation_x, [pval_1830[i] for i in mutation_x], c = 'orange')
+ax.scatter(interesting_mut, [pval_1830[i] for i in interesting_mut], c = 'red')
+ax.axvspan(49, 65, alpha = 0.25, color='grey')
+ax.axvspan(92, 102, alpha = 0.25, color='grey')
+
+pval_1830_diff = []
+for i in np.arange(0,115):
+    pval_1830_diff.append(pval_1830[i+1] - pval_1830[i])
+   
+fig, ax = plt.subplots()
+ax.plot(pval_1830_diff)
+ax.scatter(mutation_x_diff, [pval_1830_diff[i-1] for i in mutation_x], c = 'orange', edgecolor = 'k')
+ax.scatter(interesting_mut_diff, [pval_1830_diff[i-1] for i in interesting_mut], c = 'red', edgecolor = 'k', s = 75, marker = '^')
+ax.axvspan(49, 65, alpha = 0.25, color='grey')
+ax.axvspan(92, 102, alpha = 0.25, color='grey')
 
 
 #%%
 xticks = np.arange(0,115,5)
 fig, ax = plt.subplots(figsize = (18,4.5))
-ax.plot(pval_849)
-ax.scatter(mutation_x, [pval_849[i] for i in mutation_x], c = 'blue', s = 75, edgecolor = 'k')
+ax.plot(pval_1830)
+ax.scatter(mutation_x, [pval_1830[i] for i in mutation_x], c = 'blue', s = 75, edgecolor = 'k')
 ax.axvspan(25, 35, alpha = 0.25, color = 'grey')
 ax.axvspan(49, 66, alpha = 0.25, color='grey')
 ax.axvspan(96, 104, alpha = 0.25, color='grey')
@@ -308,8 +320,8 @@ plt.xticks(ticks = xticks, fontsize = 20)
 plt.tight_layout()
 
 fig, ax = plt.subplots(figsize = (18,4.5))
-ax.plot(pval_1146, c = 'darkorange')
-ax.scatter(mutation_x, [pval_1146[i] for i in mutation_x], c = 'orange', s = 75, edgecolor = 'k')
+ax.plot(pval_849, c = 'darkorange')
+ax.scatter(mutation_x, [pval_849[i] for i in mutation_x], c = 'orange', s = 75, edgecolor = 'k')
 ax.axvspan(25, 35, alpha = 0.25, color = 'grey')
 ax.axvspan(49, 66, alpha = 0.25, color='grey')
 ax.axvspan(96, 104, alpha = 0.25, color='grey')
@@ -317,8 +329,8 @@ plt.xticks(ticks = xticks, fontsize = 20)
 plt.tight_layout()
 
 fig, ax = plt.subplots(figsize = (18,4.5))
-ax.plot(pval_1899, c = 'green')
-ax.scatter(mutation_x, [pval_1899[i] for i in mutation_x], c = 'green', s = 75, edgecolor = 'k')
+ax.plot(pval_1146, c = 'green')
+ax.scatter(mutation_x, [pval_1146[i] for i in mutation_x], c = 'green', s = 75, edgecolor = 'k')
 ax.axvspan(25, 35, alpha = 0.25, color = 'grey')
 ax.axvspan(49, 66, alpha = 0.25, color='grey')
 ax.axvspan(96, 104, alpha = 0.25, color='grey')
@@ -329,7 +341,17 @@ plt.tight_layout()
 #%%
 xticks = np.arange(0,115,5)
 fig, ax = plt.subplots(figsize = (18,4.5))
-ax.bar(np.arange(1,116), pval_849_diff)
+ax.bar(np.arange(1,116), pval_1830_diff)
+ax.scatter(mutation_x, [pval_1830_diff[i-1] for i in mutation_x], s = 100, c = 'red', edgecolor = 'k', zorder = 25)
+ax.axvspan(25, 35, alpha = 0.25, color = 'grey')
+ax.axvspan(49, 66, alpha = 0.25, color='grey')
+ax.axvspan(96, 104, alpha = 0.25, color='grey')
+plt.xticks(ticks = xticks, fontsize = 20)
+plt.tight_layout()
+
+
+fig, ax = plt.subplots(figsize = (18,4.5))
+ax.bar(np.arange(1,116), pval_849_diff, color = 'darkorange')
 ax.scatter(mutation_x, [pval_849_diff[i-1] for i in mutation_x], s = 100, c = 'red', edgecolor = 'k', zorder = 25)
 ax.axvspan(25, 35, alpha = 0.25, color = 'grey')
 ax.axvspan(49, 66, alpha = 0.25, color='grey')
@@ -339,18 +361,8 @@ plt.tight_layout()
 
 
 fig, ax = plt.subplots(figsize = (18,4.5))
-ax.bar(np.arange(1,116), pval_1146_diff, color = 'darkorange')
+ax.bar(np.arange(1,116), pval_1146_diff, color = 'green')
 ax.scatter(mutation_x, [pval_1146_diff[i-1] for i in mutation_x], s = 100, c = 'red', edgecolor = 'k', zorder = 25)
-ax.axvspan(25, 35, alpha = 0.25, color = 'grey')
-ax.axvspan(49, 66, alpha = 0.25, color='grey')
-ax.axvspan(96, 104, alpha = 0.25, color='grey')
-plt.xticks(ticks = xticks, fontsize = 20)
-plt.tight_layout()
-
-
-fig, ax = plt.subplots(figsize = (18,4.5))
-ax.bar(np.arange(1,116), pval_1899_diff, color = 'green')
-ax.scatter(mutation_x, [pval_1899_diff[i-1] for i in mutation_x], s = 100, c = 'red', edgecolor = 'k', zorder = 25)
 ax.axvspan(25, 35, alpha = 0.25, color = 'grey')
 ax.axvspan(49, 66, alpha = 0.25, color='grey')
 ax.axvspan(96, 104, alpha = 0.25, color='grey')
