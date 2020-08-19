@@ -79,7 +79,7 @@ emi_iso_seqs = emi_iso_seqs.iloc[0:137,:]
 
 #%%
 residue_dict = pd.read_csv("..\\Datasets\\residue_dict_new_novel_clones.csv", header = 0, index_col = 0)
-emi_novel_seqs = pd.read_pickle("..\\Datasets\\mutation scans\\2020_08_13 emi screen\\emi_mut_CDR2and3_64_AH_multiclone.pickle")
+emi_novel_seqs = pd.read_pickle("..\\Datasets\\mutation scans\\2020_08_18 emi screen with proper CDR23 ranges\\emi_mut_CDR2and3_64_AH_multiclone.pickle")
 
 ### creating a few biophysical descriptors of the new mutations and the overal mutations of the novel sequences
 
