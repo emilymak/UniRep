@@ -251,13 +251,13 @@ for index, row in emi_novel_ant_transform.iterrows():
 novel_clones_optimal_score = [0]*3150
 emi_novel_optimal_sequences = []
 for index, row in emi_novel_ant_transform.iterrows():
-    if (emi_novel_ant_transform.iloc[index,1] > 1.30) & (emi_novel_psy_transform.iloc[index,1] < 0.85):
+    if (emi_novel_ant_transform.iloc[index,1] > 1.10) & (emi_novel_psy_transform.iloc[index,1] < 0.85):
         novel_clones_optimal_score[index] = 1
         emi_novel_optimal_sequences.append([index, 1, emi_novel_seqs.iloc[index, 2]])
-    if (emi_novel_ant_transform.iloc[index,1] > 1.15) & (emi_novel_psy_transform.iloc[index,1] < 0.70):
+    if (emi_novel_ant_transform.iloc[index,1] > 0.9) & (emi_novel_psy_transform.iloc[index,1] < 0.7):
         novel_clones_optimal_score[index] = 2
         emi_novel_optimal_sequences.append([index, 2, emi_novel_seqs.iloc[index, 2]])
-    if (emi_novel_ant_transform.iloc[index,1] > 1.05) & (emi_novel_psy_transform.iloc[index,1] < 0.50):
+    if (emi_novel_ant_transform.iloc[index,1] > 0.75) & (emi_novel_psy_transform.iloc[index,1] < 0.45):
         novel_clones_optimal_score[index] = 3
         emi_novel_optimal_sequences.append([index, 3, emi_novel_seqs.iloc[index, 2]])
 
@@ -271,7 +271,7 @@ for i in emi_novel_optimal_sequences.iloc[:,0]:
     for j in np.arange(0,115):
         char_diff = list(set(new_char[j]) - set(base_char[j]))
         if len(char_diff) != 0:
-            novel_optimal_seqs.append([emi_novel_seqs.iloc[i,2], char_diff[0], j])
+            novel_optimal_seqs.append([emi_novel_seqs.iloc[i,0], emi_novel_seqs.iloc[i,2], char_diff[0], j])
 
 novel_optimal_seqs = np.vstack(novel_optimal_seqs)
 novel_optimal_seqs = pd.DataFrame(novel_optimal_seqs)
