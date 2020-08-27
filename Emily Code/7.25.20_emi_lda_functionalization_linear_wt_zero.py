@@ -53,28 +53,26 @@ sns.set_style("white")
 
 
 #%%
-emi_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_reps_stringent.csv", header = 0, index_col = None)
-emi_labels = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_rep_labels_stringent.csv", header = 0, index_col = 0)
-emi_biophys = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_biophys_stringent.csv", header = 0, index_col = 0)
+emi_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_reps_stringent.csv", header = 0, index_col = None)
+emi_labels = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_rep_labels_stringent.csv", header = 0, index_col = 0)
+emi_biophys = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_biophys_stringent.csv", header = 0, index_col = 0)
 
-emi_iso_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_iso_reps.csv", header = 0, index_col = 0)
+emi_iso_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_iso_reps_reduced.csv", header = 0, index_col = 0)
 emi_zero_rep = pd.DataFrame(emi_iso_reps.iloc[61,:]).T
-emi_iso_binding = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_iso_binding.csv", header = 0, index_col = None)
+emi_iso_binding = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_iso_binding_reduced.csv", header = 0, index_col = 0)
 
-emi_wt_rep = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_wt_rep.csv", header = 0, index_col = 0)
+emi_wt_rep = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_wt_rep.csv", header = 0, index_col = 0)
 emi_wt_binding = pd.DataFrame([1,1])
-emi_zero_binding = pd.DataFrame([emi_iso_binding.iloc[61,1:3]]).T
+emi_zero_binding = pd.DataFrame([emi_iso_binding.iloc[61,0:2]]).T
 emi_wt_binding.index = ['ANT Normalized Binding', 'PSY Normalized Binding']
 emi_fit_reps = pd.concat([emi_wt_rep, emi_zero_rep])
 emi_fit_binding = pd.concat([emi_wt_binding, emi_zero_binding], axis = 1, ignore_index = True).T
 
-wt_seq = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_wt_seq.csv", header = None, index_col = None)
-emi_iso_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_iso_seqs.csv", header = None)
+wt_seq = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_wt_seq.csv", header = None, index_col = None)
+emi_iso_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_iso_seqs_reduced.csv", header = None, index_col = None)
 emi_iso_seqs.columns = ['Sequences']
 
-emi_iso_binding = emi_iso_binding.iloc[0:137,:]
-emi_iso_reps = emi_iso_reps.iloc[0:137,:]
-emi_iso_seqs = emi_iso_seqs.iloc[0:137,:]
+emi_iso_binding.reset_index(inplace = True, drop = True)
 
 emi_iso_binding['CLF'] = 0
 emi_iso_binding['CLF PSY'] = 0
@@ -84,12 +82,6 @@ for index, row in emi_iso_binding.iterrows():
     if row[2] > 0.6:
         emi_iso_binding.loc[index, 'CLF PSY'] = 1
 
-hamming_distance_iso_from_wt_seq = []
-for i in emi_iso_seqs['Sequences']:
-    characters = list(i)
-    ham_dist = hamming(characters, list(wt_seq.iloc[0,0]))
-    hamming_distance_iso_from_wt_seq.append(ham_dist)
-emi_iso_binding['Hamming'] = hamming_distance_iso_from_wt_seq
 
 #%%
 ### stringent antigen binding LDA evaluation
@@ -110,8 +102,8 @@ emi_wt_ant_transform = pd.DataFrame(-1*(emi_ant.transform(emi_wt_rep)))
 emi_iso_ant_transform= pd.DataFrame(-1*(emi_ant.transform(emi_iso_reps)))
 emi_fit_ant_transform= pd.DataFrame(-1*(emi_ant.transform(emi_fit_reps)))
 emi_iso_ant_predict = pd.DataFrame(emi_ant.predict(emi_iso_reps))
-#emi_fit_ant_predict = pd.DataFrame(emi_ant.predict(emi_fit_reps))
-print(stats.spearmanr(emi_iso_ant_transform.iloc[:,0], emi_iso_binding.iloc[:,1]))
+
+print(stats.spearmanr(emi_iso_ant_transform.iloc[:,0], emi_iso_binding.iloc[:,0]))
 
 x1 = np.polyfit(emi_fit_ant_transform.iloc[:,0], emi_fit_binding.iloc[:,0],1)
 emi_ant_transform['Fraction ANT Binding'] = ((emi_ant_transform.iloc[:,0]*x1[0])+x1[1])
@@ -119,7 +111,7 @@ emi_iso_ant_transform['Fraction ANT Binding'] = ((emi_iso_ant_transform.iloc[:,0
 emi_fit_ant_transform['Fraction ANT Binding'] = ((emi_fit_ant_transform.iloc[:,0]*x1[0])+x1[1])
 
 plt.figure(1)
-plt.scatter(emi_iso_ant_transform.iloc[:,0], emi_iso_binding.iloc[:,1], c = emi_iso_ant_predict.iloc[:,0], cmap = cmap3, edgecolor = 'k', s = 75)
+plt.scatter(emi_iso_ant_transform.iloc[:,0], emi_iso_binding.iloc[:,0], c = emi_iso_ant_predict.iloc[:,0], cmap = cmap3, edgecolor = 'k', s = 75)
 plt.scatter(emi_wt_ant_transform, 1, s = 75, c = 'crimson', edgecolor = 'k')
 xd = np.linspace(-3.5, 2, 100)
 plt.plot(xd, ((xd*x1[0])+x1[1]), c= 'k', lw = 2, linestyle= ':')
@@ -132,23 +124,6 @@ plt.xlabel('LDA Transform', fontsize = 16)
 plt.title('Experimental Antigen Binding vs LDA Transform', fontsize = 18)
 plt.tight_layout()
 
-plt.figure(1)
-img = plt.scatter(emi_iso_ant_transform.iloc[:,0], emi_iso_binding.iloc[:,1], c = emi_iso_binding.iloc[:,3], cmap = cmap4, edgecolor = 'k', s = 75)
-plt.scatter(emi_wt_ant_transform, 1, s = 75, c = 'crimson', edgecolor = 'k')
-plt.tick_params(labelsize = 12)
-cbar = plt.colorbar(img)
-cbar.set_ticks([])
-cbar.set_label('Hamming Distance from WT', fontsize = 14)
-plt.ylabel('Display Normalalized Antigen Binding', fontsize = 16)
-plt.xlabel('LDA Transform', fontsize = 16)
-plt.title('Experimental Antigen Binding vs LDA Transform', fontsize = 18)
-plt.tight_layout()
-
-plt.figure(2)
-img = sns.swarmplot(emi_iso_binding.iloc[:,3], emi_iso_binding.iloc[:,1], hue = emi_iso_ant_transform.iloc[:,0], palette = 'viridis', s = 8)
-plt.xlabel('Hamming Distance', fontsize = 16)
-plt.ylabel('ANT Binding', fontsize = 16)
-img.get_legend().remove()
 
 #%%
 ### stringent psyigen binding LDA evaluation
@@ -169,7 +144,7 @@ emi_wt_psy_transform = pd.DataFrame(emi_psy.transform(emi_wt_rep))
 emi_iso_psy_transform= pd.DataFrame(emi_psy.transform(emi_iso_reps))
 emi_fit_psy_transform= pd.DataFrame(emi_psy.transform(emi_fit_reps))
 emi_iso_psy_predict = pd.DataFrame(emi_psy.predict(emi_iso_reps))
-#emi_fit_psy_predict = pd.DataFrame(emi_psy.predict(emi_fit_reps))
+
 print(stats.spearmanr(emi_iso_psy_transform.iloc[:,0], emi_iso_binding.iloc[:,1]))
 
 x2 = np.polyfit(emi_fit_psy_transform.iloc[:,0], emi_fit_binding.iloc[:,1],1)
@@ -178,7 +153,7 @@ emi_iso_psy_transform['Fraction PSY Binding'] = ((emi_iso_psy_transform.iloc[:,0
 emi_fit_psy_transform['Fraction PSY Binding'] = ((emi_fit_psy_transform.iloc[:,0]*x2[0])+x2[1])
 
 plt.figure(3)
-plt.scatter(emi_iso_psy_transform.iloc[:,0], emi_iso_binding.iloc[:,2], c = emi_iso_psy_predict.iloc[:,0], cmap = cmap1, edgecolor = 'k', s = 75)
+plt.scatter(emi_iso_psy_transform.iloc[:,0], emi_iso_binding.iloc[:,1], c = emi_iso_psy_predict.iloc[:,0], cmap = cmap1, edgecolor = 'k', s = 75)
 plt.scatter(emi_wt_psy_transform, 1, s = 75, c = 'crimson', edgecolor = 'k')
 xd = np.linspace(-3, 2, 100)
 plt.plot(xd, ((xd*x2[0])+x2[1]), c= 'k', lw = 2, linestyle= ':')
@@ -189,8 +164,8 @@ legend = plt.legend(handles=[neg_gate_patch, pos_gate_patch], fontsize = 11)
 plt.ylabel('Display Normalalized PSY Binding', fontsize = 16)
 plt.xlabel('LDA Transform', fontsize = 16)
 plt.title('Experimental PSY Binding vs LDA Transform', fontsize = 18)
-plt.xlim(-4,3.5)
-plt.ylim(0,1.5)
+#plt.xlim(-4,3.5)
+#plt.ylim(0,1.5)
 plt.tight_layout()
 
 
@@ -209,22 +184,23 @@ for index, row in emi_ant_transform.iterrows():
 
 iso_score = [0]*137
 for index, row in emi_iso_ant_transform.iterrows():
-    if (emi_iso_ant_transform.iloc[index,1] > 0.45) & (emi_iso_psy_transform.iloc[index,1] < 0.75):
+    if (emi_iso_ant_transform.iloc[index,1] > 0.60) & (emi_iso_psy_transform.iloc[index,1] < 0.95):
         iso_score[index] = 1
-    if (emi_iso_ant_transform.iloc[index,1] > 0.50) & (emi_iso_psy_transform.iloc[index,1] < 0.70):
+    if (emi_iso_ant_transform.iloc[index,1] > 0.70) & (emi_iso_psy_transform.iloc[index,1] < 0.90):
         iso_score[index] = 2
-    if (emi_iso_ant_transform.iloc[index,1] > 0.55) & (emi_iso_psy_transform.iloc[index,1] < 0.65):
+    if (emi_iso_ant_transform.iloc[index,1] > 0.80) & (emi_iso_psy_transform.iloc[index,1] < 0.85):
         iso_score[index] = 3
 
 iso_optimal_conf = [0]*137
 iso_transform_conf = [0]*137
 
 for index, row in emi_iso_binding.iterrows():
-    if (emi_iso_binding.iloc[index,1] > 0.5) & (emi_iso_binding.iloc[index,2] < 0.7):
+    if (emi_iso_binding.iloc[index,0] > 0.80) & (emi_iso_binding.iloc[index,1] < 0.85):
         iso_optimal_conf[index] = 1
-    if (emi_iso_ant_transform.iloc[index,1] > 0.5) & (emi_iso_psy_transform.iloc[index,1] < 0.7):
+    if (emi_iso_ant_transform.iloc[index,1] > 0.80) & (emi_iso_psy_transform.iloc[index,1] < 0.85):
         iso_transform_conf[index] = 1
 print(confusion_matrix(iso_optimal_conf, iso_transform_conf, labels = [0,1]))
+
 
 #%%
 fig, (ax0, ax1, ax2) = plt.subplots(1, 3, figsize = (18,5))
@@ -257,7 +233,7 @@ ax2.legend(handles=[optimal_patch, lessoptimal_patch, nonoptimal_patch], fontsiz
 
 #%%
 fig, ax = plt.subplots(figsize = (7,4.5))
-img = plt.scatter(emi_iso_binding.iloc[:,1], emi_iso_binding.iloc[:,2], c = iso_score, cmap = cmap4, edgecolor = 'k', s = 75, lw = 1.5, zorder = 2)
+img = plt.scatter(emi_iso_binding.iloc[:,0], emi_iso_binding.iloc[:,1], c = iso_score, cmap = cmap4, edgecolor = 'k', s = 75, lw = 1.5, zorder = 2)
 #img = ax.scatter(emi_ant_iso_transform.iloc[:,1], emi_psy_iso_transform.iloc[:,1], c = iso_score_stringent, s = 80, cmap = cmap4, zorder = 2, edgecolor = 'k')
 plt.xlabel('Antigen Binding (WT Normal)', fontsize = 18)
 plt.ylabel('PSY Binding (WT Normal)', fontsize = 18)
@@ -271,22 +247,6 @@ cbar.set_ticks([])
 cbar.set_label('Stringency of Property Requirements', fontsize = 14)
 plt.tight_layout()
 
-
-#%%
-fig, ax = plt.subplots(figsize = (7,4.5))
-img = plt.scatter(emi_iso_binding.iloc[60:83,1], emi_iso_binding.iloc[60:83,2], c = emi_iso_binding.iloc[60:83,3], cmap = cmap4, edgecolor = 'k', s = 75, lw = 1.5, zorder = 2)
-#img = ax.scatter(emi_ant_iso_transform.iloc[:,1], emi_psy_iso_transform.iloc[:,1], c = iso_score_stringent, s = 80, cmap = cmap4, zorder = 2, edgecolor = 'k')
-plt.xlabel('Antigen Binding (WT Normal)', fontsize = 18)
-plt.ylabel('PSY Binding (WT Normal)', fontsize = 18)
-plt.xticks(fontsize = 14)
-plt.yticks(fontsize = 14)
-ax.invert_xaxis()
-ax.set_ylim(0.2,0.85)
-ax.set_xlim(0.08, -0.025)
-cbar = plt.colorbar(img)
-cbar.set_ticks([])
-cbar.set_label('Hamming Distance from WT', fontsize = 14)
-plt.tight_layout()
 
 #%%
 """

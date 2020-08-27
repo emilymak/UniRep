@@ -53,15 +53,16 @@ sns.set_style("white")
 
 
 #%%
-emi_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_reps_stringent.csv", header = 0, index_col = None)
-emi_labels = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_rep_labels_stringent.csv", header = 0, index_col = 0)
-emi_biophys = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_biophys_stringent.csv", header = 0, index_col = 0)
+emi_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_reps_stringent.csv", header = 0, index_col = None)
+emi_labels = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_rep_labels_stringent.csv", header = 0, index_col = 0)
+emi_biophys = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_biophys_stringent.csv", header = 0, index_col = 0)
 
-emi_iso_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_iso_reps.csv", header = 0, index_col = 0)
+emi_iso_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_iso_new_reps.csv", header = 0, index_col = 0)
+
 emi_zero_rep = pd.DataFrame(emi_reps.iloc[2945,:]).T
-emi_iso_binding = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_iso_binding.csv", header = 0, index_col = None)
+emi_iso_binding = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_iso_binding_new.csv", header = 0, index_col = None)
 
-emi_wt_rep = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_wt_rep.csv", header = 0, index_col = 0)
+emi_wt_rep = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_wt_rep.csv", header = 0, index_col = 0)
 emi_wt_binding = pd.DataFrame([1,1])
 emi_zero_binding = pd.DataFrame([0,0])
 emi_wt_binding.index = ['ANT Normalized Binding', 'PSY Normalized Binding']
@@ -69,8 +70,8 @@ emi_zero_binding.index = ['ANT Normalized Binding', 'PSY Normalized Binding']
 emi_fit_reps = pd.concat([emi_wt_rep, emi_zero_rep])
 emi_fit_binding = pd.concat([emi_wt_binding, emi_zero_binding], axis = 1, ignore_index = True).T
 
-wt_seq = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_wt_seq.csv", header = None, index_col = None)
-emi_iso_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_iso_seqs.csv", header = None)
+wt_seq = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_wt_seq.csv", header = None, index_col = None)
+emi_iso_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_iso_seqs_new.csv", header = None)
 emi_iso_seqs.columns = ['Sequences']
 
 
@@ -164,30 +165,30 @@ plt.tight_layout()
 clones_score = [0]*4000
 emi_optimal_sequences = []
 for index, row in emi_ant_transform.iterrows():
-    if (emi_ant_transform.iloc[index,1] > 0.55) & (emi_psy_transform.iloc[index,1] < 0.75):
+    if (emi_ant_transform.iloc[index,1] > 0.80) & (emi_psy_transform.iloc[index,1] < 0.95):
         clones_score[index] = 1
-    if (emi_ant_transform.iloc[index,1] > 0.60) & (emi_psy_transform.iloc[index,1] < 0.70):
+    if (emi_ant_transform.iloc[index,1] > 0.85) & (emi_psy_transform.iloc[index,1] < 0.90):
         clones_score[index] = 2
-    if (emi_ant_transform.iloc[index,1] > 0.65) & (emi_psy_transform.iloc[index,1] < 0.65):
+    if (emi_ant_transform.iloc[index,1] > 0.90) & (emi_psy_transform.iloc[index,1] < 0.85):
         clones_score[index] = 3
         emi_optimal_sequences.append([index, emi_labels.iloc[index, 0]])
 
-iso_score = [0]*177
+iso_score = [0]*170
 for index, row in emi_iso_ant_transform.iterrows():
-    if (emi_iso_ant_transform.iloc[index,1] > 0.80) & (emi_iso_psy_transform.iloc[index,1] < 0.95):
+    if (emi_iso_ant_transform.iloc[index,1] > 0.80) & (emi_iso_psy_transform.iloc[index,1] < 1.00):
         iso_score[index] = 1
-    if (emi_iso_ant_transform.iloc[index,1] > 0.85) & (emi_iso_psy_transform.iloc[index,1] < 0.90):
+    if (emi_iso_ant_transform.iloc[index,1] > 0.85) & (emi_iso_psy_transform.iloc[index,1] < 0.95):
         iso_score[index] = 2
-    if (emi_iso_ant_transform.iloc[index,1] > 0.90) & (emi_iso_psy_transform.iloc[index,1] < 0.85):
+    if (emi_iso_ant_transform.iloc[index,1] > 0.90) & (emi_iso_psy_transform.iloc[index,1] < 0.90):
         iso_score[index] = 3
 
-iso_optimal_conf = [0]*177
-iso_transform_conf = [0]*177
+iso_optimal_conf = [0]*170
+iso_transform_conf = [0]*170
 
 for index, row in emi_iso_binding.iterrows():
-    if (emi_iso_binding.iloc[index,1] > 0.90) & (emi_iso_binding.iloc[index,2] < 0.85):
+    if (emi_iso_binding.iloc[index,1] > 0.90) & (emi_iso_binding.iloc[index,2] < 0.90):
         iso_optimal_conf[index] = 1
-    if (emi_iso_ant_transform.iloc[index,1] > 0.90) & (emi_iso_psy_transform.iloc[index,1] < 0.85):
+    if (emi_iso_ant_transform.iloc[index,1] > 0.90) & (emi_iso_psy_transform.iloc[index,1] < 0.90):
         iso_transform_conf[index] = 1
 print(confusion_matrix(iso_optimal_conf, iso_transform_conf, labels = [0,1]))
 

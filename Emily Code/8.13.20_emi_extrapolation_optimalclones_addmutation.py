@@ -251,13 +251,13 @@ for index, row in emi_novel_ant_transform.iterrows():
 novel_clones_optimal_score = [0]*3150
 emi_novel_optimal_sequences = []
 for index, row in emi_novel_ant_transform.iterrows():
-    if (emi_novel_ant_transform.iloc[index,1] > 1.30) & (emi_novel_psy_transform.iloc[index,1] < 0.85):
+    if (emi_novel_ant_transform.iloc[index,1] > 1.10) & (emi_novel_psy_transform.iloc[index,1] < 0.85):
         novel_clones_optimal_score[index] = 1
         emi_novel_optimal_sequences.append([index, 1, emi_novel_seqs.iloc[index, 2]])
-#    if (emi_novel_ant_transform.iloc[index,1] > 1.10) & (emi_novel_psy_transform.iloc[index,1] < 0.65):
-#        novel_clones_optimal_score[index] = 2
-#        emi_novel_optimal_sequences.append([index, 2, emi_novel_seqs.iloc[index, 2]])
-    if (emi_novel_ant_transform.iloc[index,1] > 0.80) & (emi_novel_psy_transform.iloc[index,1] < 0.45):
+    if (emi_novel_ant_transform.iloc[index,1] > 0.95) & (emi_novel_psy_transform.iloc[index,1] < 0.65):
+        novel_clones_optimal_score[index] = 2
+        emi_novel_optimal_sequences.append([index, 2, emi_novel_seqs.iloc[index, 2]])
+    if (emi_novel_ant_transform.iloc[index,1] > 0.75) & (emi_novel_psy_transform.iloc[index,1] < 0.45):
         novel_clones_optimal_score[index] = 3
         emi_novel_optimal_sequences.append([index, 3, emi_novel_seqs.iloc[index, 2]])
 
