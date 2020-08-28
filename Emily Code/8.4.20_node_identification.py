@@ -297,8 +297,8 @@ ax.axvspan(92, 102, alpha = 0.25, color='grey')
 
 
 #%%
-xticks = np.arange(0,115,5)
-fig, ax = plt.subplots(figsize = (6,4.5))
+xticks = np.arange(0,115,15)
+fig, ax = plt.subplots(figsize = (18,4.5))
 ax.plot(pval_849)
 ax.scatter(mutation_x, [pval_849[i] for i in mutation_x], c = 'blue', s = 75, edgecolor = 'k')
 ax.axvspan(25, 35, alpha = 0.25, color = 'grey')

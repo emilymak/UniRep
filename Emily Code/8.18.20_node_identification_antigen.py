@@ -204,10 +204,19 @@ for i in np.arange(0,116):
     neg_1146_act = []
     act_1146 = []
     for j in np.arange(0,2000):
-         pos_1146_act.append(emi_pos_hs[j][i][1146])
-         neg_1146_act.append(emi_neg_hs[j][i][1146])
-         act_1146.append(emi_pos_hs[j][i][1146])
-         act_1146.append(emi_neg_hs[j][i][1146])
+        if emi_labels.iloc[j,3] == 1:
+            pos_1146_act.append(emi_pos_hs[j][i][1146])
+            act_1146.append(emi_pos_hs[j][i][1146])
+        if emi_labels.iloc[j,3] == 0:
+            neg_1146_act.append(emi_pos_hs[j][i][1146])
+            act_1146.append(emi_pos_hs[j][i][1146])
+    for j in np.arange(2000, 4000):
+        if emi_labels.iloc[j,3] == 1:
+            pos_1146_act.append(emi_neg_hs[j-2000][i][1146])
+            act_1146.append(emi_neg_hs[j-2000][i][1146])
+        if emi_labels.iloc[j,3] == 0:
+            neg_1146_act.append(emi_neg_hs[j-2000][i][1146])
+            act_1146.append(emi_neg_hs[j-2000][i][1146])
     kl_bins = np.linspace(np.min(act_1146), np.max(act_1146), n_kl_bins)
     hist_pos = np.histogram(pos_1146_act, kl_bins)     
     hist_neg = np.histogram(neg_1146_act, kl_bins)
@@ -241,10 +250,19 @@ for i in np.arange(0,116):
     neg_849_act = []
     act_849 = []
     for j in np.arange(0,2000):
-         pos_849_act.append(emi_pos_hs[j][i][849])
-         neg_849_act.append(emi_neg_hs[j][i][849])
-         act_849.append(emi_pos_hs[j][i][849])
-         act_849.append(emi_neg_hs[j][i][849])
+        if emi_labels.iloc[j,3] == 1:
+            pos_849_act.append(emi_pos_hs[j][i][849])
+            act_849.append(emi_pos_hs[j][i][849])
+        if emi_labels.iloc[j,3] == 0:
+            neg_849_act.append(emi_pos_hs[j][i][849])
+            act_849.append(emi_pos_hs[j][i][849])
+    for j in np.arange(2000, 4000):
+        if emi_labels.iloc[j,3] == 1:
+            pos_849_act.append(emi_neg_hs[j-2000][i][849])
+            act_849.append(emi_neg_hs[j-2000][i][849])
+        if emi_labels.iloc[j,3] == 0:
+            neg_849_act.append(emi_neg_hs[j-2000][i][849])
+            act_849.append(emi_neg_hs[j-2000][i][849])
     kl_bins = np.linspace(np.min(act_849), np.max(act_849), n_kl_bins)
     hist_pos = np.histogram(pos_849_act, kl_bins)     
     hist_neg = np.histogram(neg_849_act, kl_bins)
@@ -268,7 +286,6 @@ ax.scatter(mutation_x_diff, [pval_849_diff[i-1] for i in mutation_x], c = 'orang
 ax.scatter(interesting_mut_diff, [pval_849_diff[i-1] for i in interesting_mut], c = 'red', edgecolor = 'k', s = 75, marker = '^')
 ax.axvspan(49, 65, alpha = 0.25, color='grey')
 ax.axvspan(92, 102, alpha = 0.25, color='grey')
-plt.show()
 
 
 #%%
@@ -279,10 +296,19 @@ for i in np.arange(0,116):
     neg_1830_act = []
     act_1830 = []
     for j in np.arange(0,2000):
-         pos_1830_act.append(emi_pos_hs[j][i][1830])
-         neg_1830_act.append(emi_neg_hs[j][i][1830])
-         act_1830.append(emi_pos_hs[j][i][1830])
-         act_1830.append(emi_neg_hs[j][i][1830])
+        if emi_labels.iloc[j,3] == 1:
+            pos_1830_act.append(emi_pos_hs[j][i][1830])
+            act_1830.append(emi_pos_hs[j][i][1830])
+        if emi_labels.iloc[j,3] == 0:
+            neg_1830_act.append(emi_pos_hs[j][i][1830])
+            act_1830.append(emi_pos_hs[j][i][1830])
+    for j in np.arange(2000, 4000):
+        if emi_labels.iloc[j,3] == 1:
+            pos_1830_act.append(emi_neg_hs[j-2000][i][1830])
+            act_1830.append(emi_neg_hs[j-2000][i][1830])
+        if emi_labels.iloc[j,3] == 0:
+            neg_1830_act.append(emi_neg_hs[j-2000][i][1830])
+            act_1830.append(emi_neg_hs[j-2000][i][1830])
     kl_bins = np.linspace(np.min(act_1830), np.max(act_1830), n_kl_bins)
     hist_pos = np.histogram(pos_1830_act, kl_bins)     
     hist_neg = np.histogram(neg_1830_act, kl_bins)
