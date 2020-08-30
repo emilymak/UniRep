@@ -52,7 +52,7 @@ b = babbler(batch_size=batch_size, model_path=MODEL_WEIGHT_PATH)
 
 # Before you can train your model, 
 sequences = []
-with open("emi_wt_seq.txt", "r") as source:
+with open("emi_iso_seqs_reduced.txt", "r") as source:
     with open("formatted.txt", "w") as destination:
         for i,seq in enumerate(source):
             seq = seq.strip()
@@ -102,8 +102,8 @@ print(hidden_state)
 # In[8]:
 
 
-average_hidden_pd.to_csv("emi_wt_rep.csv")
-final_hidden_pd.to_csv("emi_wt_finalhidden.csv")
+average_hidden_pd.to_csv("emi_iso_reps_reduced.csv")
+final_hidden_pd.to_csv("emi_iso_finalhidden_reduced.csv")
 
 
 # In[9]:
@@ -111,7 +111,7 @@ final_hidden_pd.to_csv("emi_wt_finalhidden.csv")
 
 import pickle
 save_loc = "C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets"
-data_name = 'emi_wt_rep'
+data_name = 'emi_iso_reps_reduced'
 file_append = '.pickle'
 
 
