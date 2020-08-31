@@ -175,20 +175,20 @@ for index, row in emi_ant_transform.iterrows():
 
 iso_score = [0]*139
 for index, row in emi_iso_ant_transform.iterrows():
-    if (emi_iso_ant_transform.iloc[index,1] > 0.95) & (emi_iso_psy_transform.iloc[index,1] < 0.90):
+    if (emi_iso_ant_transform.iloc[index,1] > 0.75) & (emi_iso_psy_transform.iloc[index,1] < 0.95):
         iso_score[index] = 1
-    if (emi_iso_ant_transform.iloc[index,1] > 1.00) & (emi_iso_psy_transform.iloc[index,1] < 0.85):
+    if (emi_iso_ant_transform.iloc[index,1] > 0.8) & (emi_iso_psy_transform.iloc[index,1] < 0.90):
         iso_score[index] = 2
-    if (emi_iso_ant_transform.iloc[index,1] > 1.05) & (emi_iso_psy_transform.iloc[index,1] < 0.80):
+    if (emi_iso_ant_transform.iloc[index,1] > 0.85) & (emi_iso_psy_transform.iloc[index,1] < 0.85):
         iso_score[index] = 3
 
 iso_optimal_conf = [0]*139
 iso_transform_conf = [0]*139
 
 for index, row in emi_iso_binding.iterrows():
-    if (emi_iso_binding.iloc[index,1] > 1.0) & (emi_iso_binding.iloc[index,2] < 0.85):
+    if (emi_iso_binding.iloc[index,1] > 0.85) & (emi_iso_binding.iloc[index,2] < 0.85):
         iso_optimal_conf[index] = 1
-    if (emi_iso_ant_transform.iloc[index,1] > 1.0) & (emi_iso_psy_transform.iloc[index,1] < 0.85):
+    if (emi_iso_ant_transform.iloc[index,1] > 0.85) & (emi_iso_psy_transform.iloc[index,1] < 0.85):
         iso_transform_conf[index] = 1
 print(confusion_matrix(iso_optimal_conf, iso_transform_conf, labels = [0,1]))
 
