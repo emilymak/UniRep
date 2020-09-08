@@ -72,21 +72,16 @@ wt_seq = pd.read_csv("..\\Datasets\\emi_wt_seq.csv", header = None, index_col = 
 emi_iso_seqs = pd.read_csv("..\\Datasets\\emi_iso_seqs.csv", header = None)
 emi_iso_seqs.columns = ['Sequences']
 
-emi_iso_binding = emi_iso_binding.iloc[0:137,:]
-emi_iso_reps = emi_iso_reps.iloc[0:137,:]
-emi_iso_seqs = emi_iso_seqs.iloc[0:137,:]
-
 
 #%%
 residue_dict = pd.read_csv("..\\Datasets\\residue_dict_new_novel_clones.csv", header = 0, index_col = 0)
-emi_novel_seqs = pd.read_pickle("..\\Datasets\\mutation scans\\2020_08_18 emi screen with proper CDR23 ranges\\emi_mut_CDR2and3_64_AH_multiclone.pickle")
+emi_novel_seqs = pd.read_pickle("..\\Datasets\\emi_mut_CDR2and3_64_AH_multiclone.pickle")
 
 ### creating a few biophysical descriptors of the new mutations and the overal mutations of the novel sequences
 
 ### importing residue dict that has 6 desciptors of amino acids
 residue_dict = pd.read_csv("..\\Datasets\\residue_dict_new_novel_clones.csv", header = 0, index_col = 0)
 
-emi_novel_seqs = pd.read_pickle("..\\Datasets\\mutation scans\\2020_08_18 emi screen with proper CDR23 ranges\\emi_mut_CDR2and3_64_AH_multiclone.pickle")
 emi_novel_reps = pd.DataFrame(np.vstack(emi_novel_seqs.iloc[:,3]))
 
 ### compares residue to the base sequence residue at that position
@@ -236,7 +231,7 @@ for index, row in emi_ant_transform.iterrows():
         emi_optimal_sequences.append([index, emi_labels.iloc[index, 0]])
 
 ### creating list of stringency/qulity of novel sequences that matches old library evaluation
-novel_clones_score = [0]*3150
+novel_clones_score = [0]*2250
 emi_optimal_sequences = []
 for index, row in emi_novel_ant_transform.iterrows():
     if (emi_novel_ant_transform.iloc[index,1] > 0.65) & (emi_novel_psy_transform.iloc[index,1] < 0.95):
@@ -248,16 +243,16 @@ for index, row in emi_novel_ant_transform.iterrows():
         emi_optimal_sequences.append([index, emi_labels.iloc[index, 0]])
 
 ### creating list of stringency/quality of novel sequences based on new criteria that is very subject to change
-novel_clones_optimal_score = [0]*3150
+novel_clones_optimal_score = [0]*2250
 emi_novel_optimal_sequences = []
 for index, row in emi_novel_ant_transform.iterrows():
-    if (emi_novel_ant_transform.iloc[index,1] > 1.10) & (emi_novel_psy_transform.iloc[index,1] < 0.85):
+    if (emi_novel_ant_transform.iloc[index,1] > 1.20) & (emi_novel_psy_transform.iloc[index,1] < 0.85):
         novel_clones_optimal_score[index] = 1
         emi_novel_optimal_sequences.append([index, 1, emi_novel_seqs.iloc[index, 2]])
-    if (emi_novel_ant_transform.iloc[index,1] > 0.95) & (emi_novel_psy_transform.iloc[index,1] < 0.65):
+    if (emi_novel_ant_transform.iloc[index,1] > 1.15) & (emi_novel_psy_transform.iloc[index,1] < 0.80):
         novel_clones_optimal_score[index] = 2
         emi_novel_optimal_sequences.append([index, 2, emi_novel_seqs.iloc[index, 2]])
-    if (emi_novel_ant_transform.iloc[index,1] > 0.75) & (emi_novel_psy_transform.iloc[index,1] < 0.45):
+    if (emi_novel_ant_transform.iloc[index,1] > 1) & (emi_novel_psy_transform.iloc[index,1] < 0.75):
         novel_clones_optimal_score[index] = 3
         emi_novel_optimal_sequences.append([index, 3, emi_novel_seqs.iloc[index, 2]])
 
@@ -275,6 +270,7 @@ for i in emi_novel_optimal_sequences.iloc[:,0]:
 
 novel_optimal_seqs = np.vstack(novel_optimal_seqs)
 novel_optimal_seqs = pd.DataFrame(novel_optimal_seqs)
+
 
 #%%
 ### pareto plot cmparison of old library vs new clones
@@ -328,10 +324,10 @@ ax5.set_ylim(-5, 5.5)
 
 #%%
 fig, ax = plt.subplots(figsize = (7,4.5))
-img = ax.scatter(emi_novel_ant_transform.iloc[:,0], emi_novel_psy_transform.iloc[:,0], c = mutation_added.loc[:,'Number'], s = 50, edgecolor = 'k', cmap = 'viridis')
+img = ax.scatter(emi_novel_ant_transform.iloc[:,0], emi_novel_psy_transform.iloc[:,0], c = mutation_biophys.iloc[:,3], s = 50, edgecolor = 'k', cmap = 'viridis')
 ax.scatter(emi_wt_ant_transform.iloc[:,0], emi_wt_psy_transform.iloc[:,0], c = 'crimson', s = 65, edgecolor = 'k')
-plt.xlabel('Antigen Binding (WT Normal)', fontsize = 18)
-plt.ylabel('PSY Binding (WT Normal)', fontsize = 18)
+plt.xlabel('<--- Increasing Affinity', fontsize = 18)
+plt.ylabel('<--- Increasing Specificity', fontsize = 18)
 plt.xticks(fontsize = 14)
 plt.yticks(fontsize = 14)
 plt.tight_layout()
@@ -346,4 +342,11 @@ plt.ylabel('PSY Binding (WT Normal)', fontsize = 18)
 plt.xticks(fontsize = 14)
 plt.yticks(fontsize = 14)
 plt.tight_layout()
+
+
+#%%
+fig, ax = plt.subplots(figsize = (7,4.5))
+ax = sns.kdeplot(emi_ant_transform.iloc[:,0], emi_psy_transform.iloc[:,0], cmap = 'BuGn', shade = True, n_levels = 15, shade_lowest = False)
+ax = sns.kdeplot(emi_novel_ant_transform.iloc[:,0], emi_novel_psy_transform.iloc[:,0], color = 'k', alpha = 0.5, n_levels = 10)
+
 

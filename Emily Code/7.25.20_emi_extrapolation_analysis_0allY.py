@@ -43,7 +43,7 @@ colormap2 = np.array(['mediumspringgreen', 'darkturquoise', 'navy', 'darkviolet'
 colormap3 = np.array(['dodgerblue', 'darkorange'])
 colormap4 = np.array(['black', 'orangered', 'darkorange', 'yellow'])
 colormap5 = np.array(['darkgrey', 'black', 'darkgrey', 'grey'])
-colormap6 = np.array(['darkviolet'])
+colormap6 = np.array(['deepskyblue'])
 cmap1 = LinearSegmentedColormap.from_list("mycmap", colormap1)
 cmap2 = LinearSegmentedColormap.from_list("mycmap", colormap2)
 cmap3 = LinearSegmentedColormap.from_list("mycmap", colormap3)
@@ -55,13 +55,13 @@ sns.set_style("white")
 
 
 #%%
-emi_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_reps_0Y.csv", header = 0, index_col = 0)
-emi_labels = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_rep_labels_0Y.csv", header = 0, index_col = 0)
+emi_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_reps_0Y.csv", header = 0, index_col = 0)
+emi_labels = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_rep_labels_0Y.csv", header = 0, index_col = 0)
 
-emi_iso_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_iso_seqs.csv", header = None)
+emi_iso_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_iso_seqs.csv", header = None)
 emi_iso_seqs.columns = ['Sequences']
-emi_iso_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_iso_reps.csv", header = 0, index_col = 0)
-emi_iso_binding = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_iso_binding.csv", header = 0, index_col = None)
+emi_iso_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_iso_reps.csv", header = 0, index_col = 0)
+emi_iso_binding = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_iso_binding.csv", header = 0, index_col = None)
 emi_iso_binding['CLF'] = 0
 emi_iso_binding['CLF PSY'] = 0
 for index, row in emi_iso_binding.iterrows():
@@ -69,8 +69,8 @@ for index, row in emi_iso_binding.iterrows():
         emi_iso_binding.loc[index,'CLF'] = 1
     if row[2] > 0.6:
         emi_iso_binding.loc[index, 'CLF PSY'] = 1
-emi_iso_ant_transforms = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_iso_ant_transforms.csv", header = 0, index_col = 0)
-emi_iso_psy_transforms = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_iso_psy_transforms.csv", header = 0, index_col = 0)
+emi_iso_ant_transforms = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Emily Code\\emi_iso_ant_transforms.csv", header = 0, index_col = 0)
+emi_iso_psy_transforms = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Emily Code\\emi_iso_psy_transforms.csv", header = 0, index_col = 0)
 
 emi_iso_seqs_0Y = []
 emi_iso_reps_0Y = []
@@ -97,7 +97,7 @@ emi_iso_reps_0NotY = pd.DataFrame(emi_iso_reps_0NotY)
 emi_iso_binding_0Y = pd.DataFrame(emi_iso_binding_0Y)
 emi_iso_binding_0NotY = pd.DataFrame(emi_iso_binding_0NotY)
 
-emi_wt_rep = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_wt_rep.csv", header = 0, index_col = 0)
+emi_wt_rep = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_wt_rep.csv", header = 0, index_col = 0)
 emi_wt_binding = pd.DataFrame([1,1])
 emi_zero_rep = pd.DataFrame(emi_iso_reps.iloc[79,:]).T
 emi_zero_binding = pd.DataFrame([emi_iso_binding.iloc[79,1:3]]).T
@@ -217,9 +217,9 @@ emi_iso_psy_transforms = pd.concat([emi_iso_psy_transforms, emi_iso_psy_transfor
 emi_iso_ant_transforms.to_csv('emi_iso_ant_transforms.csv', header = ['All Mutations', 'LO 7', 'LO 6', 'LO 5', 'LO 4', 'LO 3', 'LO 2', 'LO 1', 'LO 0'], index = True)
 emi_iso_psy_transforms.to_csv('emi_iso_psy_transforms.csv', header = ['All Mutations', 'LO 7', 'LO 6', 'LO 5', 'LO 4', 'LO 3', 'LO 2', 'LO 1', 'LO 0'], index = True)
 
-
+"""
 #%%
-yes = ['yes']*177
+yes = ['yes']*139
 yes = pd.DataFrame(yes)
 yes_index = emi_iso_ant_transforms.index
 yes.columns = ['Yes']
@@ -227,14 +227,24 @@ emi_iso_ant_transforms = pd.concat([emi_iso_ant_transforms, yes], axis = 1)
 
 
 #%%
-#fig, ax = plt.figure(0, figsize = (10,8))
-ax = sns.pairplot(emi_iso_ant_transforms, hue = 'Yes', palette = colormap6)
-ax.fig.set_size_inches(12,12)
+yes = ['yes']*139
+yes = pd.DataFrame(yes)
+yes_index = emi_iso_psy_transforms.index
+yes.columns = ['Yes']
+emi_iso_psy_transforms = pd.concat([emi_iso_psy_transforms, yes], axis = 1)
 
 
 #%%
-sns.pairplot(emi_iso_psy_transforms)
-plt.tight_layout()
+#fig, ax = plt.figure(0, figsize = (10,8))
+ax = sns.pairplot(emi_iso_ant_transforms, hue = 'Yes', palette = colormap6, corner = True, plot_kws=dict(s = 25, edgecolor = 'k', linewidth = 1))
+ax.fig.set_size_inches(12,12)
+ax._legend.remove()
+
+
+#%%
+ax = sns.pairplot(emi_iso_psy_transforms, hue = 'Yes', palette = colormap6, plot_kws=dict(s = 25, edgecolor = 'k', linewidth = 1))
+ax.fig.set_size_inches(12,12)
+ax._legend.remove()
 
 
 #%%
@@ -252,6 +262,6 @@ f, ax = plt.subplots(figsize=(10, 8))
 sns.heatmap(transform_corrmat_ant, mask = mask, cmap = 'plasma', annot = True, annot_kws = {'fontsize': 18})
 ax.set_xticklabels([])
 ax.set_yticklabels([])
-"""
+
 
 
