@@ -52,7 +52,7 @@ b = babbler(batch_size=batch_size, model_path=MODEL_WEIGHT_PATH)
 
 # Before you can train your model, 
 sequences = []
-with open("emi_iso_seqs_reduced.txt", "r") as source:
+with open("clinical_vh_1.txt", "r") as source:
     with open("formatted.txt", "w") as destination:
         for i,seq in enumerate(source):
             seq = seq.strip()
@@ -90,7 +90,7 @@ for i in num2:
     
 
 
-# In[7]:
+# In[6]:
 
 
 average_hidden_pd = pd.DataFrame(np.row_stack(average_hidden_list))
@@ -99,19 +99,19 @@ hidden_state = pd.DataFrame(np.row_stack(hs_list))
 print(hidden_state)
 
 
+# In[7]:
+
+
+average_hidden_pd.to_csv("clinical_vh_1_reps.csv")
+final_hidden_pd.to_csv("clinical_vh_1_finalhidden.csv")
+
+
 # In[8]:
-
-
-average_hidden_pd.to_csv("emi_iso_reps_reduced.csv")
-final_hidden_pd.to_csv("emi_iso_finalhidden_reduced.csv")
-
-
-# In[9]:
 
 
 import pickle
 save_loc = "C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets"
-data_name = 'emi_iso_reps_reduced'
+data_name = 'clinical_vh_1'
 file_append = '.pickle'
 
 

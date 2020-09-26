@@ -47,12 +47,12 @@ batch_size = 50
 b = babbler(batch_size=batch_size, model_path=MODEL_WEIGHT_PATH)
 
 
-# In[4]:
+# In[5]:
 
 
 # Before you can train your model, 
 sequences = []
-with open("emi_neg_seqs_stringent2.txt", "r") as source:
+with open("clinical_vh_2.txt", "r") as source:
     with open("formatted.txt", "w") as destination:
         for i,seq in enumerate(source):
             seq = seq.strip()
@@ -63,7 +63,7 @@ with open("emi_neg_seqs_stringent2.txt", "r") as source:
                 destination.write('\n')
 
 
-# In[5]:
+# In[6]:
 
 
 ## 
@@ -84,13 +84,13 @@ for i in num2:
         final_hidden_list.append(final_hidden)
         final_cell_list.append(final_cell)
         hs_list.append(hs_out)
-        print('rep')
+    print('rep')
     x = x + 50
     y = y + 50
     
 
 
-# In[6]:
+# In[7]:
 
 
 average_hidden_pd = pd.DataFrame(np.row_stack(average_hidden_list))
@@ -99,19 +99,19 @@ hidden_state = pd.DataFrame(np.row_stack(hs_list))
 print(hidden_state)
 
 
-# In[7]:
-
-
-average_hidden_pd.to_csv("emi_neg_reps_stringent2.csv")
-final_hidden_pd.to_csv("emi_neg_finalhidden_stringent2.csv")
-
-
 # In[8]:
+
+
+average_hidden_pd.to_csv("clinical_vh_2_reps.csv")
+final_hidden_pd.to_csv("clinical_vh_2_finalhidden.csv")
+
+
+# In[9]:
 
 
 import pickle
 save_loc = "C:\\Users\\pkinn\\Documents\\UniRep\\full representations\\emi larger set\\"
-data_name = 'emi_neg_reps_stringent2'
+data_name = 'clinical_vh_2'
 file_append = '.pickle'
 
 
