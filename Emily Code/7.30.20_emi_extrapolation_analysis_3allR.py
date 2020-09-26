@@ -53,13 +53,13 @@ sns.set_style("white")
 
 
 #%%
-emi_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_reps_3R.csv", header = 0, index_col = 0)
-emi_labels = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_rep_labels_3R.csv", header = 0, index_col = 0)
+emi_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_reps_3R.csv", header = 0, index_col = 0)
+emi_labels = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_rep_labels_3R.csv", header = 0, index_col = 0)
 
-emi_iso_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_iso_seqs.csv", header = None)
+emi_iso_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_iso_seqs.csv", header = None)
 emi_iso_seqs.columns = ['Sequences']
-emi_iso_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_iso_reps.csv", header = 0, index_col = 0)
-emi_iso_binding = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_iso_binding.csv", header = 0, index_col = None)
+emi_iso_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_iso_reps.csv", header = 0, index_col = 0)
+emi_iso_binding = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_iso_binding.csv", header = 0, index_col = None)
 emi_iso_binding['CLF'] = 0
 emi_iso_binding['CLF PSY'] = 0
 for index, row in emi_iso_binding.iterrows():
@@ -67,8 +67,8 @@ for index, row in emi_iso_binding.iterrows():
         emi_iso_binding.loc[index,'CLF'] = 1
     if row[2] > 0.6:
         emi_iso_binding.loc[index, 'CLF PSY'] = 1
-emi_iso_ant_transforms = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_iso_ant_transforms.csv", header = 0, index_col = 0)
-emi_iso_psy_transforms = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_iso_psy_transforms.csv", header = 0, index_col = 0)
+emi_iso_ant_transforms = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Emily Code\\emi_iso_ant_transforms.csv", header = 0, index_col = 0)
+emi_iso_psy_transforms = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Emily Code\\emi_iso_psy_transforms.csv", header = 0, index_col = 0)
 
 emi_iso_seqs_3R = []
 emi_iso_reps_3R = []
@@ -95,7 +95,7 @@ emi_iso_reps_3NotR = pd.DataFrame(emi_iso_reps_3NotR)
 emi_iso_binding_3R = pd.DataFrame(emi_iso_binding_3R)
 emi_iso_binding_3NotR = pd.DataFrame(emi_iso_binding_3NotR)
 
-emi_wt_rep = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_wt_rep.csv", header = 0, index_col = 0)
+emi_wt_rep = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_wt_rep.csv", header = 0, index_col = 0)
 emi_wt_binding = pd.DataFrame([1,1])
 emi_zero_rep = pd.DataFrame(emi_iso_reps.iloc[70,:]).T
 emi_zero_binding = pd.DataFrame([emi_iso_binding.iloc[70,1:3]]).T

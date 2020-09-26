@@ -58,18 +58,20 @@ emi_labels = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\
 emi_biophys = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_biophys_stringent.csv", header = 0, index_col = 0)
 
 emi_iso_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_iso_reps_reduced.csv", header = 0, index_col = 0)
-emi_zero_rep = pd.DataFrame(emi_iso_reps.iloc[61,:]).T
-emi_iso_binding = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_iso_binding_reduced.csv", header = 0, index_col = 0)
+
+emi_zero_rep = pd.DataFrame(emi_reps.iloc[2945,:]).T
+emi_iso_binding = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_iso_binding_reduced.csv", header = 0, index_col = None)
 
 emi_wt_rep = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_wt_rep.csv", header = 0, index_col = 0)
 emi_wt_binding = pd.DataFrame([1,1])
-emi_zero_binding = pd.DataFrame([emi_iso_binding.iloc[61,0:2]]).T
+emi_zero_binding = pd.DataFrame([0,0])
 emi_wt_binding.index = ['ANT Normalized Binding', 'PSY Normalized Binding']
+emi_zero_binding.index = ['ANT Normalized Binding', 'PSY Normalized Binding']
 emi_fit_reps = pd.concat([emi_wt_rep, emi_zero_rep])
 emi_fit_binding = pd.concat([emi_wt_binding, emi_zero_binding], axis = 1, ignore_index = True).T
 
 wt_seq = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_wt_seq.csv", header = None, index_col = None)
-emi_iso_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_iso_seqs_reduced.csv", header = None, index_col = None)
+emi_iso_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_iso_seqs_reduced.csv", header = None)
 emi_iso_seqs.columns = ['Sequences']
 
 emi_iso_binding.reset_index(inplace = True, drop = True)
@@ -103,7 +105,7 @@ emi_iso_ant_transform= pd.DataFrame(-1*(emi_ant.transform(emi_iso_reps)))
 emi_fit_ant_transform= pd.DataFrame(-1*(emi_ant.transform(emi_fit_reps)))
 emi_iso_ant_predict = pd.DataFrame(emi_ant.predict(emi_iso_reps))
 
-print(stats.spearmanr(emi_iso_ant_transform.iloc[:,0], emi_iso_binding.iloc[:,0]))
+print(stats.spearmanr(emi_iso_ant_transform.iloc[:,0], emi_iso_binding.iloc[:,1]))
 
 x1 = np.polyfit(emi_fit_ant_transform.iloc[:,0], emi_fit_binding.iloc[:,0],1)
 emi_ant_transform['Fraction ANT Binding'] = ((emi_ant_transform.iloc[:,0]*x1[0])+x1[1])
@@ -111,7 +113,7 @@ emi_iso_ant_transform['Fraction ANT Binding'] = ((emi_iso_ant_transform.iloc[:,0
 emi_fit_ant_transform['Fraction ANT Binding'] = ((emi_fit_ant_transform.iloc[:,0]*x1[0])+x1[1])
 
 plt.figure(1)
-plt.scatter(emi_iso_ant_transform.iloc[:,0], emi_iso_binding.iloc[:,0], c = emi_iso_ant_predict.iloc[:,0], cmap = cmap3, edgecolor = 'k', s = 75)
+plt.scatter(emi_iso_ant_transform.iloc[:,0], emi_iso_binding.iloc[:,1], c = emi_iso_ant_predict.iloc[:,0], cmap = cmap3, edgecolor = 'k', s = 75)
 plt.scatter(emi_wt_ant_transform, 1, s = 75, c = 'crimson', edgecolor = 'k')
 xd = np.linspace(-3.5, 2, 100)
 plt.plot(xd, ((xd*x1[0])+x1[1]), c= 'k', lw = 2, linestyle= ':')
@@ -145,7 +147,7 @@ emi_iso_psy_transform= pd.DataFrame(emi_psy.transform(emi_iso_reps))
 emi_fit_psy_transform= pd.DataFrame(emi_psy.transform(emi_fit_reps))
 emi_iso_psy_predict = pd.DataFrame(emi_psy.predict(emi_iso_reps))
 
-print(stats.spearmanr(emi_iso_psy_transform.iloc[:,0], emi_iso_binding.iloc[:,1]))
+print(stats.spearmanr(emi_iso_psy_transform.iloc[:,0], emi_iso_binding.iloc[:,2]))
 
 x2 = np.polyfit(emi_fit_psy_transform.iloc[:,0], emi_fit_binding.iloc[:,1],1)
 emi_psy_transform['Fraction PSY Binding'] = ((emi_psy_transform.iloc[:,0]*x2[0])+x2[1])
@@ -153,7 +155,7 @@ emi_iso_psy_transform['Fraction PSY Binding'] = ((emi_iso_psy_transform.iloc[:,0
 emi_fit_psy_transform['Fraction PSY Binding'] = ((emi_fit_psy_transform.iloc[:,0]*x2[0])+x2[1])
 
 plt.figure(3)
-plt.scatter(emi_iso_psy_transform.iloc[:,0], emi_iso_binding.iloc[:,1], c = emi_iso_psy_predict.iloc[:,0], cmap = cmap1, edgecolor = 'k', s = 75)
+plt.scatter(emi_iso_psy_transform.iloc[:,0], emi_iso_binding.iloc[:,2], c = emi_iso_psy_predict.iloc[:,0], cmap = cmap1, edgecolor = 'k', s = 75)
 plt.scatter(emi_wt_psy_transform, 1, s = 75, c = 'crimson', edgecolor = 'k')
 xd = np.linspace(-3, 2, 100)
 plt.plot(xd, ((xd*x2[0])+x2[1]), c= 'k', lw = 2, linestyle= ':')
@@ -174,30 +176,30 @@ plt.tight_layout()
 clones_score = [0]*4000
 emi_optimal_sequences = []
 for index, row in emi_ant_transform.iterrows():
-    if (emi_ant_transform.iloc[index,1] > 0.65) & (emi_psy_transform.iloc[index,1] < 0.95):
+    if (emi_ant_transform.iloc[index,1] > 0.80) & (emi_psy_transform.iloc[index,1] < 0.95):
         clones_score[index] = 1
-    if (emi_ant_transform.iloc[index,1] > 0.75) & (emi_psy_transform.iloc[index,1] < 0.90):
+    if (emi_ant_transform.iloc[index,1] > 0.85) & (emi_psy_transform.iloc[index,1] < 0.90):
         clones_score[index] = 2
-    if (emi_ant_transform.iloc[index,1] > 0.85) & (emi_psy_transform.iloc[index,1] < 0.85):
+    if (emi_ant_transform.iloc[index,1] > 0.90) & (emi_psy_transform.iloc[index,1] < 0.85):
         clones_score[index] = 3
         emi_optimal_sequences.append([index, emi_labels.iloc[index, 0]])
 
-iso_score = [0]*137
+iso_score = [0]*139
 for index, row in emi_iso_ant_transform.iterrows():
-    if (emi_iso_ant_transform.iloc[index,1] > 0.60) & (emi_iso_psy_transform.iloc[index,1] < 0.95):
+    if (emi_iso_ant_transform.iloc[index,1] > 0.80) & (emi_iso_psy_transform.iloc[index,1] < 0.95):
         iso_score[index] = 1
-    if (emi_iso_ant_transform.iloc[index,1] > 0.70) & (emi_iso_psy_transform.iloc[index,1] < 0.90):
+    if (emi_iso_ant_transform.iloc[index,1] > 0.85) & (emi_iso_psy_transform.iloc[index,1] < 0.95):
         iso_score[index] = 2
-    if (emi_iso_ant_transform.iloc[index,1] > 0.80) & (emi_iso_psy_transform.iloc[index,1] < 0.85):
+    if (emi_iso_ant_transform.iloc[index,1] > 0.90) & (emi_iso_psy_transform.iloc[index,1] < 0.90):
         iso_score[index] = 3
 
-iso_optimal_conf = [0]*137
-iso_transform_conf = [0]*137
+iso_optimal_conf = [0]*139
+iso_transform_conf = [0]*139
 
 for index, row in emi_iso_binding.iterrows():
-    if (emi_iso_binding.iloc[index,0] > 0.80) & (emi_iso_binding.iloc[index,1] < 0.85):
+    if (emi_iso_binding.iloc[index,1] > 0.95) & (emi_iso_binding.iloc[index,2] < 0.9):
         iso_optimal_conf[index] = 1
-    if (emi_iso_ant_transform.iloc[index,1] > 0.80) & (emi_iso_psy_transform.iloc[index,1] < 0.85):
+    if (emi_iso_ant_transform.iloc[index,1] > 0.95) & (emi_iso_psy_transform.iloc[index,1] < 0.9):
         iso_transform_conf[index] = 1
 print(confusion_matrix(iso_optimal_conf, iso_transform_conf, labels = [0,1]))
 
@@ -233,7 +235,7 @@ ax2.legend(handles=[optimal_patch, lessoptimal_patch, nonoptimal_patch], fontsiz
 
 #%%
 fig, ax = plt.subplots(figsize = (7,4.5))
-img = plt.scatter(emi_iso_binding.iloc[:,0], emi_iso_binding.iloc[:,1], c = iso_score, cmap = cmap4, edgecolor = 'k', s = 75, lw = 1.5, zorder = 2)
+img = plt.scatter(emi_iso_binding.iloc[:,1], emi_iso_binding.iloc[:,2], c = iso_score, cmap = cmap4, edgecolor = 'k', s = 75, lw = 1.5, zorder = 2)
 #img = ax.scatter(emi_ant_iso_transform.iloc[:,1], emi_psy_iso_transform.iloc[:,1], c = iso_score_stringent, s = 80, cmap = cmap4, zorder = 2, edgecolor = 'k')
 plt.xlabel('Antigen Binding (WT Normal)', fontsize = 18)
 plt.ylabel('PSY Binding (WT Normal)', fontsize = 18)
@@ -254,7 +256,7 @@ emi_iso_ant_transform.iloc[:,0].to_csv('emi_iso_ant_transforms.csv', header = ['
 emi_iso_psy_transform.iloc[:,0].to_csv('emi_iso_psy_transforms.csv', header = ['All Mutations'], index = True)
 """
 
-"""
+
 #%%
 colormap6 = np.array(['gold', 'darkviolet'])
 colormap7 = np.array(['mediumvioletred','darkblue'])
@@ -270,6 +272,7 @@ neg_gate_patch = mpatches.Patch(facecolor='darkblue', label = 'Predicted High Af
 pos_gate_patch = mpatches.Patch(facecolor = 'mediumvioletred', label = 'Predicted Low Affinity', edgecolor = 'black', linewidth = 0.5)
 legend = ax1.legend(handles=[pos_gate_patch, neg_gate_patch], fontsize = 12)
 ax1.set_xlim(-3.5,4.5)
+ax1.set_ylim(-0.05,1.75)
 ax1.set_ylabel('Normalalized Affinity', fontsize = 19)
 ax1.set_xlabel('Affinity Transform', fontsize = 19)
 
@@ -283,8 +286,38 @@ ax2.set_xlabel('Polyspecificity Transform', fontsize = 19)
 ax2.set_xlim(-4.5,3.5)
 ax2.set_xticks(np.arange(-4, 3.1, step=2))
 ax2.set_yticks(np.arange(0, 1.6, step=0.5))
-ax2.set_ylim(0,1.5)
+ax2.set_ylim(0.05,1.55)
 fig.tight_layout(pad = 1.5)
+
+
+#%%
+emi_iso_ant_transforms = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Emily Code\\emi_iso_ant_transforms.csv", header = 0, index_col = 0)
+emi_iso_psy_transforms = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Emily Code\\emi_iso_ant_transforms.csv", header = 0, index_col = 0)
+
+colormap6 = np.array(['gold', 'darkviolet'])
+colormap7 = np.array(['mediumvioletred','darkblue'])
+cmap6 = LinearSegmentedColormap.from_list("mycmap", colormap6)
+cmap7 = LinearSegmentedColormap.from_list("mycmap", colormap7)
+
+
+fig, (ax1, ax2) = plt.subplots(1,2, figsize = (9,4))
+
+ax1.scatter(emi_iso_ant_transforms.iloc[:,0], emi_iso_ant_transforms.iloc[:,1], c = 'darkviolet', edgecolor = 'k', s = 50)
+ax1.tick_params(labelsize = 14)
+ax1.set_xlim(-4.25, 4.5)
+ax1.set_ylim(-4.5,6.00)
+ax1.set_ylabel('Affinity Transform Trained\non Data Without Mutation 8', fontsize = 18)
+ax1.set_xlabel('Affinity Transform Trained\non all Mutation Sites', fontsize = 18)
+
+ax2.scatter(emi_iso_ant_transforms.iloc[:,1], emi_iso_ant_transforms.iloc[:,3], c = 'dodgerblue', edgecolor = 'k', s = 50)
+ax2.tick_params(labelsize = 14)
+ax2.set_ylabel('Affinity Transform Trained\non Data Without Mutation 6', fontsize = 18)
+ax2.set_xlabel('Affinity Transform Trained\non Data Without Mutation 8', fontsize = 18)
+ax2.set_xlim(-4.25, 4.5)
+#ax2.set_xticks(np.arange(-4, 3.1, step=2))
+#ax2.set_yticks(np.arange(0, 1.6, step=0.5))
+ax2.set_ylim(-4.25,5.0)
+fig.tight_layout(pad = 2)
 
 
 #%%
@@ -338,4 +371,3 @@ plt.xlabel('            Increasing Affinity', fontsize = 20)
 print(accuracy_score(emi_iso_ant_predict.iloc[:,0], emi_iso_binding.iloc[:,3]))
 print(accuracy_score(emi_iso_psy_predict.iloc[:,0], emi_iso_binding.iloc[:,4]))
 
-"""
