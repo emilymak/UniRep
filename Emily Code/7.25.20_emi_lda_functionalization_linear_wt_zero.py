@@ -258,35 +258,35 @@ emi_iso_psy_transform.iloc[:,0].to_csv('emi_iso_psy_transforms.csv', header = ['
 
 
 #%%
-colormap6 = np.array(['gold', 'darkviolet'])
-colormap7 = np.array(['mediumvioletred','darkblue'])
+colormap6 = np.array(['fuchsia', 'darkviolet'])
+colormap7 = np.array(['dodgerblue','darkblue'])
 cmap6 = LinearSegmentedColormap.from_list("mycmap", colormap6)
 cmap7 = LinearSegmentedColormap.from_list("mycmap", colormap7)
 
 
 fig, (ax1, ax2) = plt.subplots(1,2, figsize = (9,4))
 
-ax1.scatter(emi_iso_ant_transform.iloc[:,0], emi_iso_binding.iloc[:,1], c = emi_iso_ant_predict.iloc[:,0], cmap = cmap7, edgecolor = 'k', s = 50)
+ax1.scatter(emi_iso_ant_transform.iloc[:,0], emi_iso_binding.iloc[:,1], c = emi_iso_ant_predict.iloc[:,0], cmap = cmap7, edgecolor = 'k', s = 65)
 ax1.tick_params(labelsize = 14)
 neg_gate_patch = mpatches.Patch(facecolor='darkblue', label = 'Predicted High Affinity', edgecolor = 'black', linewidth = 0.5)
-pos_gate_patch = mpatches.Patch(facecolor = 'mediumvioletred', label = 'Predicted Low Affinity', edgecolor = 'black', linewidth = 0.5)
-legend = ax1.legend(handles=[pos_gate_patch, neg_gate_patch], fontsize = 12)
-ax1.set_xlim(-3.5,4.5)
-ax1.set_ylim(-0.05,1.75)
+pos_gate_patch = mpatches.Patch(facecolor = 'dodgerblue', label = 'Predicted Low Affinity', edgecolor = 'black', linewidth = 0.5)
+legend = ax1.legend(handles=[pos_gate_patch, neg_gate_patch], fontsize = 14)
+ax1.set_xlim(-3.5,5)
+ax1.set_ylim(-0.1,2.10)
 ax1.set_ylabel('Normalalized Affinity', fontsize = 19)
-ax1.set_xlabel('Affinity Transform', fontsize = 19)
+ax1.set_xlabel('Affinity Projection', fontsize = 19)
 
-ax2.scatter(emi_iso_psy_transform.iloc[:,0], emi_iso_binding.iloc[:,2], c = emi_iso_psy_predict.iloc[:,0], cmap = cmap6, edgecolor = 'k', s = 50)
+ax2.scatter(emi_iso_psy_transform.iloc[:,0], emi_iso_binding.iloc[:,2], c = emi_iso_psy_predict.iloc[:,0], cmap = cmap6, edgecolor = 'k', s = 65)
 ax2.tick_params(labelsize = 14)
-neg_gate_patch = mpatches.Patch(facecolor='gold', label = 'Predicted High Specificity', edgecolor = 'black', linewidth = 0.5)
+neg_gate_patch = mpatches.Patch(facecolor='fuchsia', label = 'Predicted High Specificity', edgecolor = 'black', linewidth = 0.5)
 pos_gate_patch = mpatches.Patch(facecolor = 'darkviolet', label = 'Predicted Low Specificity', edgecolor = 'black', linewidth = 0.5)
-legend = ax2.legend(handles=[pos_gate_patch, neg_gate_patch], fontsize = 12, loc = 2)
+legend = ax2.legend(handles=[pos_gate_patch, neg_gate_patch], fontsize = 14, loc = 2)
 ax2.set_ylabel('Normalized Polyspecificity', fontsize = 19)
-ax2.set_xlabel('Polyspecificity Transform', fontsize = 19)
+ax2.set_xlabel('Polyspecificity Projection', fontsize = 19)
 ax2.set_xlim(-4.5,3.5)
 ax2.set_xticks(np.arange(-4, 3.1, step=2))
 ax2.set_yticks(np.arange(0, 1.6, step=0.5))
-ax2.set_ylim(0.05,1.55)
+ax2.set_ylim(-0.05,1.55)
 fig.tight_layout(pad = 1.5)
 
 

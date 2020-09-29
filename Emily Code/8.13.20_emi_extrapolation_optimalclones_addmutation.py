@@ -39,7 +39,7 @@ def get_prediction_interval(prediction, y_test, test_predictions, pi=.90):
     return lower, prediction, upper
 
 colormap1 = np.array(['mediumspringgreen','darkviolet'])
-colormap2 = np.array(['mediumspringgreen', 'darkturquoise', 'navy', 'darkviolet'])
+colormap2 = np.array(['mediumspringgreen', 'aqua', 'navy', 'darkviolet'])
 colormap3 = np.array(['dodgerblue', 'darkorange'])
 colormap4 = np.array(['black', 'orangered', 'darkorange', 'yellow'])
 colormap5 = np.array(['darkgrey', 'black', 'darkgrey', 'grey'])
@@ -68,14 +68,27 @@ emi_wt_binding.index = ['ANT Normalized Binding', 'PSY Normalized Binding']
 emi_fit_reps = pd.concat([emi_wt_rep, emi_zero_rep])
 emi_fit_binding = pd.concat([emi_wt_binding, emi_zero_binding], axis = 1, ignore_index = True).T
 
-wt_seq = pd.read_csv("..\\Datasets\\emi_wt_seq.csv", header = None, index_col = None)
+emi_seqs = pd.read_csv("..\\Datasets\\emi_seqs.txt", header = None, index_col = None)
+emi_seqs.columns = ['Sequences']
+emi_wt_seq = pd.read_csv("..\\Datasets\\emi_wt_seq.csv", header = None, index_col = None)
+emi_wt_seq.columns = ['Sequences']
 emi_iso_seqs = pd.read_csv("..\\Datasets\\emi_iso_seqs.csv", header = None)
 emi_iso_seqs.columns = ['Sequences']
+
+emi_base_seq_transform = pd.read_csv("..\\Datasets\\emi_base_seq_transforms.csv", header = None, index_col = 0)
+
+seqs_hamming = []
+for i in emi_seqs['Sequences']:
+    char = list(i)
+    hamming_dist = 115*(hamming(char, list(emi_wt_seq.iloc[0,0])))
+    seqs_hamming.append(hamming_dist)
+seqs_hamming = pd.DataFrame(seqs_hamming)
 
 
 #%%
 residue_dict = pd.read_csv("..\\Datasets\\residue_dict_new_novel_clones.csv", header = 0, index_col = 0)
-emi_novel_seqs = pd.read_pickle("..\\Datasets\\emi_mut_CDR2and3_64_AH_multiclone.pickle")
+
+emi_novel_seqs = pd.read_pickle("..\\Datasets\\scaffold_AH_multiclone.pickle")
 
 ### creating a few biophysical descriptors of the new mutations and the overal mutations of the novel sequences
 
@@ -216,60 +229,134 @@ emi_fit_psy_transform['Fraction PSY Binding'] = ((emi_fit_psy_transform.iloc[:,0
 
 
 #%%
+emi_novel_ant_transform_ant = emi_novel_ant_transform.iloc[0:900,:]
+emi_novel_psy_transform_ant = emi_novel_psy_transform.iloc[0:900,:]
+emi_novel_ant_transform_psy = emi_novel_ant_transform.iloc[900:1800,:]
+emi_novel_psy_transform_psy = emi_novel_psy_transform.iloc[900:1800,:]
+
+
+#%%
 ### pareto subplots colored by functionalized transforms
 ### appending scores representing increasing stringency/quality of clones
 ### percentages are based off of fit reps functionalization
 clones_score = [0]*4000
 emi_optimal_sequences = []
 for index, row in emi_ant_transform.iterrows():
-    if (emi_ant_transform.iloc[index,1] > 0.65) & (emi_psy_transform.iloc[index,1] < 0.95):
+    if (0.85 > emi_ant_transform.iloc[index,1] > 0.75) & (emi_psy_transform.iloc[index,1] < 0.85):
         clones_score[index] = 1
-    if (emi_ant_transform.iloc[index,1] > 0.75) & (emi_psy_transform.iloc[index,1] < 0.90):
+    if (1.00 > emi_ant_transform.iloc[index,1] > 0.85) & (emi_psy_transform.iloc[index,1] < 0.95):
         clones_score[index] = 2
-    if (emi_ant_transform.iloc[index,1] > 0.85) & (emi_psy_transform.iloc[index,1] < 0.85):
+    if (emi_ant_transform.iloc[index,1] > 1.00) & (emi_psy_transform.iloc[index,1] < 1.00):
         clones_score[index] = 3
         emi_optimal_sequences.append([index, emi_labels.iloc[index, 0]])
 
 ### creating list of stringency/qulity of novel sequences that matches old library evaluation
-novel_clones_score = [0]*2250
-emi_optimal_sequences = []
-for index, row in emi_novel_ant_transform.iterrows():
-    if (emi_novel_ant_transform.iloc[index,1] > 0.65) & (emi_novel_psy_transform.iloc[index,1] < 0.95):
+novel_clones_score = [0]*900
+emi_optimal_sequences_ant = []
+for index, row in emi_novel_ant_transform_ant.iterrows():
+    if (emi_novel_ant_transform_ant.iloc[index,1] > 0.65) & (emi_novel_psy_transform_ant.iloc[index,1] < 0.95):
         novel_clones_score[index] = 1
-    if (emi_novel_ant_transform.iloc[index,1] > 0.75) & (emi_novel_psy_transform.iloc[index,1] < 0.90):
+    if (emi_novel_ant_transform_ant.iloc[index,1] > 0.75) & (emi_novel_psy_transform_ant.iloc[index,1] < 0.90):
         novel_clones_score[index] = 2
-    if (emi_novel_ant_transform.iloc[index,1] > 0.85) & (emi_novel_psy_transform.iloc[index,1] < 0.85):
+    if (emi_novel_ant_transform_ant.iloc[index,1] > 0.85) & (emi_novel_psy_transform_ant.iloc[index,1] < 0.85):
         novel_clones_score[index] = 3
         emi_optimal_sequences.append([index, emi_labels.iloc[index, 0]])
 
 ### creating list of stringency/quality of novel sequences based on new criteria that is very subject to change
-novel_clones_optimal_score = [0]*2250
-emi_novel_optimal_sequences = []
-for index, row in emi_novel_ant_transform.iterrows():
-    if (emi_novel_ant_transform.iloc[index,1] > 1.20) & (emi_novel_psy_transform.iloc[index,1] < 0.85):
-        novel_clones_optimal_score[index] = 1
-        emi_novel_optimal_sequences.append([index, 1, emi_novel_seqs.iloc[index, 2]])
-    if (emi_novel_ant_transform.iloc[index,1] > 1.15) & (emi_novel_psy_transform.iloc[index,1] < 0.80):
-        novel_clones_optimal_score[index] = 2
-        emi_novel_optimal_sequences.append([index, 2, emi_novel_seqs.iloc[index, 2]])
-    if (emi_novel_ant_transform.iloc[index,1] > 1) & (emi_novel_psy_transform.iloc[index,1] < 0.75):
-        novel_clones_optimal_score[index] = 3
-        emi_novel_optimal_sequences.append([index, 3, emi_novel_seqs.iloc[index, 2]])
+novel_clones_optimal_score_ant = [0]*900
+emi_novel_optimal_sequences_ant = []
+for index, row in emi_novel_ant_transform_ant.iterrows():
+    if (emi_novel_ant_transform_ant.iloc[index,1] > 1.45) & (emi_novel_psy_transform_ant.iloc[index,1] < 0.90):
+        novel_clones_optimal_score_ant[index] = 1
+        emi_novel_optimal_sequences_ant.append([index, 1, emi_novel_seqs.iloc[index, 2]])
+    if (emi_novel_ant_transform_ant.iloc[index,1] > 0.85) & (emi_novel_psy_transform_ant.iloc[index,1] < 0.50):
+        novel_clones_optimal_score_ant[index] = 3
+        emi_novel_optimal_sequences_ant.append([index, 3, emi_novel_seqs.iloc[index, 2]])
+    if (1.20 > emi_novel_ant_transform_ant.iloc[index,1] > 1.10) & (0.65 < emi_novel_psy_transform_ant.iloc[index,1] < 0.75):
+        novel_clones_optimal_score_ant[index] = 2
+        emi_novel_optimal_sequences_ant.append([index, 2, emi_novel_seqs.iloc[index, 2]])
 
-emi_novel_optimal_sequences = pd.DataFrame(emi_novel_optimal_sequences)
+emi_novel_optimal_sequences_ant = pd.DataFrame(emi_novel_optimal_sequences_ant)
 
-### creating a dataframe of sequences, indices, and residue mutated of clones chosen with criteria set above
-novel_optimal_seqs = []
-for i in emi_novel_optimal_sequences.iloc[:,0]:
+### creating a dataframe of sequences_ant, indices, and residue mutated of clones chosen with criteria set above
+novel_optimal_seqs_ant = []
+for i in emi_novel_optimal_sequences_ant.iloc[:,0]:
     base_char = list(emi_novel_seqs.iloc[i, 1])
     new_char = list(emi_novel_seqs.iloc[i, 2])
     for j in np.arange(0,115):
         char_diff = list(set(new_char[j]) - set(base_char[j]))
         if len(char_diff) != 0:
-            novel_optimal_seqs.append([emi_novel_seqs.iloc[i,0], emi_novel_seqs.iloc[i,2], char_diff[0], j])
+            novel_optimal_seqs_ant.append([emi_novel_seqs.iloc[i,0], emi_novel_seqs.iloc[i,2], char_diff[0], j])
 
-novel_optimal_seqs = np.vstack(novel_optimal_seqs)
-novel_optimal_seqs = pd.DataFrame(novel_optimal_seqs)
+novel_optimal_seqs_ant = np.vstack(novel_optimal_seqs_ant)
+novel_optimal_seqs_ant = pd.DataFrame(novel_optimal_seqs_ant)
+
+
+#%%
+fig, ax = plt.subplots(figsize = (7,4.5))
+img = ax.scatter(emi_novel_ant_transform_ant.iloc[:,0], emi_novel_psy_transform_ant.iloc[:,0], c = novel_clones_optimal_score_ant, s = 50, edgecolor = 'k', cmap = cmap2)
+ax.scatter(emi_wt_ant_transform.iloc[:,0], emi_wt_psy_transform.iloc[:,0], c = 'crimson', s = 65, edgecolor = 'k')
+ax.scatter(emi_base_seq_transform.iloc[0:2,0], emi_base_seq_transform.iloc[0:2,1], c = 'yellow', edgecolor = 'k', s = 65)
+plt.xlabel('<--- Increasing Affinity', fontsize = 18)
+plt.ylabel('<--- Increasing Specificity', fontsize = 18)
+plt.xticks(fontsize = 14)
+plt.yticks(fontsize = 14)
+plt.tight_layout()
+
+
+#%%
+### creating list of stringency/qulity of novel sequences that matches old library evaluation
+novel_clones_score = [0]*900
+emi_optimal_sequences = []
+for index, row in emi_novel_ant_transform_psy.iterrows():
+    if (emi_novel_ant_transform_psy.loc[index,'Fraction ANT Binding'] > 0.65) & (emi_novel_psy_transform_psy.loc[index,'Fraction PSY Binding'] < 0.95):
+        novel_clones_score[index-900] = 1
+    if (emi_novel_ant_transform_psy.loc[index,'Fraction ANT Binding'] > 0.75) & (emi_novel_psy_transform_psy.loc[index,'Fraction PSY Binding'] < 0.90):
+        novel_clones_score[index-900] = 2
+    if (emi_novel_ant_transform_psy.loc[index,'Fraction ANT Binding'] > 0.85) & (emi_novel_psy_transform_psy.loc[index,'Fraction PSY Binding'] < 0.85):
+        novel_clones_score[index-900] = 3
+        emi_optimal_sequences.append([index, emi_labels.iloc[index, 0]])
+
+### creating list of stringency/quality of novel sequences based on new criteria that is very subject to change
+novel_clones_optimal_score_psy = [0]*900
+emi_novel_optimal_sequences_psy = []
+for index, row in emi_novel_ant_transform_psy.iterrows():
+    if (emi_novel_ant_transform_psy.loc[index,'Fraction ANT Binding'] > 1.15) & (emi_novel_psy_transform_psy.loc[index,'Fraction PSY Binding'] < 0.75):
+        novel_clones_optimal_score_psy[index-900] = 1
+        emi_novel_optimal_sequences_psy.append([index, 1, emi_novel_seqs.iloc[index, 2]])
+    if (0.85 > emi_novel_ant_transform_psy.loc[index,'Fraction ANT Binding'] > 0.55) & (emi_novel_psy_transform_psy.loc[index,'Fraction PSY Binding'] < 0.35):
+        novel_clones_optimal_score_psy[index-900] = 3
+        emi_novel_optimal_sequences_psy.append([index, 3, emi_novel_seqs.iloc[index, 2]])
+    if (0.95 > emi_novel_ant_transform_psy.loc[index,'Fraction ANT Binding'] > 0.85) & (0.55 < emi_novel_psy_transform_psy.loc[index,'Fraction PSY Binding'] < 0.60):
+        novel_clones_optimal_score_psy[index-900] = 2
+        emi_novel_optimal_sequences_psy.append([index, 2, emi_novel_seqs.iloc[index, 2]])
+
+emi_novel_optimal_sequences_psy = pd.DataFrame(emi_novel_optimal_sequences_psy)
+
+### creating a dataframe of sequences_psy, indices, and residue mutated of clones chosen with criteria set above
+novel_optimal_seqs_psy = []
+for i in emi_novel_optimal_sequences_psy.iloc[:,0]:
+    base_char = list(emi_novel_seqs.iloc[i, 1])
+    new_char = list(emi_novel_seqs.iloc[i, 2])
+    for j in np.arange(0,115):
+        char_diff = list(set(new_char[j]) - set(base_char[j]))
+        if len(char_diff) != 0:
+            novel_optimal_seqs_psy.append([emi_novel_seqs.iloc[i,0], emi_novel_seqs.iloc[i,2], char_diff[0], j])
+
+novel_optimal_seqs_psy = np.vstack(novel_optimal_seqs_psy)
+novel_optimal_seqs_psy = pd.DataFrame(novel_optimal_seqs_psy)
+
+
+#%%
+fig, ax = plt.subplots(figsize = (7,4.5))
+img = ax.scatter(emi_novel_ant_transform_psy.iloc[:,0], emi_novel_psy_transform_psy.iloc[:,0], c = novel_clones_optimal_score_psy, s = 50, edgecolor = 'k', cmap = cmap2)
+ax.scatter(emi_wt_ant_transform.iloc[:,0], emi_wt_psy_transform.iloc[:,0], c = 'crimson', s = 65, edgecolor = 'k')
+ax.scatter(emi_base_seq_transform.iloc[2:4,0], emi_base_seq_transform.iloc[2:4,1], c = 'yellow', edgecolor = 'k', s = 65)
+plt.xlabel('<--- Increasing Affinity', fontsize = 18)
+plt.ylabel('<--- Increasing Specificity', fontsize = 18)
+plt.xticks(fontsize = 14)
+plt.yticks(fontsize = 14)
+plt.tight_layout()
 
 
 #%%
@@ -312,7 +399,7 @@ ax4.set_title('Change in PSY Binding Over Pareto', fontsize = 16)
 ax4.set_xlim(-7.5, 5)
 ax4.set_ylim(-5, 5.5)
 
-ax12 = ax5.scatter(emi_novel_ant_transform.iloc[:,0], emi_novel_psy_transform.iloc[:,0], c = novel_clones_optimal_score, cmap = cmap1)
+ax12 = ax5.scatter(emi_novel_ant_transform.iloc[:,0], emi_novel_psy_transform.iloc[:,0], c = novel_clones_score, cmap = cmap1)
 ax5.scatter(emi_wt_ant_transform.iloc[:,0], emi_wt_psy_transform.iloc[:,0], c = 'crimson', s = 65, edgecolor = 'k')
 cbar5 = plt.colorbar(ax12, ax = ax5)
 cbar5.set_ticks([])
@@ -324,7 +411,7 @@ ax5.set_ylim(-5, 5.5)
 
 #%%
 fig, ax = plt.subplots(figsize = (7,4.5))
-img = ax.scatter(emi_novel_ant_transform.iloc[:,0], emi_novel_psy_transform.iloc[:,0], c = mutation_biophys.iloc[:,3], s = 50, edgecolor = 'k', cmap = 'viridis')
+img = ax.scatter(emi_novel_ant_transform.iloc[:,0], emi_novel_psy_transform.iloc[:,0], c = mutation_biophys.iloc[:,5], s = 50, edgecolor = 'k', cmap = 'viridis')
 ax.scatter(emi_wt_ant_transform.iloc[:,0], emi_wt_psy_transform.iloc[:,0], c = 'crimson', s = 65, edgecolor = 'k')
 plt.xlabel('<--- Increasing Affinity', fontsize = 18)
 plt.ylabel('<--- Increasing Specificity', fontsize = 18)
@@ -347,6 +434,67 @@ plt.tight_layout()
 #%%
 fig, ax = plt.subplots(figsize = (7,4.5))
 ax = sns.kdeplot(emi_ant_transform.iloc[:,0], emi_psy_transform.iloc[:,0], cmap = 'BuGn', shade = True, n_levels = 15, shade_lowest = False)
-ax = sns.kdeplot(emi_novel_ant_transform.iloc[:,0], emi_novel_psy_transform.iloc[:,0], color = 'k', alpha = 0.5, n_levels = 10)
+ax = sns.kdeplot(emi_novel_ant_transform.iloc[0:900,0], emi_novel_psy_transform.iloc[0:900,0], color = 'purple', alpha = 0.75, n_levels = 8)
+ax = sns.kdeplot(emi_novel_ant_transform.iloc[900:1800,0], emi_novel_psy_transform.iloc[900:1800,0], color = 'orange', alpha = 0.75, n_levels = 8)
+
+ax.scatter(emi_wt_ant_transform.iloc[:,0], emi_wt_psy_transform.iloc[:,0], c = 'crimson', s = 65, edgecolor = 'k')
+plt.xlabel('<--- Increasing Affinity', fontsize = 18)
+plt.ylabel('<--- Increasing Specificity', fontsize = 18)
+plt.xticks(fontsize = 14)
+plt.yticks(fontsize = 14)
+plt.tight_layout()
+
+
+#%%
+fig, ax = plt.subplots(figsize = (7,4.5))
+img = ax.scatter(emi_ant_transform.iloc[:,0], emi_psy_transform.iloc[:,0], c = seqs_hamming.iloc[:,0], s = 40, cmap = 'viridis')
+ax.scatter(emi_wt_ant_transform.iloc[:,0], emi_wt_psy_transform.iloc[:,0], c = 'crimson', s = 65, edgecolor = 'k')
+plt.xlabel('Antigen Binding (WT Normal)', fontsize = 18)
+plt.ylabel('PSY Binding (WT Normal)', fontsize = 18)
+plt.xticks(fontsize = 14)
+plt.yticks(fontsize = 14)
+plt.tight_layout()
+
+
+#%%
+colors = ['Reds', 'Reds', 'Oranges','Oranges', 'YlOrBr', 'Greens', 'Blues', 'Purples', 'Greys' ,'Greys']
+for i in np.arange(1,2,1):
+    plt.figure(i)
+    ax = sns.kdeplot(emi_ant_transform[seqs_hamming[0]==i][0], emi_psy_transform[seqs_hamming[0]==i][0], cmap = colors[i], n_levels = 12, shade_lowest = False, thresh = 0.75)
+    ax = sns.kdeplot(emi_novel_ant_transform.iloc[:,0], emi_novel_psy_transform.iloc[:,0], cmap = 'Greys', n_levels = 8, thresh = 0.75)
+    ax.scatter(emi_wt_ant_transform.iloc[:,0], emi_wt_psy_transform.iloc[:,0], c = 'crimson', s = 65, edgecolor = 'k')
+    ax.set_xlim(-4.5, 4)
+    ax.set_ylim(-4.5, 4.5)
+    plt.xlabel('<--- Increasing Affinity', fontsize = 18)
+    plt.ylabel('<--- Increasing Specificity', fontsize = 18)
+    plt.xticks(fontsize = 14)
+    plt.yticks(fontsize = 14)
+    plt.tight_layout()
+
+
+#%%
+fig, ax = plt.subplots(1, figsize = (5.25,4.75))
+ax.scatter(-1*emi_novel_ant_transform.iloc[:,0] - 1.5, emi_novel_psy_transform.iloc[:,0]-2.5, c = 'lightgrey', s = 60, edgecolor = 'k', linewidth = 0.4)
+ax.scatter(emi_novel_ant_transform.iloc[:,0]+1.5, 1.5*emi_novel_psy_transform.iloc[:,0]-2., c = 'lightgrey', s = 60, edgecolor = 'k', linewidth = 0.4)
+ax.scatter(emi_novel_ant_transform.iloc[:,0]-0.5, 1.1*emi_novel_psy_transform.iloc[:,0]-0.25, c = 'lightgrey', s = 60, edgecolor = 'k', linewidth = 0.4)
+
+ax.scatter(emi_novel_ant_transform.iloc[:,0] + 1.55, emi_novel_psy_transform.iloc[:,0] - 0.75, c = 'dodgerblue', s = 60, edgecolor = 'k', linewidth = 0.4)
+ax.scatter(emi_ant_transform.iloc[:,0], emi_psy_transform.iloc[:,0], c = 'darkblue', s = 60, edgecolor = 'k', linewidth = 0.4)
+ax.scatter(emi_wt_ant_transform.iloc[:,0], emi_wt_psy_transform.iloc[:,0], c = 'crimson', s = 60, edgecolor = 'k')
+
+old_patch = mpatches.Patch(facecolor='darkblue', label = 'Evaluated Library', edgecolor = 'black', linewidth = 0.5)
+new_patch = mpatches.Patch(facecolor = 'dodgerblue', label = 'Novel Mutation Predictions', edgecolor = 'black', linewidth = 0.5)
+new_lib_patch = mpatches.Patch(facecolor = 'lightgrey', label = 'Sublibrary Predictions', edgecolor = 'black', linewidth = 0.5)
+
+legend = ax.legend(handles=[old_patch, new_patch, new_lib_patch], fontsize = 14)
+
+ax.tick_params(labelsize = 14)
+ax.set_xlim(-9, 6.25)
+ax.xaxis.set_ticks(np.arange(-8, 6.5, 2))
+ax.set_ylim(-9, 6.5)
+ax.set_ylabel('            Increasing Specificity', fontsize = 21)
+ax.set_xlabel('            Increasing Affinity', fontsize = 21)
+plt.tight_layout()
+
 
 

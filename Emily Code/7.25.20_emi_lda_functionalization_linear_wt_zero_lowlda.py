@@ -165,30 +165,30 @@ plt.tight_layout()
 clones_score = [0]*4000
 emi_optimal_sequences = []
 for index, row in emi_ant_transform.iterrows():
-    if (emi_ant_transform.iloc[index,1] > 0.80) & (emi_psy_transform.iloc[index,1] < 0.95):
+    if (0.85 > emi_ant_transform.iloc[index,1] > 0.75) & (emi_psy_transform.iloc[index,1] < 0.85):
         clones_score[index] = 1
-    if (emi_ant_transform.iloc[index,1] > 0.85) & (emi_psy_transform.iloc[index,1] < 0.90):
+    if (1.00 > emi_ant_transform.iloc[index,1] > 0.85) & (emi_psy_transform.iloc[index,1] < 0.95):
         clones_score[index] = 2
-    if (emi_ant_transform.iloc[index,1] > 0.90) & (emi_psy_transform.iloc[index,1] < 0.85):
+    if (emi_ant_transform.iloc[index,1] > 1.00) & (emi_psy_transform.iloc[index,1] < 1.00):
         clones_score[index] = 3
         emi_optimal_sequences.append([index, emi_labels.iloc[index, 0]])
 
 iso_score = [0]*139
 for index, row in emi_iso_ant_transform.iterrows():
-    if (emi_iso_ant_transform.iloc[index,1] > 0.80) & (emi_iso_psy_transform.iloc[index,1] < 0.95):
+    if (0.85 > emi_iso_ant_transform.iloc[index,1] > 0.75) & (emi_iso_psy_transform.iloc[index,1] < 0.85):
         iso_score[index] = 1
-    if (emi_iso_ant_transform.iloc[index,1] > 0.85) & (emi_iso_psy_transform.iloc[index,1] < 0.95):
+    if (1.00 > emi_iso_ant_transform.iloc[index,1] > 0.85) & (emi_iso_psy_transform.iloc[index,1] < 0.95):
         iso_score[index] = 2
-    if (emi_iso_ant_transform.iloc[index,1] > 0.90) & (emi_iso_psy_transform.iloc[index,1] < 0.90):
+    if (emi_iso_ant_transform.iloc[index,1] > 1.00) & (emi_iso_psy_transform.iloc[index,1] < 1.00):
         iso_score[index] = 3
 
 iso_optimal_conf = [0]*139
 iso_transform_conf = [0]*139
 
 for index, row in emi_iso_binding.iterrows():
-    if (emi_iso_binding.iloc[index,1] > 0.95) & (emi_iso_binding.iloc[index,2] < 0.9):
+    if (emi_iso_binding.iloc[index,1] > 1) & (emi_iso_binding.iloc[index,2] < 1):
         iso_optimal_conf[index] = 1
-    if (emi_iso_ant_transform.iloc[index,1] > 0.95) & (emi_iso_psy_transform.iloc[index,1] < 0.9):
+    if (emi_iso_ant_transform.iloc[index,1] > 1) & (emi_iso_psy_transform.iloc[index,1] < 1):
         iso_transform_conf[index] = 1
 print(confusion_matrix(iso_optimal_conf, iso_transform_conf, labels = [0,1]))
 
@@ -209,17 +209,17 @@ cbar1 = plt.colorbar(ax10, ax = ax1)
 ax1.set_title('Change in PSY Binding Over Pareto', fontsize = 16)
 ax1.legend(handles=[binding_patch, nonbinding_patch], fontsize = 12)
 
-ax20 = ax2.scatter(emi_ant_transform.iloc[:,0], emi_psy_transform.iloc[:,0], c = clones_score, cmap = cmap1)
-ax21 = ax2.scatter(emi_iso_ant_transform.iloc[:,0], emi_iso_psy_transform.iloc[:,0], c = iso_score, cmap = 'Greys', edgecolor = 'k')
+ax20 = ax2.scatter(emi_ant_transform.iloc[:,0], emi_psy_transform.iloc[:,0], c = clones_score, cmap = cmap2)
+#ax21 = ax2.scatter(emi_iso_ant_transform.iloc[:,0], emi_iso_psy_transform.iloc[:,0], c = iso_score, cmap = 'Greys', edgecolor = 'k')
 ax2.scatter(emi_wt_ant_transform.iloc[:,0], emi_wt_psy_transform.iloc[:,0], c = 'crimson', s = 65, edgecolor = 'k')
 cbar2 = plt.colorbar(ax20, ax = ax2)
 cbar2.set_ticks([])
 cbar2.set_label('Increasing Stringency of Property Requirements', fontsize = 14)
 ax2.set_title('Isolation of Clones with\nChosen Binding Properties', fontsize = 16)
-optimal_patch = mpatches.Patch(facecolor='black', label = 'Optimal', edgecolor = 'black', linewidth = 0.1)
-nonoptimal_patch = mpatches.Patch(facecolor = 'white', label = 'Not Optimal', edgecolor = 'black', linewidth = 0.1)
-lessoptimal_patch = mpatches.Patch(facecolor='grey', label = 'Less Optimal', edgecolor = 'black', linewidth = 0.1)
-ax2.legend(handles=[optimal_patch, lessoptimal_patch, nonoptimal_patch], fontsize = 12)
+optimal_patch = mpatches.Patch(facecolor='darkviolet', label = 'Population 1', edgecolor = 'black', linewidth = 0.1)
+nonoptimal_patch = mpatches.Patch(facecolor = 'navy', label = 'Population 2', edgecolor = 'black', linewidth = 0.1)
+lessoptimal_patch = mpatches.Patch(facecolor='darkturquoise', label = 'Population 3', edgecolor = 'black', linewidth = 0.1)
+ax2.legend(handles=[optimal_patch, nonoptimal_patch, lessoptimal_patch], fontsize = 12)
 
 
 #%%

@@ -143,11 +143,11 @@ emi_ant_transform['Fraction ANT Binding'] = ((emi_ant_transform.iloc[:,0]*x1[0])
 emi_iso_ant_transform_5A['Fraction ANT Binding'] = ((emi_iso_ant_transform_5A.iloc[:,0]*x1[0])+x1[1])
 emi_iso_ant_transform_5NotA['Fraction ANT Binding'] = ((emi_iso_ant_transform_5NotA.iloc[:,0]*x1[0])+x1[1])
 emi_fit_ant_transform['Fraction ANT Binding'] = ((emi_fit_ant_transform.iloc[:,0]*x1[0])+x1[1])
-colormap7 = np.array(['mediumvioletred','darkblue'])
+colormap7 = np.array(['dodgerblue','darkblue'])
 cmap7 = LinearSegmentedColormap.from_list("mycmap", colormap7)
-plt.figure(1, figsize = (4.5,4))
-plt.scatter(emi_iso_ant_transform_5NotA.iloc[:,0], emi_iso_binding_5NotA.iloc[:,1], c = emi_iso_ant_predict_5NotA.iloc[:,0], cmap = cmap7, edgecolor = 'k', s = 75, zorder = 4)
-plt.scatter(emi_iso_ant_transform_5A.iloc[:,0], emi_iso_binding_5A.iloc[:,1], c = 'white', edgecolor = 'k', s = 75)
+fig, ax = plt.subplots(1, figsize = (4.75,4.25))
+ax.scatter(emi_iso_ant_transform_5NotA.iloc[:,0], emi_iso_binding_5NotA.iloc[:,1], c = emi_iso_ant_predict_5NotA.iloc[:,0], cmap = cmap7, edgecolor = 'k', s = 65, zorder = 4)
+plt.scatter(emi_iso_ant_transform_5A.iloc[:,0], emi_iso_binding_5A.iloc[:,1], c = 'white', edgecolor = 'k', s = 65)
 #plt.scatter(emi_wt_ant_transform, 1, s = 75, c = 'crimson', edgecolor = 'k')
 """
 xd = np.linspace(-3.5, 0, 100)
@@ -159,16 +159,16 @@ pos_gate_patch = mpatches.Patch(facecolor = 'darkorange', label = 'LDA Predicted
 legend = plt.legend(handles=[y_patch, neg_gate_patch, pos_gate_patch], fontsize = 11)
 """
 neg_gate_patch = mpatches.Patch(facecolor='darkblue', label = 'Predicted High Affinity', edgecolor = 'black', linewidth = 0.5)
-pos_gate_patch = mpatches.Patch(facecolor = 'mediumvioletred', label = 'Predicted Low Affinity', edgecolor = 'black', linewidth = 0.5)
+pos_gate_patch = mpatches.Patch(facecolor = 'dodgerblue', label = 'Predicted Low Affinity', edgecolor = 'black', linewidth = 0.5)
 
-legend = plt.legend(handles=[pos_gate_patch, neg_gate_patch], fontsize = 12)
-
+legend = plt.legend(handles=[pos_gate_patch, neg_gate_patch], fontsize = 14)
+ax.set_ylim(-0.1,2.10)
 plt.tick_params(labelsize = 14)
-plt.ylabel('Normalized Affinity', fontsize = 19)
-plt.xlabel('Affinity Transform', fontsize = 19)
+plt.ylabel('Normalized Affinity', fontsize = 20)
+plt.xlabel('Affinity Projection', fontsize = 20)
 #plt.title('Experimental Antigen Binding vs LDA Transform 95=A', fontsize = 17)
 
-plt.tight_layout()
+plt.tight_layout(pad = 1.5)
 
 
 #%%
