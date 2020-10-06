@@ -19,7 +19,7 @@ lenzi_rep1_smp_neg = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\l
 lenzi_rep1_ova_pos = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\lenzi_rep1_ova_pos_seqs.csv", header = None)
 lenzi_rep1_ova_neg = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\lenzi_rep1_ova_neg_seqs.csv", header = None)
 
-lenzi_wt_seq = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\lenzi_wt_seq.csv", header = None)
+lenzi_wt_seq = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\lenzi_wt_seq.csv", header = None)
 
 #%%
 lenzi_rep1_pos = pd.concat([lenzi_rep1_smp_pos, lenzi_rep1_ova_pos], axis = 0, ignore_index = False)
@@ -118,7 +118,7 @@ lenzi_neg_seqs.set_index('Sequences', drop = True, inplace = True)
 lenzi_pos_seq = []
 for index, row in lenzi_pos_seqs.iterrows():
     characters = list(index)
-    if len(characters) == 124:
+    if len(characters) == 10:
         lenzi_pos_seq.append([index, row[0], row[1], row[2]])
 lenzi_pos_seq = pd.DataFrame(lenzi_pos_seq)
 lenzi_pos_seq.columns = ['Sequences', 'OVA Freq', 'SMP Freq', 'Frequency Ave']
@@ -127,7 +127,7 @@ lenzi_pos_seq['PSY Binding'] = 1
 lenzi_neg_seq = []
 for index, row in lenzi_neg_seqs.iterrows():
     characters = list(index)
-    if len(characters) == 124:
+    if len(characters) == 10:
         lenzi_neg_seq.append([index, row[0], row[1], row[2]])
 lenzi_neg_seq = pd.DataFrame(lenzi_neg_seq)
 lenzi_neg_seq.columns = ['Sequences', 'OVA Freq', 'SMP Freq', 'Frequency Ave']
@@ -200,15 +200,16 @@ lenzi_pos_seqs_wmuts = []
 for i in lenzi_pos_seq_stringent.iloc[:,0]:
     wt = list(lenzi_wt_seq.iloc[0,0])
     muts = list(i)
-    wt[1] = muts[0]
     wt[32] = muts[0]
-    wt[49] = muts[1]
-    wt[54] = muts[2]
-    wt[55] = muts[3]
-    wt[56] = muts[4]
-    wt[98] = muts[5]
-    wt[100] = muts[6]
-    wt[103] = muts[7]
+    wt[49] = muts[0]
+    wt[53] = muts[1]
+    wt[98] = muts[2]
+    wt[100] = muts[3]
+    wt[101] = muts[4]
+    wt[102] = muts[5]
+    wt[103] = muts[6]
+    wt[104] = muts[7]
+    wt[107] = muts[8]
     wt = ''.join(str(j) for j in wt)
     lenzi_pos_seqs_wmuts.append(wt)
 
@@ -218,22 +219,23 @@ lenzi_neg_seqs_wmuts = []
 for i in lenzi_neg_seq_stringent.iloc[:,0]:
     wt = list(lenzi_wt_seq.iloc[0,0])
     muts = list(i)
-    wt[1] = muts[0]
     wt[32] = muts[0]
-    wt[49] = muts[1]
-    wt[54] = muts[2]
-    wt[55] = muts[3]
-    wt[56] = muts[4]
-    wt[98] = muts[5]
-    wt[100] = muts[6]
-    wt[103] = muts[7]
+    wt[49] = muts[0]
+    wt[53] = muts[1]
+    wt[98] = muts[2]
+    wt[100] = muts[3]
+    wt[101] = muts[4]
+    wt[102] = muts[5]
+    wt[103] = muts[6]
+    wt[104] = muts[7]
+    wt[107] = muts[8]
     wt = ''.join(str(j) for j in wt)
     lenzi_neg_seqs_wmuts.append(wt)
 
 lenzi_neg_seq_stringent.iloc[:,0] = lenzi_neg_seqs_wmuts
     
 #%%
-"""
+
 lenzi_seqs_used_stringent.reset_index(drop = True, inplace = True)
 lenzi_seqs_used_stringent.to_csv('lenzi_rep_labels.csv', header = True, index = True)
 
@@ -246,6 +248,6 @@ lenzi_neg_seq_stringent.iloc[500:1000,0].to_csv('lenzi_neg_seqs_2.txt', header =
 lenzi_pos_seq_stringent.iloc[1000:1500,0].to_csv('lenzi_pos_seqs_3.txt', header = False, index = False)
 lenzi_neg_seq_stringent.iloc[1000:1500,0].to_csv('lenzi_neg_seqs_3.txt', header = False, index = False)
 
-lenzi_pos_seq_stringent.iloc[1500:1688,0].to_csv('lenzi_pos_seqs_4.txt', header = False, index = False)
+lenzi_pos_seq_stringent.iloc[1500:2000,0].to_csv('lenzi_pos_seqs_4.txt', header = False, index = False)
 lenzi_neg_seq_stringent.iloc[1500:2000,0].to_csv('lenzi_neg_seqs_4.txt', header = False, index = False)
-"""
+
