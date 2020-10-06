@@ -191,8 +191,7 @@ for index, row in lenzi_iso_binding.iterrows():
         iso_transform_conf[index] = 1
 print(confusion_matrix(iso_optimal_conf, iso_transform_conf, labels = [0,1]))
 
-plt.scatter(lenzi_ant_transform.iloc[:,0], lenzi_psy_transform.iloc[:,0], c = 'green')
-plt.scatter(lenzi_ant_transform.iloc[0:1688,0], lenzi_psy_transform.iloc[0:1688,0], c = 'blue')
+plt.scatter(lenzi_ant_transform.iloc[:,0], lenzi_psy_transform.iloc[:,0], c = lenzi_labels.iloc[:,3], cmap = cmap1)
 plt.scatter(lenzi_wt_ant_transform.iloc[:,0], lenzi_wt_psy_transform.iloc[:,0], c = 'crimson', s = 65, edgecolor = 'k')
 
 #%%

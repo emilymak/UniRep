@@ -81,6 +81,29 @@ lenzi_neg_duplicates['label'] = 0
 
 lenzi_seqs = pd.concat([lenzi_pos_duplicates, lenzi_neg_duplicates], axis = 0)
 lenzi_seqs = lenzi_seqs.drop_duplicates(subset = 'Sequences', keep = False)
+
+#%%
+mut0 = pd.Series(['A', 'D', 'F', 'S', 'V', 'Y'])
+mut1 = pd.Series(['L', 'G', 'V', 'S', 'A', 'W'])
+mut2 = pd.Series(['A', 'D', 'N', 'S', 'T', 'G']) #G
+mut3 = pd.Series(['A', 'E', 'G', 'K', 'T', 'R']) #R
+mut4 = pd.Series(['A', 'E', 'G', 'K', 'T', 'R']) #R
+mut5 = pd.Series(['A', 'D', 'S', 'V', 'Y', 'F']) #F 
+mut6 = pd.Series(['A', 'E', 'L', 'Q', 'V', 'P']) #P
+mut7 = pd.Series(['A', 'D', 'F', 'S', 'V', 'Y']) #Y
+mut8 = pd.Series(['A', 'D', 'F', 'S', 'V', 'Y']) #Y
+mut9 = pd.Series(['A', 'D', 'F', 'S', 'V', 'Y']) #
+
+lenzi_seqs_out_dropped = []
+for index, row in lenzi_seqs.iterrows():
+    seq = pd.Series(list(row[0]))
+    if ((sum(mut0.isin(list(seq[0]))) + sum(mut1.isin(list(seq[1]))) + sum(mut2.isin(list(seq[2]))) + sum(mut3.isin(list(seq[3]))) + sum(mut4.isin(list(seq[4]))) + sum(mut5.isin(list(seq[5]))) + sum(mut6.isin(list(seq[6]))) + sum(mut7.isin(list(seq[7]))) + sum(mut8.isin(list(seq[8]))) + sum(mut9.isin(list(seq[9])))) == 10):
+        lenzi_seqs_out_dropped.append([row[0], row[1], row[2], row[3], row[4], row[5]])
+
+lenzi_seqs = pd.DataFrame(lenzi_seqs_out_dropped)
+lenzi_seqs.columns = ['Sequences', 'OVA Freq', 'Drop', 'smp Freq', 'Frequency Ave', 'label']
+
+#%%
 lenzi_labels = pd.DataFrame(lenzi_seqs['label'])
 lenzi_seqs.drop('label', axis = 1, inplace = True)
 
@@ -91,7 +114,7 @@ lenzi_labels.reset_index(drop = False, inplace = True)
 lenzi_labels.columns = ['Sequences','PSY Binding']
 
 #%%
-lenzi_pos_seqs = lenzi_seqs.iloc[0:3126,:]
+lenzi_pos_seqs = lenzi_seqs.iloc[0:1692,:]
 """
 lenzi_pos_seqs_char = []
 for index, row in lenzi_pos_seqs.iterrows():
@@ -103,7 +126,7 @@ lenzi_pos_seqs = pd.DataFrame(lenzi_pos_seqs_char)
 """
 lenzi_pos_seqs.set_index('Sequences', drop = True, inplace = True)
 
-lenzi_neg_seqs = lenzi_seqs.iloc[3126:16115,:]
+lenzi_neg_seqs = lenzi_seqs.iloc[1692:14992,:]
 """
 lenzi_neg_seqs_char = []
 for index, row in lenzi_neg_seqs.iterrows():
@@ -195,6 +218,7 @@ lenzi_seqs_used_stringent.drop('SMP Freq', inplace = True, axis = 1)
 lenzi_seqs_used_stringent.drop('rep1', inplace = True, axis = 1)
 lenzi_seqs_used_stringent.drop('rep2', inplace = True, axis = 1)
 
+
 #%%
 lenzi_pos_seqs_wmuts = []
 for i in lenzi_pos_seq_stringent.iloc[:,0]:
@@ -245,9 +269,8 @@ lenzi_neg_seq_stringent.iloc[0:500,0].to_csv('lenzi_neg_seqs_1.txt', header = Fa
 lenzi_pos_seq_stringent.iloc[500:1000,0].to_csv('lenzi_pos_seqs_2.txt', header = False, index = False)
 lenzi_neg_seq_stringent.iloc[500:1000,0].to_csv('lenzi_neg_seqs_2.txt', header = False, index = False)
 
-lenzi_pos_seq_stringent.iloc[1000:1500,0].to_csv('lenzi_pos_seqs_3.txt', header = False, index = False)
+lenzi_pos_seq_stringent.iloc[1000:1285,0].to_csv('lenzi_pos_seqs_3.txt', header = False, index = False)
 lenzi_neg_seq_stringent.iloc[1000:1500,0].to_csv('lenzi_neg_seqs_3.txt', header = False, index = False)
 
-lenzi_pos_seq_stringent.iloc[1500:2000,0].to_csv('lenzi_pos_seqs_4.txt', header = False, index = False)
+#lenzi_pos_seq_stringent.iloc[1500:2000,0].to_csv('lenzi_pos_seqs_4.txt', header = False, index = False)
 lenzi_neg_seq_stringent.iloc[1500:2000,0].to_csv('lenzi_neg_seqs_4.txt', header = False, index = False)
-
