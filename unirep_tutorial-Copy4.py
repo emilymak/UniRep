@@ -52,7 +52,7 @@ b = babbler(batch_size=batch_size, model_path=MODEL_WEIGHT_PATH)
 
 # Before you can train your model, 
 sequences = []
-with open("lenzi_pos_seqs_4.txt", "r") as source:
+with open("lenzi_neg_seqs_4.txt", "r") as source:
     with open("formatted.txt", "w") as destination:
         for i,seq in enumerate(source):
             seq = seq.strip()
@@ -90,7 +90,7 @@ for i in num2:
     
 
 
-# In[ ]:
+# In[6]:
 
 
 average_hidden_pd = pd.DataFrame(np.row_stack(average_hidden_list))
@@ -102,8 +102,8 @@ print(hidden_state)
 # In[7]:
 
 
-average_hidden_pd.to_csv("lenzi_pos_reps_4.csv")
-final_hidden_pd.to_csv("lenzi_pos_finalhidden_4.csv")
+average_hidden_pd.to_csv("lenzi_neg_reps_4.csv")
+final_hidden_pd.to_csv("lenzi_neg_finalhidden_4.csv")
 
 
 # In[8]:
@@ -111,7 +111,7 @@ final_hidden_pd.to_csv("lenzi_pos_finalhidden_4.csv")
 
 import pickle
 save_loc = "C:\\Users\\pkinn\\Documents\\UniRep\\full representations\\emi larger set\\"
-data_name = 'lenzi_pos_reps_4'
+data_name = 'lenzi_neg_reps_4'
 file_append = '.pickle'
 
 
