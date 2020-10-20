@@ -399,7 +399,7 @@ ax4.set_title('Change in PSY Binding Over Pareto', fontsize = 16)
 ax4.set_xlim(-7.5, 5)
 ax4.set_ylim(-5, 5.5)
 
-ax12 = ax5.scatter(emi_novel_ant_transform.iloc[:,0], emi_novel_psy_transform.iloc[:,0], c = novel_clones_score, cmap = cmap1)
+ax12 = ax5.scatter(emi_novel_ant_transform_ant.iloc[:,0], emi_novel_psy_transform_ant.iloc[:,0], c = novel_clones_optimal_score_ant, cmap = cmap1)
 ax5.scatter(emi_wt_ant_transform.iloc[:,0], emi_wt_psy_transform.iloc[:,0], c = 'crimson', s = 65, edgecolor = 'k')
 cbar5 = plt.colorbar(ax12, ax = ax5)
 cbar5.set_ticks([])
@@ -497,4 +497,50 @@ ax.set_xlabel('            Increasing Affinity', fontsize = 21)
 plt.tight_layout()
 
 
+#%%
+ant_baseseq_ant = [-2.968343676, -2.868485042]
+ant_baseseq_psy = [1.921408569, 1.601674534]
+psy_baseseq_ant = [-1.240606051, -1.592595398]
+psy_baseseq_psy = [0.962155947, 1.117217874]
 
+
+fig, ax = plt.subplots(figsize = (5.5, 5.25))
+ax.scatter(emi_ant_transform.iloc[:,0], emi_psy_transform.iloc[:,0], c = 'darkgray', edgecolor = 'k', linewidth = 0.1)
+ax.scatter(emi_wt_ant_transform.iloc[:,0], emi_wt_psy_transform.iloc[:,0], c = 'k', s = 65, edgecolor = 'k')
+ax.scatter(ant_baseseq_ant, ant_baseseq_psy, c = 'blue', edgecolor = 'k', s = 65, linewidth = 1)
+ax.scatter(psy_baseseq_ant, psy_baseseq_psy, c = 'red', edgecolor = 'k', s = 65, linewidth = 1)
+ax.tick_params(labelsize = 16)
+
+
+#%%
+ant_baseseq_ant = [-2.968343676, -2.868485042]
+ant_baseseq_psy = [1.921408569, 1.601674534]
+
+fig, ax = plt.subplots(figsize = (5.5, 5.25))
+ax.scatter(emi_novel_ant_transform_ant.iloc[:,0], emi_novel_psy_transform_ant.iloc[:,0], c = 'blue', edgecolor = 'k', linewidth = 0.1)
+ax.scatter(emi_ant_transform.iloc[:,0], emi_psy_transform.iloc[:,0], c = 'darkgray', edgecolor = 'k', linewidth = 0.1)
+ax.scatter(emi_wt_ant_transform.iloc[:,0], emi_wt_psy_transform.iloc[:,0], c = 'k', s = 65, edgecolor = 'k')
+ax.scatter(ant_baseseq_ant, ant_baseseq_psy, c = 'blue', edgecolor = 'k', s = 125, marker = '*', linewidth = 1)
+ax.tick_params(labelsize = 16)
+
+
+#%%
+colormap_pareto = np.array(['darkgray', 'blue', 'darkviolet', 'red'])
+cmap_pareto = LinearSegmentedColormap.from_list("mycmap", colormap_pareto)
+
+
+fig, ax = plt.subplots(figsize = (5.5, 5.25))
+ax.scatter(emi_novel_ant_transform_ant.iloc[:,0], emi_novel_psy_transform_ant.iloc[:,0], c = novel_clones_optimal_score_ant, cmap = cmap_pareto, edgecolor = 'k', linewidth = 0.1)
+ax.tick_params(labelsize = 16)
+
+
+#%%
+psy_baseseq_ant = [-1.240606051, -1.592595398]
+psy_baseseq_psy = [0.962155947, 1.117217874]
+
+fig, ax = plt.subplots(figsize = (5.5, 5.25))
+ax.scatter(emi_novel_ant_transform_psy.iloc[:,0], emi_novel_psy_transform_psy.iloc[:,0], c = 'red', edgecolor = 'k', linewidth = 0.1)
+ax.scatter(emi_ant_transform.iloc[:,0], emi_psy_transform.iloc[:,0], c = 'darkgray', edgecolor = 'k', linewidth = 0.1)
+ax.scatter(emi_wt_ant_transform.iloc[:,0], emi_wt_psy_transform.iloc[:,0], c = 'k', s = 65, edgecolor = 'k')
+ax.scatter(psy_baseseq_ant, psy_baseseq_psy, c = 'red', edgecolor = 'k', s = 125, marker = '*', linewidth = 1)
+ax.tick_params(labelsize = 16)

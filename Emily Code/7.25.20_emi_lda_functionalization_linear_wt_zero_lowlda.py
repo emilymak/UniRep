@@ -81,6 +81,7 @@ emi_reps_train, emi_reps_test, emi_ant_train, emi_ant_test = train_test_split(em
 
 emi_ant = LDA()
 cv_lda = cv(emi_ant, emi_reps, emi_labels.iloc[:,3], cv = 10)
+print(np.mean(cv_lda['test_score']))
 
 emi_ant_transform = pd.DataFrame(-1*(emi_ant.fit_transform(emi_reps, emi_labels.iloc[:,3])))
 emi_ant_predict = pd.DataFrame(emi_ant.predict(emi_reps))
@@ -123,6 +124,7 @@ emi_reps_train, emi_reps_test, emi_psy_train, emi_psy_test = train_test_split(em
 
 emi_psy = LDA()
 cv_lda = cv(emi_psy, emi_reps, emi_labels.iloc[:,2], cv = 10)
+print(np.mean(cv_lda['test_score']))
 
 emi_psy_transform = pd.DataFrame(emi_psy.fit_transform(emi_reps, emi_labels.iloc[:,2]))
 emi_psy_predict = pd.DataFrame(emi_psy.predict(emi_reps))

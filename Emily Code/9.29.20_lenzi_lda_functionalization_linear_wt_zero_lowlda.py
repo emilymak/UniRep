@@ -57,6 +57,7 @@ lenzi_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\
 lenzi_labels = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\lenzi_rep_labels.csv", header = 0, index_col = 0)
 #lenzi_biophys = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\lenzi_biophys.csv", header = 0, index_col = 0)
 lenzi_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\lenzi_seqs.csv", header = 0, index_col = None)
+lenzi_wt_seq = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\lenzi_wt_seq.csv", header = None)
 
 lenzi_zero_rep = pd.DataFrame(lenzi_reps.iloc[2945,:]).T
 
@@ -65,14 +66,12 @@ lenzi_wt_binding = pd.DataFrame([1,1])
 lenzi_zero_binding = pd.DataFrame([0,0])
 lenzi_wt_binding.index = ['ANT Normalized Binding', 'PSY Normalized Binding']
 lenzi_zero_binding.index = ['ANT Normalized Binding', 'PSY Normalized Binding']
-"""
+
 lenzi_fit_reps = pd.concat([lenzi_wt_rep, lenzi_zero_rep])
 lenzi_fit_binding = pd.concat([lenzi_wt_binding, lenzi_zero_binding], axis = 1, ignore_index = True).T
 
-#wt_seq = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\lenzi_wt_seq.csv", header = None, index_col = None)
-"""
+wt_seq = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\lenzi_wt_seq.csv", header = None, index_col = None)
 
-print(hamming(list(lenzi_seqs.iloc[0,0]), list(lenzi_seqs.iloc[1822,0])))
 
 #%%
 ### stringent antigen binding LDA evaluation
@@ -86,34 +85,15 @@ lenzi_ant_predict = pd.DataFrame(lenzi_ant.predict(lenzi_reps))
 print(confusion_matrix(lenzi_ant_predict.iloc[:,0], lenzi_labels.iloc[:,3]))
 
 lenzi_wt_ant_transform = pd.DataFrame(-1*(lenzi_ant.transform(lenzi_wt_rep)))
+lenzi_fit_ant_transform = pd.DataFrame(-1*(lenzi_ant.transform(lenzi_fit_reps)))
 
 
 #%%
 ### obtaining transformand predicting antigen binding of experimental iso clones
-lenzi_iso_ant_transform= pd.DataFrame(-1*(lenzi_ant.transform(lenzi_iso_reps)))
-lenzi_fit_ant_transform= pd.DataFrame(-1*(lenzi_ant.transform(lenzi_fit_reps)))
-lenzi_iso_ant_predict = pd.DataFrame(lenzi_ant.predict(lenzi_iso_reps))
 lenzi_fit_ant_predict = pd.DataFrame(lenzi_ant.predict(lenzi_fit_reps))
-print(stats.spearmanr(lenzi_iso_ant_transform.iloc[:,0], lenzi_iso_binding.iloc[:,1]))
 
 x1 = np.polyfit(lenzi_fit_ant_transform.iloc[:,0], lenzi_fit_binding.iloc[:,0],1)
 lenzi_ant_transform['Fraction ANT Binding'] = ((lenzi_ant_transform.iloc[:,0]*x1[0])+x1[1])
-lenzi_iso_ant_transform['Fraction ANT Binding'] = ((lenzi_iso_ant_transform.iloc[:,0]*x1[0])+x1[1])
-lenzi_fit_ant_transform['Fraction ANT Binding'] = ((lenzi_fit_ant_transform.iloc[:,0]*x1[0])+x1[1])
-
-plt.figure(1)
-plt.scatter(lenzi_iso_ant_transform.iloc[:,0], lenzi_iso_binding.iloc[:,1], c = lenzi_iso_ant_predict.iloc[:,0], cmap = cmap3, edgecolor = 'k', s = 75)
-plt.scatter(lenzi_wt_ant_transform, 1, s = 75, c = 'crimson', edgecolor = 'k')
-xd = np.linspace(-3.5, 2, 100)
-plt.plot(xd, ((xd*x1[0])+x1[1]), c= 'k', lw = 2, linestyle= ':')
-plt.tick_params(labelsize = 12)
-neg_gate_patch = mpatches.Patch(facecolor='dodgerblue', label = 'LDA Predicted No ANT Binding', edgecolor = 'black', linewidth = 0.5)
-pos_gate_patch = mpatches.Patch(facecolor = 'darkorange', label = 'LDA Predicted ANT Binding', edgecolor = 'black', linewidth = 0.5)
-legend = plt.legend(handles=[neg_gate_patch, pos_gate_patch], fontsize = 11)
-plt.ylabel('Display Normalalized Antigen Binding', fontsize = 16)
-plt.xlabel('LDA Transform', fontsize = 16)
-plt.title('Experimental Antigen Binding vs LDA Transform', fontsize = 18)
-plt.tight_layout()
 
 
 #%%
@@ -128,71 +108,66 @@ lenzi_psy_predict = pd.DataFrame(lenzi_psy.predict(lenzi_reps))
 print(confusion_matrix(lenzi_psy_predict.iloc[:,0], lenzi_labels.iloc[:,2]))
 
 lenzi_wt_psy_transform = pd.DataFrame(lenzi_psy.transform(lenzi_wt_rep))
+lenzi_fit_psy_transform = pd.DataFrame((lenzi_psy.transform(lenzi_fit_reps)))
 
 
 #%%
 ### obtaining transformand predicting poly-specificity binding of experimental iso clones
-lenzi_iso_psy_transform= pd.DataFrame(lenzi_psy.transform(lenzi_iso_reps))
-lenzi_fit_psy_transform= pd.DataFrame(lenzi_psy.transform(lenzi_fit_reps))
-lenzi_iso_psy_predict = pd.DataFrame(lenzi_psy.predict(lenzi_iso_reps))
 lenzi_fit_psy_predict = pd.DataFrame(lenzi_psy.predict(lenzi_fit_reps))
-print(stats.spearmanr(lenzi_iso_psy_transform.iloc[:,0], lenzi_iso_binding.iloc[:,2]))
 
 x2 = np.polyfit(lenzi_fit_psy_transform.iloc[:,0], lenzi_fit_binding.iloc[:,1],1)
 lenzi_psy_transform['Fraction PSY Binding'] = ((lenzi_psy_transform.iloc[:,0]*x2[0])+x2[1])
-lenzi_iso_psy_transform['Fraction PSY Binding'] = ((lenzi_iso_psy_transform.iloc[:,0]*x2[0])+x2[1])
-lenzi_fit_psy_transform['Fraction PSY Binding'] = ((lenzi_fit_psy_transform.iloc[:,0]*x2[0])+x2[1])
-
-plt.figure(3)
-plt.scatter(lenzi_iso_psy_transform.iloc[:,0], lenzi_iso_binding.iloc[:,2], c = lenzi_iso_psy_predict.iloc[:,0], cmap = cmap1, edgecolor = 'k', s = 75)
-plt.scatter(lenzi_wt_psy_transform, 1, s = 75, c = 'crimson', edgecolor = 'k')
-xd = np.linspace(-3.5, 2, 100)
-plt.plot(xd, ((xd*x2[0])+x2[1]), c= 'k', lw = 2, linestyle= ':')
-plt.tick_params(labelsize = 12)
-plt.ylim(0,1.5)
-neg_gate_patch = mpatches.Patch(facecolor='mediumspringgreen', label = 'LDA Predicted No PSY Binding', edgecolor = 'black', linewidth = 0.5)
-pos_gate_patch = mpatches.Patch(facecolor = 'darkviolet', label = 'LDA Predicted PSY Binding', edgecolor = 'black', linewidth = 0.5)
-legend = plt.legend(handles=[neg_gate_patch, pos_gate_patch], fontsize = 11)
-plt.ylabel('Display Normalalized psyigen Binding', fontsize = 16)
-plt.xlabel('LDA Transform', fontsize = 16)
-plt.title('Experimental psyigen Binding vs LDA Transform', fontsize = 18)
-plt.tight_layout()
 
 
 #%%
 ### pareto subplots colored by functionalized transforms
-clones_score = [0]*4000
+clones_score = [0]*3284
 lenzi_optimal_sequences = []
 for index, row in lenzi_ant_transform.iterrows():
-    if (0.85 > lenzi_ant_transform.iloc[index,1] > 0.75) & (lenzi_psy_transform.iloc[index,1] < 0.85):
-        clones_score[index] = 1
-    if (1.00 > lenzi_ant_transform.iloc[index,1] > 0.85) & (lenzi_psy_transform.iloc[index,1] < 0.95):
+    if (lenzi_ant_transform.iloc[index,1] > 1.20) & (lenzi_psy_transform.iloc[index,1] < 1):
         clones_score[index] = 2
-    if (lenzi_ant_transform.iloc[index,1] > 1.00) & (lenzi_psy_transform.iloc[index,1] < 1.00):
+        lenzi_optimal_sequences.append([index, 2, lenzi_labels.iloc[index, 0]])
+    if (lenzi_ant_transform.iloc[index,1] > 0.90) & (lenzi_psy_transform.iloc[index,1] < 0.85):
         clones_score[index] = 3
-        lenzi_optimal_sequences.append([index, lenzi_labels.iloc[index, 0]])
+        lenzi_optimal_sequences.append([index, 3, lenzi_labels.iloc[index, 0]])
+lenzi_optimal_sequences = pd.DataFrame(lenzi_optimal_sequences)
 
-iso_score = [0]*139
-for index, row in lenzi_iso_ant_transform.iterrows():
-    if (0.85 > lenzi_iso_ant_transform.iloc[index,1] > 0.75) & (lenzi_iso_psy_transform.iloc[index,1] < 0.85):
-        iso_score[index] = 1
-    if (1.00 > lenzi_iso_ant_transform.iloc[index,1] > 0.85) & (lenzi_iso_psy_transform.iloc[index,1] < 0.95):
-        iso_score[index] = 2
-    if (lenzi_iso_ant_transform.iloc[index,1] > 1.00) & (lenzi_iso_psy_transform.iloc[index,1] < 1.00):
-        iso_score[index] = 3
+lenzi_optimal_muts = []
+for i in lenzi_optimal_sequences.iloc[:,2]:
+    muts = list(i)
+    lenzi_optimal_muts.append(muts)
+lenzi_optimal_muts = pd.DataFrame(lenzi_optimal_muts)
 
-iso_optimal_conf = [0]*139
-iso_transform_conf = [0]*139
+wt_muts = ['Y','W','G','R','R','F','P','Y','Y','Y']
+lenzi_optimal_hamming = []
+for index, row in lenzi_optimal_muts.iterrows():
+    muts = list(row)
+    ham = hamming(muts, wt_muts)
+    lenzi_optimal_hamming.append(ham)
+lenzi_optimal_hamming = pd.DataFrame(lenzi_optimal_hamming)
 
-for index, row in lenzi_iso_binding.iterrows():
-    if (lenzi_iso_binding.iloc[index,1] > 1) & (lenzi_iso_binding.iloc[index,2] < 1):
-        iso_optimal_conf[index] = 1
-    if (lenzi_iso_ant_transform.iloc[index,1] > 1) & (lenzi_iso_psy_transform.iloc[index,1] < 1):
-        iso_transform_conf[index] = 1
-print(confusion_matrix(iso_optimal_conf, iso_transform_conf, labels = [0,1]))
+lenzi_optimal_sequences_full = []
+for i in lenzi_optimal_sequences.iloc[:,2]:
+    wt = list(lenzi_wt_seq.iloc[0,0])
+    muts = list(i)
+    wt[32] = muts[0]
+    wt[49] = muts[0]
+    wt[53] = muts[1]
+    wt[98] = muts[2]
+    wt[100] = muts[3]
+    wt[101] = muts[4]
+    wt[102] = muts[5]
+    wt[103] = muts[6]
+    wt[104] = muts[7]
+    wt[107] = muts[8]
+    wt = ''.join(str(j) for j in wt)
+    lenzi_optimal_sequences_full.append(wt)
+lenzi_optimal_sequences_full = pd.DataFrame(lenzi_optimal_sequences_full)
 
-plt.scatter(lenzi_ant_transform.iloc[:,0], lenzi_psy_transform.iloc[:,0], c = lenzi_labels.iloc[:,3], cmap = cmap1)
+#%%
+plt.scatter(lenzi_ant_transform.iloc[:,0], lenzi_psy_transform.iloc[:,0], c = clones_score, cmap = cmap1)
 plt.scatter(lenzi_wt_ant_transform.iloc[:,0], lenzi_wt_psy_transform.iloc[:,0], c = 'crimson', s = 65, edgecolor = 'k')
+
 
 #%%
 fig, (ax0, ax1, ax2) = plt.subplots(1, 3, figsize = (18,5))
@@ -222,21 +197,6 @@ nonoptimal_patch = mpatches.Patch(facecolor = 'navy', label = 'Population 2', ed
 lessoptimal_patch = mpatches.Patch(facecolor='darkturquoise', label = 'Population 3', edgecolor = 'black', linewidth = 0.1)
 ax2.legend(handles=[optimal_patch, nonoptimal_patch, lessoptimal_patch], fontsize = 12)
 
-
-#%%
-fig, ax = plt.subplots(figsize = (7,4.5))
-img = plt.scatter(lenzi_iso_binding.iloc[:,1], lenzi_iso_binding.iloc[:,2], c = iso_score, cmap = cmap4, edgecolor = 'k', s = 75, lw = 1.5, zorder = 2)
-plt.xlabel('Antigen Binding (WT Normal)', fontsize = 18)
-plt.ylabel('PSY Binding (WT Normal)', fontsize = 18)
-plt.xticks(fontsize = 14)
-plt.yticks(fontsize = 14)
-ax.invert_xaxis()
-ax.set_ylim(0,1.35)
-ax.set_xlim(1.8, -0.05)
-cbar = plt.colorbar(img)
-cbar.set_ticks([])
-cbar.set_label('Stringency of Property Requirements', fontsize = 14)
-plt.tight_layout()
 
 
 #%%
