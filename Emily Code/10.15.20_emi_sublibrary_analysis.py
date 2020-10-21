@@ -24,6 +24,7 @@ from matplotlib.colors import ListedColormap, LinearSegmentedColormap
 from sklearn.metrics import confusion_matrix
 from sklearn.linear_model import LinearRegression as LR
 from scipy.spatial.distance import hamming
+from sklearn.preprocessing import MinMaxScaler
 
 def get_prediction_interval(prediction, y_test, test_predictions, pi=.90):    
     #get standard deviation of y_test
@@ -53,22 +54,18 @@ sns.set_style("white")
 
 
 #%%
-emi_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_reps_stringent.csv", header = 0, index_col = None)
+emi_pos_reps = pd.read_pickle("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_PS_pos_avg_hidden.pickle")
+emi_pos_reps = pd.DataFrame(np.vstack(emi_pos_reps))
+emi_neg_reps = pd.read_pickle("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_PS_neg_avg_hidden.pickle")
+emi_neg_reps = pd.DataFrame(np.vstack(emi_neg_reps))
+
+emi_reps = pd.concat([emi_pos_reps, emi_neg_reps], axis = 0)
+emi_reps.reset_index(inplace = True, drop = True)
+scaler = MinMaxScaler()
+emi_reps = pd.DataFrame(scaler.fit_transform(emi_reps))
+
 emi_labels = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_rep_labels_stringent.csv", header = 0, index_col = 0)
 emi_biophys = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_biophys_stringent.csv", header = 0, index_col = 0)
-
-emi_iso_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_iso_reps_reduced.csv", header = 0, index_col = 0)
-
-emi_zero_rep = pd.DataFrame(emi_reps.iloc[2945,:]).T
-emi_iso_binding = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_iso_binding_reduced.csv", header = 0, index_col = None)
-
-emi_wt_rep = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_wt_rep.csv", header = 0, index_col = 0)
-emi_wt_binding = pd.DataFrame([1,1])
-emi_zero_binding = pd.DataFrame([0,0])
-emi_wt_binding.index = ['ANT Normalized Binding', 'PSY Normalized Binding']
-emi_zero_binding.index = ['ANT Normalized Binding', 'PSY Normalized Binding']
-emi_fit_reps = pd.concat([emi_wt_rep, emi_zero_rep])
-emi_fit_binding = pd.concat([emi_wt_binding, emi_zero_binding], axis = 1, ignore_index = True).T
 
 wt_seq = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_wt_seq.csv", header = None, index_col = None)
 emi_iso_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_iso_seqs_reduced.csv", header = None)
@@ -87,28 +84,13 @@ emi_ant_transform = pd.DataFrame(-1*(emi_ant.fit_transform(emi_reps, emi_labels.
 emi_ant_predict = pd.DataFrame(emi_ant.predict(emi_reps))
 print(confusion_matrix(emi_ant_predict.iloc[:,0], emi_labels.iloc[:,3]))
 
-emi_wt_ant_transform = pd.DataFrame(-1*(emi_ant.transform(emi_wt_rep)))
-
-
-#%%
-### obtaining transformand predicting antigen binding of experimental iso clones
-emi_iso_ant_transform= pd.DataFrame(-1*(emi_ant.transform(emi_iso_reps)))
-emi_fit_ant_transform= pd.DataFrame(-1*(emi_ant.transform(emi_fit_reps)))
-emi_iso_ant_predict = pd.DataFrame(emi_ant.predict(emi_iso_reps))
-emi_fit_ant_predict = pd.DataFrame(emi_ant.predict(emi_fit_reps))
-print(stats.spearmanr(emi_iso_ant_transform.iloc[:,0], emi_iso_binding.iloc[:,1]))
-
-x1 = np.polyfit(emi_fit_ant_transform.iloc[:,0], emi_fit_binding.iloc[:,0],1)
-emi_ant_transform['Fraction ANT Binding'] = ((emi_ant_transform.iloc[:,0]*x1[0])+x1[1])
-emi_iso_ant_transform['Fraction ANT Binding'] = ((emi_iso_ant_transform.iloc[:,0]*x1[0])+x1[1])
-emi_fit_ant_transform['Fraction ANT Binding'] = ((emi_fit_ant_transform.iloc[:,0]*x1[0])+x1[1])
-
 
 #%%
 ### ant scalings analysis
 emi_ant_scalings = pd.DataFrame(abs(emi_ant.scalings_))
+emi_ant_scalings['Fold Diff'] = (1/emi_ant_scalings.iloc[:,0])
 
-emi_reps_single = pd.concat([emi_reps.iloc[:,17], emi_reps.iloc[:,20]], axis = 1)
+emi_reps_single = pd.concat([emi_reps.iloc[:,697], emi_reps.iloc[:,1644], emi_reps.iloc[:,1795]], axis = 1)
 emi_ant_single = LDA()
 emi_ant_transform_single = pd.DataFrame(-1*(emi_ant_single.fit_transform(emi_reps_single, emi_labels.iloc[:,3])))
 emi_ant_predict_single = pd.DataFrame(emi_ant_single.predict(emi_reps_single))
@@ -127,28 +109,12 @@ emi_psy_transform = pd.DataFrame(emi_psy.fit_transform(emi_reps, emi_labels.iloc
 emi_psy_predict = pd.DataFrame(emi_psy.predict(emi_reps))
 print(confusion_matrix(emi_psy_predict.iloc[:,0], emi_labels.iloc[:,2]))
 
-emi_wt_psy_transform = pd.DataFrame(emi_psy.transform(emi_wt_rep))
-
-
-#%%
-### obtaining transformand predicting poly-specificity binding of experimental iso clones
-emi_iso_psy_transform= pd.DataFrame(emi_psy.transform(emi_iso_reps))
-emi_fit_psy_transform= pd.DataFrame(emi_psy.transform(emi_fit_reps))
-emi_iso_psy_predict = pd.DataFrame(emi_psy.predict(emi_iso_reps))
-emi_fit_psy_predict = pd.DataFrame(emi_psy.predict(emi_fit_reps))
-print(stats.spearmanr(emi_iso_psy_transform.iloc[:,0], emi_iso_binding.iloc[:,2]))
-
-x2 = np.polyfit(emi_fit_psy_transform.iloc[:,0], emi_fit_binding.iloc[:,1],1)
-emi_psy_transform['Fraction PSY Binding'] = ((emi_psy_transform.iloc[:,0]*x2[0])+x2[1])
-emi_iso_psy_transform['Fraction PSY Binding'] = ((emi_iso_psy_transform.iloc[:,0]*x2[0])+x2[1])
-emi_fit_psy_transform['Fraction PSY Binding'] = ((emi_fit_psy_transform.iloc[:,0]*x2[0])+x2[1])
-
 
 #%%
 ### psy scalings analysis
 emi_psy_scalings = pd.DataFrame(abs(emi_psy.scalings_))
 
-emi_reps_single = pd.concat([emi_reps.iloc[:,17], emi_reps.iloc[:,63]], axis = 1)
+emi_reps_single = pd.concat([emi_reps.iloc[:,554], emi_reps.iloc[:,697], emi_reps.iloc[:,1795]], axis = 1)
 emi_psy_single = LDA()
 emi_psy_transform_single = pd.DataFrame(-1*(emi_psy_single.fit_transform(emi_reps_single, emi_labels.iloc[:,3])))
 emi_psy_predict_single = pd.DataFrame(emi_psy_single.predict(emi_reps_single))
