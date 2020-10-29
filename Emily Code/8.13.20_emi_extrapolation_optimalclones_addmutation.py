@@ -250,31 +250,21 @@ for index, row in emi_ant_transform.iterrows():
         clones_score[index] = 3
         emi_optimal_sequences.append([index, emi_labels.iloc[index, 0]])
 
-### creating list of stringency/qulity of novel sequences that matches old library evaluation
-novel_clones_score = [0]*900
-emi_optimal_sequences_ant = []
-for index, row in emi_novel_ant_transform_ant.iterrows():
-    if (emi_novel_ant_transform_ant.iloc[index,1] > 0.65) & (emi_novel_psy_transform_ant.iloc[index,1] < 0.95):
-        novel_clones_score[index] = 1
-    if (emi_novel_ant_transform_ant.iloc[index,1] > 0.75) & (emi_novel_psy_transform_ant.iloc[index,1] < 0.90):
-        novel_clones_score[index] = 2
-    if (emi_novel_ant_transform_ant.iloc[index,1] > 0.85) & (emi_novel_psy_transform_ant.iloc[index,1] < 0.85):
-        novel_clones_score[index] = 3
-        emi_optimal_sequences.append([index, emi_labels.iloc[index, 0]])
 
+#%%
 ### creating list of stringency/quality of novel sequences based on new criteria that is very subject to change
 novel_clones_optimal_score_ant = [0]*900
 emi_novel_optimal_sequences_ant = []
 for index, row in emi_novel_ant_transform_ant.iterrows():
-    if (emi_novel_ant_transform_ant.iloc[index,1] > 1.45) & (emi_novel_psy_transform_ant.iloc[index,1] < 0.90):
+    if (emi_novel_ant_transform_ant.iloc[index,1] > 1.25) & (0.90 <= emi_novel_psy_transform_ant.iloc[index,1] < 1.00):
         novel_clones_optimal_score_ant[index] = 1
         emi_novel_optimal_sequences_ant.append([index, 1, emi_novel_seqs.iloc[index, 2]])
-    if (emi_novel_ant_transform_ant.iloc[index,1] > 0.85) & (emi_novel_psy_transform_ant.iloc[index,1] < 0.50):
-        novel_clones_optimal_score_ant[index] = 3
-        emi_novel_optimal_sequences_ant.append([index, 3, emi_novel_seqs.iloc[index, 2]])
-    if (1.20 > emi_novel_ant_transform_ant.iloc[index,1] > 1.10) & (0.65 < emi_novel_psy_transform_ant.iloc[index,1] < 0.75):
+    if (emi_novel_ant_transform_ant.iloc[index,1] > 1.25) & (0.75 <= emi_novel_psy_transform_ant.iloc[index,1] < 0.90):
         novel_clones_optimal_score_ant[index] = 2
         emi_novel_optimal_sequences_ant.append([index, 2, emi_novel_seqs.iloc[index, 2]])
+    if (emi_novel_ant_transform_ant.iloc[index,1] > 1.25) & (emi_novel_psy_transform_ant.iloc[index,1] < 0.75):
+        novel_clones_optimal_score_ant[index] = 3
+        emi_novel_optimal_sequences_ant.append([index, 3, emi_novel_seqs.iloc[index, 2]])
 
 emi_novel_optimal_sequences_ant = pd.DataFrame(emi_novel_optimal_sequences_ant)
 
@@ -292,7 +282,6 @@ novel_optimal_seqs_ant = np.vstack(novel_optimal_seqs_ant)
 novel_optimal_seqs_ant = pd.DataFrame(novel_optimal_seqs_ant)
 
 
-#%%
 fig, ax = plt.subplots(figsize = (7,4.5))
 img = ax.scatter(emi_novel_ant_transform_ant.iloc[:,0], emi_novel_psy_transform_ant.iloc[:,0], c = novel_clones_optimal_score_ant, s = 50, edgecolor = 'k', cmap = cmap2)
 ax.scatter(emi_wt_ant_transform.iloc[:,0], emi_wt_psy_transform.iloc[:,0], c = 'crimson', s = 65, edgecolor = 'k')
@@ -305,31 +294,19 @@ plt.tight_layout()
 
 
 #%%
-### creating list of stringency/qulity of novel sequences that matches old library evaluation
-novel_clones_score = [0]*900
-emi_optimal_sequences = []
-for index, row in emi_novel_ant_transform_psy.iterrows():
-    if (emi_novel_ant_transform_psy.loc[index,'Fraction ANT Binding'] > 0.65) & (emi_novel_psy_transform_psy.loc[index,'Fraction PSY Binding'] < 0.95):
-        novel_clones_score[index-900] = 1
-    if (emi_novel_ant_transform_psy.loc[index,'Fraction ANT Binding'] > 0.75) & (emi_novel_psy_transform_psy.loc[index,'Fraction PSY Binding'] < 0.90):
-        novel_clones_score[index-900] = 2
-    if (emi_novel_ant_transform_psy.loc[index,'Fraction ANT Binding'] > 0.85) & (emi_novel_psy_transform_psy.loc[index,'Fraction PSY Binding'] < 0.85):
-        novel_clones_score[index-900] = 3
-        emi_optimal_sequences.append([index, emi_labels.iloc[index, 0]])
-
 ### creating list of stringency/quality of novel sequences based on new criteria that is very subject to change
 novel_clones_optimal_score_psy = [0]*900
 emi_novel_optimal_sequences_psy = []
 for index, row in emi_novel_ant_transform_psy.iterrows():
-    if (emi_novel_ant_transform_psy.loc[index,'Fraction ANT Binding'] > 1.15) & (emi_novel_psy_transform_psy.loc[index,'Fraction PSY Binding'] < 0.75):
+    if (0.60 >= emi_novel_ant_transform_psy.loc[index,'Fraction ANT Binding'] > 0.45) & (emi_novel_psy_transform_psy.loc[index,'Fraction PSY Binding'] < 0.55):
         novel_clones_optimal_score_psy[index-900] = 1
         emi_novel_optimal_sequences_psy.append([index, 1, emi_novel_seqs.iloc[index, 2]])
-    if (0.85 > emi_novel_ant_transform_psy.loc[index,'Fraction ANT Binding'] > 0.55) & (emi_novel_psy_transform_psy.loc[index,'Fraction PSY Binding'] < 0.35):
-        novel_clones_optimal_score_psy[index-900] = 3
-        emi_novel_optimal_sequences_psy.append([index, 3, emi_novel_seqs.iloc[index, 2]])
-    if (0.95 > emi_novel_ant_transform_psy.loc[index,'Fraction ANT Binding'] > 0.85) & (0.55 < emi_novel_psy_transform_psy.loc[index,'Fraction PSY Binding'] < 0.60):
+    if (0.90 >= emi_novel_ant_transform_psy.loc[index,'Fraction ANT Binding'] > 0.60) & (emi_novel_psy_transform_psy.loc[index,'Fraction PSY Binding'] < 0.55):
         novel_clones_optimal_score_psy[index-900] = 2
         emi_novel_optimal_sequences_psy.append([index, 2, emi_novel_seqs.iloc[index, 2]])
+    if (emi_novel_ant_transform_psy.loc[index,'Fraction ANT Binding'] > 0.90) & (emi_novel_psy_transform_psy.loc[index,'Fraction PSY Binding'] < 0.55):
+        novel_clones_optimal_score_psy[index-900] = 3
+        emi_novel_optimal_sequences_psy.append([index, 3, emi_novel_seqs.iloc[index, 2]])
 
 emi_novel_optimal_sequences_psy = pd.DataFrame(emi_novel_optimal_sequences_psy)
 
@@ -346,8 +323,6 @@ for i in emi_novel_optimal_sequences_psy.iloc[:,0]:
 novel_optimal_seqs_psy = np.vstack(novel_optimal_seqs_psy)
 novel_optimal_seqs_psy = pd.DataFrame(novel_optimal_seqs_psy)
 
-
-#%%
 fig, ax = plt.subplots(figsize = (7,4.5))
 img = ax.scatter(emi_novel_ant_transform_psy.iloc[:,0], emi_novel_psy_transform_psy.iloc[:,0], c = novel_clones_optimal_score_psy, s = 50, edgecolor = 'k', cmap = cmap2)
 ax.scatter(emi_wt_ant_transform.iloc[:,0], emi_wt_psy_transform.iloc[:,0], c = 'crimson', s = 65, edgecolor = 'k')
