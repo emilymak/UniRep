@@ -47,12 +47,12 @@ batch_size = 50
 b = babbler(batch_size=batch_size, model_path=MODEL_WEIGHT_PATH)
 
 
-# In[ ]:
+# In[5]:
 
 
 # Before you can train your model, 
 sequences = []
-with open("emi_neg_seqs_ova_2.txt", "r") as source:
+with open("emi_novel_clones_seqs.txt", "r") as source:
     with open("formatted.txt", "w") as destination:
         for i,seq in enumerate(source):
             seq = seq.strip()
@@ -63,7 +63,7 @@ with open("emi_neg_seqs_ova_2.txt", "r") as source:
                 destination.write('\n')
 
 
-# In[ ]:
+# In[6]:
 
 
 ## 
@@ -90,7 +90,7 @@ for i in num2:
     
 
 
-# In[6]:
+# In[7]:
 
 
 average_hidden_pd = pd.DataFrame(np.row_stack(average_hidden_list))
@@ -99,19 +99,19 @@ hidden_state = pd.DataFrame(np.row_stack(hs_list))
 print(hidden_state)
 
 
-# In[7]:
-
-
-average_hidden_pd.to_csv("emi_neg_reps_ova_2.csv")
-final_hidden_pd.to_csv("emi_neg_finalhidden_ova_2.csv")
-
-
 # In[8]:
+
+
+average_hidden_pd.to_csv("emi_novel_clones_reps.csv")
+final_hidden_pd.to_csv("emi_novel_clones_finalhidden.csv")
+
+
+# In[9]:
 
 
 import pickle
 save_loc = "C:\\Users\\pkinn\\Documents\\UniRep\\full representations\\emi larger set\\"
-data_name = 'emi_neg_reps_ova_2'
+data_name = 'emi_novel_clones_reps'
 file_append = '.pickle'
 
 
@@ -134,12 +134,6 @@ with open(fn, 'wb') as f:
 fn = save_loc + data_name + 'all_output_hs' + file_append
 with open(fn, 'wb') as f:
     pickle.dump([average_hidden_list, final_hidden_list, final_cell_list, hs_list], f)
-
-
-# In[ ]:
-
-
-
 
 
 # In[ ]:
