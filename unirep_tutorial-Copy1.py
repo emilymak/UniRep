@@ -47,12 +47,12 @@ batch_size = 50
 b = babbler(batch_size=batch_size, model_path=MODEL_WEIGHT_PATH)
 
 
-# In[5]:
+# In[4]:
 
 
 # Before you can train your model, 
 sequences = []
-with open("emi_neg_seqs_pva_1.txt", "r") as source:
+with open("emi_pos_seqs_ova_1.txt", "r") as source:
     with open("formatted.txt", "w") as destination:
         for i,seq in enumerate(source):
             seq = seq.strip()
@@ -63,7 +63,7 @@ with open("emi_neg_seqs_pva_1.txt", "r") as source:
                 destination.write('\n')
 
 
-# In[ ]:
+# In[5]:
 
 
 ## 
@@ -102,8 +102,8 @@ print(hidden_state)
 # In[7]:
 
 
-average_hidden_pd.to_csv("emii_neg_reps_ova_1.csv")
-final_hidden_pd.to_csv("emi_neg_finalhidden_ova_1.csv")
+average_hidden_pd.to_csv("emi_pos_reps_ova_1.csv")
+final_hidden_pd.to_csv("emi_pos_finalhidden_ova_1.csv")
 
 
 # In[8]:
@@ -111,7 +111,7 @@ final_hidden_pd.to_csv("emi_neg_finalhidden_ova_1.csv")
 
 import pickle
 save_loc = "C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets"
-data_name = 'emi_neg_reps_ova_1'
+data_name = 'emi_pos_reps_ova_1'
 file_append = '.pickle'
 
 
