@@ -158,7 +158,7 @@ emi_seqs_used_stringent.drop('rep2', inplace = True, axis = 1)
 #%%
 
 emi_seqs_used_stringent.reset_index(drop = True, inplace = True)
-emi_seqs_used_stringent.to_csv('emi_rep_labels_5G6A.csv', header = True, index = True)
+emi_seqs_used_stringent.to_csv('emi_rep_labels_ova.csv', header = True, index = True)
 
 emi_pos_seq_stringent.iloc[0:500,0].to_csv('emi_pos_seqs_ova_1.txt', header = False, index = False)
 emi_neg_seq_stringent.iloc[0:500,0].to_csv('emi_neg_seqs_pva_1.txt', header = False, index = False)
