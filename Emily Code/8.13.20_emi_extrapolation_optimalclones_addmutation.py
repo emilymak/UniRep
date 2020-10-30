@@ -77,6 +77,8 @@ emi_iso_seqs.columns = ['Sequences']
 
 emi_base_seq_transform = pd.read_csv("..\\Datasets\\emi_base_seq_transforms.csv", header = None, index_col = 0)
 
+emi_novel_clones_reps = pd.read_csv("..\\Datasets\\emi_novel_clones_reps.csv", header = 0, index_col = 0)
+
 seqs_hamming = []
 for i in emi_seqs['Sequences']:
     char = list(i)
@@ -193,6 +195,7 @@ emi_wt_ant_transform = pd.DataFrame(-1*(emi_ant.transform(emi_wt_rep)))
 emi_novel_ant_transform= pd.DataFrame(-1*(emi_ant.transform(emi_novel_reps)))
 emi_fit_ant_transform= pd.DataFrame(-1*(emi_ant.transform(emi_fit_reps)))
 emi_novel_ant_predict = pd.DataFrame(emi_ant.predict(emi_novel_reps))
+emi_novel_clones_transform_ant = pd.DataFrame(-1*emi_ant.transform(emi_novel_clones_reps))
 
 ### fit transform is used to create a linear function that describes percentage of ANT binding predicted for a clone
 x1 = np.polyfit(emi_fit_ant_transform.iloc[:,0], emi_fit_binding.iloc[:,0],1)
@@ -220,6 +223,7 @@ emi_wt_psy_transform = pd.DataFrame(emi_psy.transform(emi_wt_rep))
 emi_novel_psy_transform= pd.DataFrame(emi_psy.transform(emi_novel_reps))
 emi_fit_psy_transform= pd.DataFrame(emi_psy.transform(emi_fit_reps))
 emi_novel_psy_predict = pd.DataFrame(emi_psy.predict(emi_novel_reps))
+emi_novel_clones_transform_psy = pd.DataFrame(emi_psy.transform(emi_novel_clones_reps))
 
 ### fit transform is used to create a linear function that describes percentage of PSY binding predicted for a clone
 x2 = np.polyfit(emi_fit_psy_transform.iloc[:,0], emi_fit_binding.iloc[:,1],1)
