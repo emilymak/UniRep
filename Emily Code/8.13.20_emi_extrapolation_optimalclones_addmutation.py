@@ -260,13 +260,27 @@ for index, row in emi_ant_transform.iterrows():
 novel_clones_optimal_score_ant = [0]*900
 emi_novel_optimal_sequences_ant = []
 for index, row in emi_novel_ant_transform_ant.iterrows():
-    if (emi_novel_ant_transform_ant.iloc[index,1] > 1.25) & (0.90 <= emi_novel_psy_transform_ant.iloc[index,1] < 1.00):
+    if (emi_novel_ant_transform_ant.iloc[index,1] > 1.75) & (0.90 <= emi_novel_psy_transform_ant.iloc[index,1] < 1.00):
         novel_clones_optimal_score_ant[index] = 1
         emi_novel_optimal_sequences_ant.append([index, 1, emi_novel_seqs.iloc[index, 2]])
-    if (emi_novel_ant_transform_ant.iloc[index,1] > 1.25) & (0.75 <= emi_novel_psy_transform_ant.iloc[index,1] < 0.90):
+    if (1.75 >= emi_novel_ant_transform_ant.iloc[index,1] > 1.5) & (0.75 <= emi_novel_psy_transform_ant.iloc[index,1] < 0.90):
         novel_clones_optimal_score_ant[index] = 2
         emi_novel_optimal_sequences_ant.append([index, 2, emi_novel_seqs.iloc[index, 2]])
-    if (emi_novel_ant_transform_ant.iloc[index,1] > 1.25) & (emi_novel_psy_transform_ant.iloc[index,1] < 0.75):
+    if (1.5 >= emi_novel_ant_transform_ant.iloc[index,1] > 1.25) & (emi_novel_psy_transform_ant.iloc[index,1] < 0.75):
+        novel_clones_optimal_score_ant[index] = 3
+        emi_novel_optimal_sequences_ant.append([index, 3, emi_novel_seqs.iloc[index, 2]])
+
+emi_novel_optimal_sequences_ant = pd.DataFrame(emi_novel_optimal_sequences_ant)
+
+emi_novel_optimal_sequences_ant = []
+for index, row in emi_novel_ant_transform_ant.iterrows():
+    if (emi_novel_ant_transform_ant.iloc[index,1] > 1.35) & (emi_novel_psy_transform_ant.iloc[index,1] < 1.00):
+        novel_clones_optimal_score_ant[index] = 1
+        emi_novel_optimal_sequences_ant.append([index, 1, emi_novel_seqs.iloc[index, 2]])
+    if (1.35 > emi_novel_ant_transform_ant.iloc[index,1] > 1.10) & (emi_novel_psy_transform_ant.iloc[index,1] < 0.85):
+        novel_clones_optimal_score_ant[index] = 2
+        emi_novel_optimal_sequences_ant.append([index, 2, emi_novel_seqs.iloc[index, 2]])
+    if (1.10 > emi_novel_ant_transform_ant.iloc[index,1] > 0.85) & (emi_novel_psy_transform_ant.iloc[index,1] < 0.75):
         novel_clones_optimal_score_ant[index] = 3
         emi_novel_optimal_sequences_ant.append([index, 3, emi_novel_seqs.iloc[index, 2]])
 
@@ -486,9 +500,10 @@ psy_baseseq_psy = [0.962155947, 1.117217874]
 fig, ax = plt.subplots(figsize = (5.5, 5.25))
 ax.scatter(emi_ant_transform.iloc[:,0], emi_psy_transform.iloc[:,0], c = 'darkgray', edgecolor = 'k', linewidth = 0.1)
 ax.scatter(emi_wt_ant_transform.iloc[:,0], emi_wt_psy_transform.iloc[:,0], c = 'k', s = 65, edgecolor = 'k')
-ax.scatter(ant_baseseq_ant, ant_baseseq_psy, c = 'blue', edgecolor = 'k', s = 65, linewidth = 1)
-ax.scatter(psy_baseseq_ant, psy_baseseq_psy, c = 'red', edgecolor = 'k', s = 65, linewidth = 1)
+ax.scatter(ant_baseseq_ant, ant_baseseq_psy, c = 'blue', edgecolor = 'k', s = 125, marker = '*', linewidth = 1)
+#ax.scatter(psy_baseseq_ant, psy_baseseq_psy, c = 'red', edgecolor = 'k', s = 65, linewidth = 1)
 ax.tick_params(labelsize = 16)
+plt.xlim(-5.75, 5)
 
 
 #%%
@@ -510,6 +525,7 @@ cmap_pareto = LinearSegmentedColormap.from_list("mycmap", colormap_pareto)
 
 fig, ax = plt.subplots(figsize = (5.5, 5.25))
 ax.scatter(emi_novel_ant_transform_ant.iloc[:,0], emi_novel_psy_transform_ant.iloc[:,0], c = novel_clones_optimal_score_ant, cmap = cmap_pareto, edgecolor = 'k', linewidth = 0.1)
+ax.scatter(ant_baseseq_ant, ant_baseseq_psy, c = 'blue', edgecolor = 'k', s = 125, marker = '*', linewidth = 1)
 ax.tick_params(labelsize = 16)
 
 
@@ -523,3 +539,4 @@ ax.scatter(emi_ant_transform.iloc[:,0], emi_psy_transform.iloc[:,0], c = 'darkgr
 ax.scatter(emi_wt_ant_transform.iloc[:,0], emi_wt_psy_transform.iloc[:,0], c = 'k', s = 65, edgecolor = 'k')
 ax.scatter(psy_baseseq_ant, psy_baseseq_psy, c = 'red', edgecolor = 'k', s = 125, marker = '*', linewidth = 1)
 ax.tick_params(labelsize = 16)
+

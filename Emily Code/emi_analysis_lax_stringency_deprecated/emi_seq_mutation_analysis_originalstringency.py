@@ -16,29 +16,23 @@ import seaborn as sns
 from scipy.spatial.distance import hamming
 from scipy.spatial.distance import euclidean
 from sklearn.model_selection import train_test_split
-from representation_analysis_functions import remove_duplicates
+
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
 from sklearn.metrics import accuracy_score
 
-residue_info = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\residue_dict.csv", header = 0, index_col = 0)
-emi_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_seqs.csv", header = 0, index_col = 0)
+residue_info = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\residue_dict.csv", header = 0, index_col = 0)
+emi_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_seqs_stringent.csv", header = 0, index_col = None)
 emi_seqs.columns = ['Sequences']
-emi_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_reps.csv", header = 0, index_col = 0)
+emi_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_reps_stringent.csv", header = 0, index_col = 0)
 
-emi_isolatedclones_biophys = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_isolatedclones_biophys.csv", header = 0, index_col = None)
-emi_isolatedclones_binding = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_isolatedclones_binding.csv", header = 0, index_col = 0)
-emi_isolatedclones_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_isolatedclones_seqs.txt", header = None)
-emi_isolatedclones_seqs.columns = ['Sequences']
-emi_isolatedclones_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_isolatedclones_reps.csv", header = 0, index_col = 0)
-
-emi_labels = [1]*500 + [0]*500 + [1]*500 + [0]*500 + [1]*499 + [0]*500
+emi_labels = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_rep_labels_stringent.csv", header = 0, index_col = 0)
 emi_labels = pd.DataFrame(emi_labels)
-emi_labels.columns = ['Sequences']
-wt_seq = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_wt_seq.txt", header = None, index_col = None)
+emi_labels.columns = ['Sequences', 'Frequency Ave', 'PSY Binding' ,'ANT Binding']
+wt_seq = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_wt_seq.txt", header = None, index_col = None)
 
 #%%
 mutations = []
-for i in emi_isolatedclones_seqs['Sequences']:
+for i in emi_seqs['Sequences']:
     characters = list(i)
     mutations.append([characters[32], characters[49], characters[54], characters[55], characters[56], characters[98], characters[100], characters[103]])
 mutations = pd.DataFrame(mutations)
@@ -133,7 +127,7 @@ for i in mutations_biophys.iterrows():
 
 
 #%%
-#mutations_biophys.to_csv('emi_isolatedclones_total_biophys.csv', header = True, index = True)
+mutations_biophys.to_csv('emi_biophys.csv', header = True, index = True)
 
 #%%
 common_mutations_y = []
@@ -183,7 +177,7 @@ for ind, row in mutations.iterrows():
         print(ind)
 
 #%%
-wt_rep = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_wt_rep.csv", header = 0, index_col = 0)
+wt_rep = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_wt_rep.csv", header = 0, index_col = 0)
 
 hamming_distance_from_wt_seq = []
 for i in emi_seqs['Sequences']:
@@ -227,7 +221,7 @@ plt.scatter(euclidean_distance_from_wt_rep, hamming_distance_from_wt_seq)
 plt.scatter((hamming_distance_isolatedclones_total_from_wt_seq), (emi_isolatedclones_total_binding.iloc[:,0]/emi_isolatedclones_total_binding.iloc[:,1]))
 
 #%%
-emi_biophys = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_biophys.csv", header = 0, index_col = 0)
+emi_biophys = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_biophys.csv", header = 0, index_col = 0)
 plt.figure(3)
 ax = sns.swarmplot(hamming_distance_from_wt_seq, euclidean_distance_from_wt_rep, hue = emi_biophys.iloc[:,62], s = 5, edgecolor = 'black', linewidth = 0.1, palette = 'viridis')
 ax.legend_.remove()
