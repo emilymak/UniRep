@@ -57,7 +57,7 @@ emi_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\e
 emi_labels = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_rep_labels_stringent.csv", header = 0, index_col = 0)
 emi_biophys = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_biophys_stringent.csv", header = 0, index_col = 0)
 
-emi_iso_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_iso_reps_reduced.csv", header = 0, index_col = 0)
+emi_iso_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_iso_new_reps.csv", header = 0, index_col = 0)
 
 emi_zero_rep = pd.DataFrame(emi_reps.iloc[2945,:]).T
 emi_iso_binding = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_iso_binding_reduced.csv", header = 0, index_col = None)
@@ -175,7 +175,7 @@ for index, row in emi_ant_transform.iterrows():
         clones_score[index] = 3
         emi_optimal_sequences.append([index, emi_labels.iloc[index, 0]])
 
-iso_score = [0]*139
+iso_score = [0]*170
 for index, row in emi_iso_ant_transform.iterrows():
     if (0.85 > emi_iso_ant_transform.iloc[index,1] > 0.75) & (emi_iso_psy_transform.iloc[index,1] < 0.85):
         iso_score[index] = 1
@@ -184,8 +184,8 @@ for index, row in emi_iso_ant_transform.iterrows():
     if (emi_iso_ant_transform.iloc[index,1] > 1.00) & (emi_iso_psy_transform.iloc[index,1] < 1.00):
         iso_score[index] = 3
 
-iso_optimal_conf = [0]*139
-iso_transform_conf = [0]*139
+iso_optimal_conf = [0]*170
+iso_transform_conf = [0]*170
 
 for index, row in emi_iso_binding.iterrows():
     if (emi_iso_binding.iloc[index,1] > 1) & (emi_iso_binding.iloc[index,2] < 1):
