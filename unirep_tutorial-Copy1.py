@@ -47,12 +47,12 @@ batch_size = 50
 b = babbler(batch_size=batch_size, model_path=MODEL_WEIGHT_PATH)
 
 
-# In[4]:
+# In[5]:
 
 
 # Before you can train your model, 
 sequences = []
-with open("emi_pos_seqs_ova_1.txt", "r") as source:
+with open("emi_novel_R2_seqs.txt", "r") as source:
     with open("formatted.txt", "w") as destination:
         for i,seq in enumerate(source):
             seq = seq.strip()
@@ -63,7 +63,7 @@ with open("emi_pos_seqs_ova_1.txt", "r") as source:
                 destination.write('\n')
 
 
-# In[5]:
+# In[6]:
 
 
 ## 
@@ -90,20 +90,20 @@ for i in num2:
     
 
 
-# In[6]:
+# In[7]:
 
 
 average_hidden_pd = pd.DataFrame(np.row_stack(average_hidden_list))
 final_hidden_pd = pd.DataFrame(np.row_stack(final_hidden_list))
 hidden_state = pd.DataFrame(np.row_stack(hs_list))
-print(hidden_state)
+print(average_hidden_pd)
 
 
-# In[7]:
+# In[8]:
 
 
-average_hidden_pd.to_csv("emi_pos_reps_ova_1.csv")
-final_hidden_pd.to_csv("emi_pos_finalhidden_ova_1.csv")
+average_hidden_pd.to_csv("emi_novel_R2_reps.csv")
+final_hidden_pd.to_csv("emi_novel_R2_finalhidden.csv")
 
 
 # In[8]:
@@ -111,7 +111,7 @@ final_hidden_pd.to_csv("emi_pos_finalhidden_ova_1.csv")
 
 import pickle
 save_loc = "C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets"
-data_name = 'emi_pos_reps_ova_1'
+data_name = 'ins_seq_1'
 file_append = '.pickle'
 
 

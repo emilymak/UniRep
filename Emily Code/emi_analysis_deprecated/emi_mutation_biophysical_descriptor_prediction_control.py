@@ -27,8 +27,8 @@ from sklearn.model_selection import GridSearchCV as gscv
 from matplotlib.colors import ListedColormap, LinearSegmentedColormap
 from sklearn.metrics import confusion_matrix
 from sklearn.linear_model import LinearRegression as LR
-from statsmodels.stats.power import TTestIndPower
 from sklearn.ensemble import RandomForestClassifier as RFC
+from sklearn.ensemble import RandomForestRegressor as RFR
 from sklearn.tree import DecisionTreeClassifier as DTC
 from sklearn.tree import plot_tree
 
@@ -65,13 +65,13 @@ sns.set_style("white")
 
 
 #%%
-emi_reps_stringent = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_reps_stringent.csv", header = 0, index_col = None)
-emi_labels_stringent = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_rep_labels_stringent.csv", header = 0, index_col = 0)
-emi_biophys_stringent = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_biophys_stringent.csv", header = 0, index_col = 0)
+emi_reps_stringent = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_reps_stringent.csv", header = 0, index_col = None)
+emi_labels_stringent = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_rep_labels_stringent.csv", header = 0, index_col = 0)
+emi_biophys_stringent = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_biophys_stringent.csv", header = 0, index_col = 0)
 
-emi_iso_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_iso_reps.csv", header = 0, index_col = 0)
-emi_iso_binding = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_iso_binding.csv", header = 0, index_col = None)
-emi_iso_biophys = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_iso_biophys.csv", header = 0, index_col = 0)
+emi_iso_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_iso_reps.csv", header = 0, index_col = 0)
+emi_iso_binding = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_iso_binding.csv", header = 0, index_col = None)
+emi_iso_biophys = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_iso_biophys.csv", header = 0, index_col = 0)
 
 emi_iso_biophys, emi_iso_biophys_test, emi_iso_binding, emi_iso_binding_test = train_test_split(emi_iso_biophys, emi_iso_binding)
 emi_iso_binding.reset_index(inplace = True, drop = True)
@@ -79,8 +79,8 @@ emi_iso_binding_test.reset_index(inplace = True, drop = True)
 emi_iso_biophys.reset_index(inplace = True, drop = True)
 emi_iso_biophys_test.reset_index(inplace = True, drop = True)
 
-emi_wt_rep = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_wt_rep.csv", header = 0, index_col = 0)
-emi_wt_biophys = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_wt_biophys.csv", header = 0, index_col = 0)
+emi_wt_rep = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_wt_rep.csv", header = 0, index_col = 0)
+emi_wt_biophys = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_wt_biophys.csv", header = 0, index_col = 0)
 
 
 #%%
@@ -279,19 +279,6 @@ for i in iso_score:
         iso_score_trunc.append(0)
     if i == 3:
         iso_score_trunc.append(1)
-
-
-#%%
-### TTest power sample size determination
-d_ant = cohen_ant
-d_psy = cohen_psy
-alpha = 0.001
-power = 0.99
-
-power_analysis = TTestIndPower()
-
-sample_size_ant = power_analysis.solve_power(effect_size = d_ant, power = power, alpha = alpha)
-sample_size_psy = power_analysis.solve_power(effect_size = d_psy, power = power, alpha = alpha)
 
 
 #%%

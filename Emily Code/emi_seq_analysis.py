@@ -12,12 +12,12 @@ import matplotlib.pyplot as plt
 import scipy as sc
 
 #%%
-emi_rep1_antigen_pos = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_rep1_antigen_pos_1nm_seqs.csv", header = None, index_col = 0)
+emi_rep1_antigen_pos = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_rep1_antigen_pos_1nm_seqs.csv", header = None, index_col = 0)
 emi_rep1_antigen_pos.columns = ['rep1']
-emi_rep1_psr_pos = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_rep1_psr_pos_seqs.csv", header = None)
-emi_rep1_psr_neg = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_rep1_psr_neg_seqs.csv", header = None)
-emi_rep1_ova_pos = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_rep1_ova_pos_seqs.csv", header = None)
-emi_rep1_ova_neg = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_rep1_ova_neg_seqs.csv", header = None)
+emi_rep1_psr_pos = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_rep1_psr_pos_seqs.csv", header = None)
+emi_rep1_psr_neg = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_rep1_psr_neg_seqs.csv", header = None)
+emi_rep1_ova_pos = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_rep1_ova_pos_seqs.csv", header = None)
+emi_rep1_ova_neg = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_rep1_ova_neg_seqs.csv", header = None)
 
 #%%
 emi_rep1_pos = pd.concat([emi_rep1_psr_pos, emi_rep1_ova_pos], axis = 0, ignore_index = False)
@@ -37,12 +37,12 @@ emi_rep1_pos_duplicates = pd.concat([emi_rep1_pos_duplicates_ova, emi_rep1_pos_d
 emi_rep1_neg_duplicates = pd.concat([emi_rep1_neg_duplicates_ova, emi_rep1_neg_duplicates_psr], axis = 1, ignore_index = False)
 
 #%%
-emi_rep2_antigen_pos = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_rep2_antigen_pos_1nm_seqs.csv", header = None, index_col = 0)
+emi_rep2_antigen_pos = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_rep2_antigen_pos_1nm_seqs.csv", header = None, index_col = 0)
 emi_rep2_antigen_pos.columns = ['rep2']
-emi_rep2_psr_pos = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_rep2_psr_pos_seqs.csv", header = None)
-emi_rep2_psr_neg = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_rep2_psr_neg_seqs.csv", header = None)
-emi_rep2_ova_pos = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_rep2_ova_pos_seqs.csv", header = None)
-emi_rep2_ova_neg = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\emi_rep2_ova_neg_seqs.csv", header = None)
+emi_rep2_psr_pos = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_rep2_psr_pos_seqs.csv", header = None)
+emi_rep2_psr_neg = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_rep2_psr_neg_seqs.csv", header = None)
+emi_rep2_ova_pos = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_rep2_ova_pos_seqs.csv", header = None)
+emi_rep2_ova_neg = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_rep2_ova_neg_seqs.csv", header = None)
 
 #%%
 emi_rep2_pos = pd.concat([emi_rep2_psr_pos, emi_rep2_ova_pos], axis = 0, ignore_index = False)
@@ -90,6 +90,7 @@ emi_labels.columns = ['Sequences','PSY Binding']
 
 #%%
 emi_pos_seqs = emi_seqs.iloc[0:25675,:]
+"""
 emi_pos_seqs_char = []
 for index, row in emi_pos_seqs.iterrows():
     char = list(row[0])
@@ -97,9 +98,11 @@ for index, row in emi_pos_seqs.iterrows():
         char = ''.join(str(i) for i in char)
         emi_pos_seqs_char.append(row)
 emi_pos_seqs = pd.DataFrame(emi_pos_seqs_char)
+"""
 emi_pos_seqs.set_index('Sequences', drop = True, inplace = True)
 
 emi_neg_seqs = emi_seqs.iloc[25675:40734,:]
+"""
 emi_neg_seqs_char = []
 for index, row in emi_neg_seqs.iterrows():
     char = list(row[0])
@@ -107,6 +110,7 @@ for index, row in emi_neg_seqs.iterrows():
         char = ''.join(str(i) for i in char)
         emi_neg_seqs_char.append(row)
 emi_neg_seqs = pd.DataFrame(emi_neg_seqs_char)
+"""
 emi_neg_seqs.set_index('Sequences', drop = True, inplace = True)
 
 emi_pos_seq = []
@@ -207,3 +211,16 @@ emi_neg_seq_stringent.iloc[1000:1500,0].to_csv('emi_neg_seqs_5G6A_3.txt', header
 emi_pos_seq_stringent.iloc[1500:2000,0].to_csv('emi_pos_seqs_5G6A_4.txt', header = False, index = False)
 emi_neg_seq_stringent.iloc[1500:2000,0].to_csv('emi_neg_seqs_5G6A_4.txt', header = False, index = False)
 """
+
+
+emi_pos_seq_stringent.iloc[2000:2500,0].to_csv('emi_pos_seqs_5.txt', header = False, index = False)
+emi_neg_seq_stringent.iloc[2000:2500,0].to_csv('emi_neg_seqs_5.txt', header = False, index = False)
+
+emi_pos_seq_stringent.iloc[2500:3000,0].to_csv('emi_pos_seqs_6.txt', header = False, index = False)
+emi_neg_seq_stringent.iloc[2500:3000,0].to_csv('emi_neg_seqs_6.txt', header = False, index = False)
+
+emi_pos_seq_stringent.iloc[3000:4500,0].to_csv('emi_pos_seqs_7.txt', header = False, index = False)
+emi_neg_seq_stringent.iloc[3000:4500,0].to_csv('emi_neg_seqs_7.txt', header = False, index = False)
+
+emi_pos_seq_stringent.iloc[4500:5000,0].to_csv('emi_pos_seqs_8.txt', header = False, index = False)
+emi_neg_seq_stringent.iloc[4500:5000,0].to_csv('emi_neg_seqs_8.txt', header = False, index = False)
