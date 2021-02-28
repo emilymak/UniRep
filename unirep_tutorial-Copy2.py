@@ -47,12 +47,12 @@ batch_size = 50
 b = babbler(batch_size=batch_size, model_path=MODEL_WEIGHT_PATH)
 
 
-# In[6]:
+# In[4]:
 
 
 # Before you can train your model, 
 sequences = []
-with open("emi_IgG_seqs.txt", "r") as source:
+with open("emi_pos_seqs_7NotY_2.txt", "r") as source:
     with open("formatted.txt", "w") as destination:
         for i,seq in enumerate(source):
             seq = seq.strip()
@@ -63,7 +63,7 @@ with open("emi_IgG_seqs.txt", "r") as source:
                 destination.write('\n')
 
 
-# In[7]:
+# In[5]:
 
 
 ## 
@@ -90,7 +90,7 @@ for i in num2:
     
 
 
-# In[8]:
+# In[6]:
 
 
 average_hidden_pd = pd.DataFrame(np.row_stack(average_hidden_list))
@@ -99,10 +99,10 @@ hidden_state = pd.DataFrame(np.row_stack(hs_list))
 print(average_hidden_pd)
 
 
-# In[9]:
+# In[7]:
 
 
-average_hidden_pd.to_csv("emi_IgG_reps.csv")
+average_hidden_pd.to_csv("emi_pos_reps_7NotY_2.csv")
 #final_hidden_pd.to_csv("input_finalhidden_pos_4.csv")
 
 
