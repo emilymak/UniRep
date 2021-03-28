@@ -12,7 +12,7 @@ from mpl_toolkits.mplot3d import Axes3D
 import scipy as sc
 import seaborn as sns
 
-emi_seq = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_IgG_seqs.csv", header = 0, index_col = 0)
+emi_seq = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_R5_seqs.csv", header = 0, index_col = 0)
 emi_seq = pd.DataFrame(emi_seq)
 residue_info = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\residue_dict.csv", header = 0, index_col = 0)
 
@@ -110,9 +110,8 @@ for i in mutations_biophys.iterrows():
     j = i[0]
     mutations_biophys.loc[j, 'HBondA'] = ((mutations_biophys.iloc[j,5]) + (mutations_biophys.iloc[j,11]) + (mutations_biophys.iloc[j,17]) + (mutations_biophys.iloc[j,23]) + mutations_biophys.iloc[j,29] + mutations_biophys.iloc[j,35] + mutations_biophys.iloc[j,41] + mutations_biophys.iloc[j,47])
 
-
-mutations_biophys.to_csv('emi_IgG_biophy.csv', header = True, index = False)
-
-
 #%%
+mutations_biophys.to_csv('emi_R5_biophys.csv', header = True, index = False)
+#mutations.to_csv('seqs_mutations.csv', header = True, index = True)
+
 

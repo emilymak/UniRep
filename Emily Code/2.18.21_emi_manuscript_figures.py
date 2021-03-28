@@ -90,8 +90,8 @@ emi_zero_binding = pd.DataFrame([0,0])
 emi_wt_binding.index = ['ANT Normalized Binding', 'PSY Normalized Binding']
 emi_zero_binding.index = ['ANT Normalized Binding', 'PSY Normalized Binding']
 
-wt_seq = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_wt_seq.csv", header = None, index_col = None)
-emi_iso_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_iso_seqs_reduced.csv", header = None)
+wt_seq = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_wt_seq.csv", header = None, index_col = None)
+emi_iso_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_iso_seqs_reduced.csv", header = None)
 emi_iso_seqs.columns = ['Sequences']
 
 emi_iso_ant_transforms_WTomit_biophys = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Emily Code\\emi_iso_ant_transforms_WTomit_biophys.csv", header = 0, index_col = 0)

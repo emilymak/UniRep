@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Feb 22 13:13:08 2021
+Created on Mon Feb 20 13:13:08 2021
 
 @author: makow
 """
@@ -19,11 +19,15 @@ import statistics
 import matplotlib.pyplot as plt
 import scipy as sc
 from scipy import stats
+import math
+import seaborn as sns
 
 
 #%%
-emi_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_seqs.txt", header = None, index_col = None)
-emi_labels = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_rep_labels_stringent.csv", header = 0, index_col = 0)
+emi_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_seqs.txt", header = None, index_col = 0)
+emi_labels = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_rep_labels.csv", header = 0, index_col = 0)
+emi_labels.set_index('Sequences', inplace = True)
+emi_seqs['label'] = emi_labels.iloc[:,1]
 
 wt_seq = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_wt_seq.txt", header = None, index_col = None)
 emi_iso_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_iso_seqs_reduced.txt", header = None, index_col = 0)
@@ -47,24 +51,7 @@ emi_rep1_psr_neg = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Dat
 emi_rep1_ova_pos = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_rep1_ova_pos_seqs.csv", header = None)
 emi_rep1_ova_neg = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_rep1_ova_neg_seqs.csv", header = None)
 
-#%%
-emi_rep1_pos = pd.concat([emi_rep1_psr_pos, emi_rep1_ova_pos], axis = 0, ignore_index = False)
-emi_rep1_neg = pd.concat([emi_rep1_psr_neg, emi_rep1_ova_neg], axis = 0, ignore_index = False)
 
-emi_rep1_pos_duplicates_ova = emi_rep1_pos[emi_rep1_pos.duplicated([0])]
-emi_rep1_pos_duplicates_ova.index = emi_rep1_pos_duplicates_ova.iloc[:,0]
-emi_rep1_neg_duplicates_ova = emi_rep1_neg[emi_rep1_neg.duplicated([0])]
-emi_rep1_neg_duplicates_ova.index = emi_rep1_neg_duplicates_ova.iloc[:,0]
-
-emi_rep1_pos_duplicates_psr = emi_rep1_pos[emi_rep1_pos.duplicated([0], keep = 'last')]
-emi_rep1_pos_duplicates_psr.index = emi_rep1_pos_duplicates_psr.iloc[:,0]
-emi_rep1_neg_duplicates_psr = emi_rep1_neg[emi_rep1_neg.duplicated([0], keep = 'last')]
-emi_rep1_neg_duplicates_psr.index = emi_rep1_neg_duplicates_psr.iloc[:,0]
-
-emi_rep1_pos_duplicates = pd.concat([emi_rep1_pos_duplicates_ova, emi_rep1_pos_duplicates_psr], axis = 1, ignore_index = False)
-emi_rep1_neg_duplicates = pd.concat([emi_rep1_neg_duplicates_ova, emi_rep1_neg_duplicates_psr], axis = 1, ignore_index = False)
-
-#%%
 emi_rep2_antigen_pos = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_rep2_antigen_pos_1nm_seqs.csv", header = None, index_col = 0)
 emi_rep2_antigen_pos.columns = ['rep2']
 emi_rep2_psr_pos = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_rep2_psr_pos_seqs.csv", header = None)
@@ -72,211 +59,163 @@ emi_rep2_psr_neg = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Dat
 emi_rep2_ova_pos = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_rep2_ova_pos_seqs.csv", header = None)
 emi_rep2_ova_neg = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_rep2_ova_neg_seqs.csv", header = None)
 
-#%%
-emi_rep2_pos = pd.concat([emi_rep2_psr_pos, emi_rep2_ova_pos], axis = 0, ignore_index = False)
-emi_rep2_neg = pd.concat([emi_rep2_psr_neg, emi_rep2_ova_neg], axis = 0, ignore_index = False)
-
-emi_rep2_pos_duplicates_ova = emi_rep2_pos[emi_rep2_pos.duplicated([0])]
-emi_rep2_pos_duplicates_ova.index = emi_rep2_pos_duplicates_ova.iloc[:,0]
-emi_rep2_neg_duplicates_ova = emi_rep2_neg[emi_rep2_neg.duplicated([0])]
-emi_rep2_neg_duplicates_ova.index = emi_rep2_neg_duplicates_ova.iloc[:,0]
-
-emi_rep2_pos_duplicates_psr = emi_rep2_pos[emi_rep2_pos.duplicated([0], keep = 'last')]
-emi_rep2_pos_duplicates_psr.index = emi_rep2_pos_duplicates_psr.iloc[:,0]
-emi_rep2_neg_duplicates_psr = emi_rep2_neg[emi_rep2_neg.duplicated([0], keep = 'last')]
-emi_rep2_neg_duplicates_psr.index = emi_rep2_neg_duplicates_psr.iloc[:,0]
-
-emi_rep2_pos_duplicates = pd.concat([emi_rep2_pos_duplicates_ova, emi_rep2_pos_duplicates_psr], axis = 1, ignore_index = False)
-emi_rep2_neg_duplicates = pd.concat([emi_rep2_neg_duplicates_ova, emi_rep2_neg_duplicates_psr], axis = 1, ignore_index = False)
-
-#%%
-emi_pos = pd.concat([emi_rep1_pos_duplicates, emi_rep2_pos_duplicates], axis = 0, ignore_index = False)
-emi_neg = pd.concat([emi_rep1_neg_duplicates, emi_rep2_neg_duplicates], axis = 0, ignore_index = False)
-
-emi_pos_duplicates = emi_pos[emi_pos.duplicated([0])]
-emi_neg_duplicates = emi_neg[emi_neg.duplicated([0])]
-
-#%%
-emi_pos_duplicates.columns = ['Sequences', 'OVA Freq', 'Drop', 'PSR Freq']
-emi_neg_duplicates.columns = ['Sequences', 'OVA Freq', 'Drop', 'PSR Freq']
-
-emi_pos_duplicates['Frequency Ave'] = (((emi_pos_duplicates['OVA Freq']-min(emi_pos_duplicates['OVA Freq']))/(max(emi_pos_duplicates['OVA Freq'])-min(emi_pos_duplicates['OVA Freq']))) + ((emi_pos_duplicates['PSR Freq']-min(emi_pos_duplicates['PSR Freq']))/(max(emi_pos_duplicates['PSR Freq'])-min(emi_pos_duplicates['PSR Freq']))))/2
-emi_neg_duplicates['Frequency Ave'] = (((emi_neg_duplicates['OVA Freq']-min(emi_neg_duplicates['OVA Freq']))/(max(emi_neg_duplicates['OVA Freq'])-min(emi_neg_duplicates['OVA Freq']))) + ((emi_neg_duplicates['PSR Freq']-min(emi_neg_duplicates['PSR Freq']))/(max(emi_neg_duplicates['PSR Freq'])-min(emi_neg_duplicates['PSR Freq']))))/2
-emi_pos_duplicates['label'] = 1
-emi_neg_duplicates['label'] = 0
-
-emi_seqs = pd.concat([emi_pos_duplicates, emi_neg_duplicates], axis = 0)
-emi_seqs = emi_seqs.drop_duplicates(subset = 'Sequences', keep = False)
-emi_labels = pd.DataFrame(emi_seqs['label'])
-emi_seqs.drop('label', axis = 1, inplace = True)
-
-#%%
-emi_seqs.drop('Drop', axis = 1, inplace = True)
-emi_seqs.reset_index(drop = True, inplace = True)
-emi_labels.reset_index(drop = False, inplace = True)
-emi_labels.columns = ['Sequences','PSY Binding']
-
-#%%
-emi_pos_seqs = emi_seqs.iloc[0:25675,:]
-
-emi_pos_seqs_char = []
-emi_pos_seqs.set_index('Sequences', drop = True, inplace = True)
-
-emi_neg_seqs = emi_seqs.iloc[25675:40734,:]
-emi_neg_seqs.set_index('Sequences', drop = True, inplace = True)
-
-emi_pos_seq = []
-for index, row in emi_pos_seqs.iterrows():
-    characters = list(index)
-    if len(characters) == 115:
-        emi_pos_seq.append([index, row[0], row[1], row[2]])
-emi_pos_seq = pd.DataFrame(emi_pos_seq)
-emi_pos_seq.columns = ['Sequences', 'OVA Freq', 'PSR Freq', 'Frequency Ave']
-emi_pos_seq['PSY Binding'] = 1
-
-emi_neg_seq = []
-for index, row in emi_neg_seqs.iterrows():
-    characters = list(index)
-    if len(characters) == 115:
-        emi_neg_seq.append([index, row[0], row[1], row[2]])
-emi_neg_seq = pd.DataFrame(emi_neg_seq)
-emi_neg_seq.columns = ['Sequences', 'OVA Freq', 'PSR Freq', 'Frequency Ave']
-emi_neg_seq['PSY Binding'] = 0
-
-emi_ant = pd.concat([emi_rep1_antigen_pos, emi_rep2_antigen_pos], axis = 1)
-emi_ant.fillna(0, inplace = True)
-
-#%%
-emi_pos_seq.set_index('Sequences', drop = True, inplace = True)
-emi_pos_seq = pd.concat([emi_pos_seq, emi_ant], axis = 1)
-emi_pos_seq.dropna(axis = 0, subset = ['OVA Freq'], inplace = True)
-emi_pos_seq.fillna(0, inplace = True)
-emi_neg_seq.set_index('Sequences', drop = True, inplace = True)
-emi_neg_seq = pd.concat([emi_neg_seq, emi_ant], axis = 1)
-emi_neg_seq.dropna(axis = 0, subset = ['OVA Freq'], inplace = True)
-emi_neg_seq.fillna(0, inplace = True)
-
-emi_pos_seq.sort_values(by = 'Frequency Ave', ascending = False, inplace = True)
-emi_pos_seq.reset_index(drop = False, inplace = True)
-emi_pos_seq.columns = ['Sequences', 'OVA Freq', 'PSR Freq', 'Frequency Ave', 'PSY Binding', 'rep1', 'rep2']
-emi_neg_seq.sort_values(by = 'Frequency Ave', ascending = False, inplace = True)
-emi_neg_seq.reset_index(drop = False, inplace = True)
-emi_neg_seq.columns = ['Sequences', 'OVA Freq', 'PSR Freq', 'Frequency Ave', 'PSY Binding', 'rep1', 'rep2']
-
-#%%
-#lax antigen binding criteria
-#only sequences that show up in both positive antigen sorts are labeled positive - everything else is labeled negative
-emi_pos_seq['ANT Binding'] = 0
-for index, row in emi_pos_seq.iterrows():
-    if (row['rep1'] > 0) and (row['rep2'] > 0):
-        emi_pos_seq.loc[index,'ANT Binding'] = 1
-
-emi_neg_seq['ANT Binding'] = 0
-for index, row in emi_neg_seq.iterrows():
-    if (row['rep1'] > 0) and (row['rep2'] > 0):
-        emi_neg_seq.loc[index,'ANT Binding'] = 1
-
-#%%
-#stringent antigen binding criteria
-#only sequences that show up in both positive antigen sorts are labeled positive - sequences that show up in only one positive sorts are dropped
-emi_pos_seq_stringent = emi_pos_seq.copy()
-emi_pos_seq_stringent['ANT Binding'] = 0
-for index, row in emi_pos_seq.iterrows():
-    if (row['rep1'] > 0) or (row['rep2'] > 0):
-        emi_pos_seq_stringent.loc[index,'ANT Binding'] = 2
-    if (row['rep1'] > 0) and (row['rep2'] > 0):
-        emi_pos_seq_stringent.loc[index,'ANT Binding'] = 1
-emi_pos_seq_stringent = emi_pos_seq_stringent[emi_pos_seq_stringent['ANT Binding'] != 2]
-
-emi_neg_seq_stringent = emi_neg_seq.copy()
-emi_neg_seq_stringent['ANT Binding'] = 0
-for index, row in emi_neg_seq_stringent.iterrows():
-    if (row['rep1'] > 0) or (row['rep2'] > 0):
-        emi_neg_seq_stringent.loc[index,'ANT Binding'] = 2
-    if (row['rep1'] > 0) and (row['rep2'] > 0):
-        emi_neg_seq_stringent.loc[index,'ANT Binding'] = 1
-emi_neg_seq_stringent = emi_neg_seq_stringent[emi_neg_seq_stringent['ANT Binding'] != 2]
-
-
-#%%
 emi_input_rep1 = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_input_rep1.csv", header = None, index_col = 0)
 emi_input_rep2 = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_input_rep2.csv", header = None, index_col = 0)
-emi_inlib_IgG_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_iso_binding_reduced_2.csv", header = 0, index_col = 0)
 wt = 'QVQLVQSGAEVKKPGASVKVSCKASGYTFTDYYMHWVRQAPGQGLEWMGRVNPNRRGTTYNQKFEGRVTMTTDTSTSTAYMELRSLRSDDTAVYYCARANWLDYWGQGTTVTVSS'
 
-#emi_rep1_ova_neg.set_index(0, inplace = True)
-#emi_rep2_ova_neg.set_index(0, inplace = True)
+emi_rep1_ova_neg.set_index(0, inplace = True)
+emi_rep2_ova_neg.set_index(0, inplace = True)
+emi_rep1_ova_pos.set_index(0, inplace = True)
+emi_rep2_ova_pos.set_index(0, inplace = True)
 
+emi_rep1_psr_neg.set_index(0, inplace = True)
+emi_rep2_psr_neg.set_index(0, inplace = True)
+emi_rep1_psr_pos.set_index(0, inplace = True)
+emi_rep2_psr_pos.set_index(0, inplace = True)
 
-emi_inlib_rep1 = pd.concat([emi_IgG_binding, emi_input_rep1, emi_rep1_ova_neg], axis = 1, ignore_index = False)
-emi_inlib_rep1.dropna(inplace = True)
-emi_inlib_rep1.columns = ['ANT Binding', 'OVA Binding', 'Input Frequency', 'OVA Frequency']
-emi_inlib_rep1['ER1'] = np.log2((emi_inlib_rep1['OVA Frequency']/ emi_inlib_rep1['Input Frequency']))
-emi_inlib_rep2 = pd.concat([emi_IgG_binding, emi_input_rep2, emi_rep2_ova_neg], axis = 1, ignore_index = False)
-emi_inlib_rep2.dropna(inplace = True)
-emi_inlib_rep2.columns = ['ANT Binding', 'OVA Binding', 'Input Frequency', 'OVA Frequency']
-emi_inlib_rep2['ER2'] = np.log2((emi_inlib_rep2['OVA Frequency']/ emi_inlib_rep2['Input Frequency']))
-
-enrichment = pd.concat([emi_inlib_rep1, emi_inlib_rep2], axis = 1, ignore_index = False)
-enrichment.dropna(inplace = True)
-enrichment['AVE ER'] = (emi_inlib_rep1['ER1']+emi_inlib_rep2['ER2'])/2
-enrichment['AVE Freq'] = (emi_inlib_rep1['OVA Frequency']+emi_inlib_rep2['OVA Frequency'])/2
-
-print(((np.log2((emi_rep1_ova_neg.loc[wt,1]/emi_input_rep1.loc[wt,1])))+(np.log2((emi_rep2_ova_neg.loc[wt,1]/emi_input_rep2.loc[wt,1]))))/2)
-
-print(stats.spearmanr(enrichment.iloc[:,10], enrichment.iloc[:,1]))
-plt.scatter(enrichment.iloc[:,10], enrichment.iloc[:,1])
 
 
 #%%
-"""
-emi_input_rep1 = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_input_rep1.csv", header = None, index_col = 0)
-emi_input_rep2 = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_input_rep2.csv", header = None, index_col = 0)
-emi_inlib_IgG_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_iso_binding_reduced_2.csv", header = 0, index_col = 0)
-wt = 'QVQLVQSGAEVKKPGASVKVSCKASGYTFTDYYMHWVRQAPGQGLEWMGRVNPNRRGTTYNQKFEGRVTMTTDTSTSTAYMELRSLRSDDTAVYYCARANWLDYWGQGTTVTVSS'
+emi_inlib_iso_psy_rep1 = pd.concat([emi_iso_binding.iloc[:,1], emi_input_rep1, emi_rep1_ova_neg, emi_rep1_psr_neg], axis = 1, ignore_index = False)
+emi_inlib_iso_psy_rep1.columns = ['label', 'Input Frequency', 'OVA Frequency', 'PSR Frequency']
+emi_inlib_iso_psy_rep1.dropna(subset = ['label'], inplace = True)
+emi_inlib_iso_psy_rep1.dropna(thresh = 2, inplace = True)
+emi_inlib_iso_psy_rep1['ER1 OVA'] = np.log2((emi_inlib_iso_psy_rep1['OVA Frequency']/ emi_inlib_iso_psy_rep1['Input Frequency']))
+emi_inlib_iso_psy_rep1['ER1 PSR'] = np.log2((emi_inlib_iso_psy_rep1['PSR Frequency']/ emi_inlib_iso_psy_rep1['Input Frequency']))
+emi_inlib_iso_psy_rep2 = pd.concat([emi_iso_binding.iloc[:,1], emi_input_rep2, emi_rep2_ova_neg, emi_rep2_psr_neg], axis = 1, ignore_index = False)
+emi_inlib_iso_psy_rep2.columns = ['label3', 'Input Frequency', 'OVA Frequency', 'PSR Frequency']
+emi_inlib_iso_psy_rep2.dropna(subset = ['label3'], inplace = True)
+emi_inlib_iso_psy_rep2.dropna(thresh = 2, inplace = True)
+emi_inlib_iso_psy_rep2['ER2 OVA'] = np.log2((emi_inlib_iso_psy_rep2['OVA Frequency']/ emi_inlib_iso_psy_rep2['Input Frequency']))
+emi_inlib_iso_psy_rep2['ER2 PSR'] = np.log2((emi_inlib_iso_psy_rep2['PSR Frequency']/ emi_inlib_iso_psy_rep2['Input Frequency']))
 
-#emi_rep1_psr_neg.set_index(0, inplace = True)
-#emi_rep2_psr_neg.set_index(0, inplace = True)
+frequency_iso_psy_neg = pd.concat([emi_inlib_iso_psy_rep1, emi_inlib_iso_psy_rep2], axis = 1, ignore_index = False)
+frequency_iso_psy_neg.dropna(subset = ['label', 'label3'], inplace = True)
+
+frequency_iso_psy = frequency_iso_psy_neg
+frequency_iso_psy['AVE Freq'] = (frequency_iso_psy.iloc[:,2] + frequency_iso_psy.iloc[:,3] + frequency_iso_psy.iloc[:,8] + frequency_iso_psy.iloc[:,9])/4
+frequency_iso_psy.reset_index(drop = False, inplace = True)
 
 
-emi_inlib_rep1 = pd.concat([emi_iso_seqs, emi_input_rep1, emi_rep1_psr_neg], axis = 1, ignore_index = False)
-emi_inlib_rep1.dropna(inplace = True)
-emi_inlib_rep1.columns = ['Name', 'ANT1', 'OVA1', 'Input Frequency', 'ANT Frequency']
-emi_inlib_rep1['ER1'] = np.log2((emi_inlib_rep1['ANT Frequency']/ emi_inlib_rep1['Input Frequency']))
-emi_inlib_rep2 = pd.concat([emi_inlib_IgG_seqs, emi_input_rep2, emi_rep2_psr_neg], axis = 1, ignore_index = False)
-emi_inlib_rep2.dropna(inplace = True)
-emi_inlib_rep2.columns = ['Name', 'ANT2', 'OVA2', 'Input Frequency', 'ANT Frequency']
-emi_inlib_rep2['ER2'] = np.log2((emi_inlib_rep2['ANT Frequency']/ emi_inlib_rep2['Input Frequency']))
 
-enrichment = pd.concat([emi_inlib_rep1, emi_inlib_rep2], axis = 1, ignore_index = False)
-enrichment.dropna(inplace = True)
-enrichment['AVE ER'] = (emi_inlib_rep1['ER1']+emi_inlib_rep2['ER2'])/2
+emi_inlib_iso_ant_rep1 = pd.concat([emi_iso_binding.iloc[:,0], emi_input_rep1, emi_rep1_antigen_pos], axis = 1, ignore_index = False)
+emi_inlib_iso_ant_rep1.columns = ['label', 'Input Frequency', 'ANT Frequency']
+emi_inlib_iso_ant_rep1.dropna(subset = ['label', 'ANT Frequency'], inplace = True)
+emi_inlib_iso_ant_rep1['ER1 ANT'] = np.log2((emi_inlib_iso_ant_rep1['ANT Frequency']/ emi_inlib_iso_ant_rep1['Input Frequency']))
+emi_inlib_iso_ant_rep2 = pd.concat([emi_iso_binding.iloc[:,0], emi_input_rep2, emi_rep2_antigen_pos], axis = 1, ignore_index = False)
+emi_inlib_iso_ant_rep2.columns = ['label3', 'Input Frequency', 'ANT Frequency']
+emi_inlib_iso_ant_rep2.dropna(subset = ['label3', 'ANT Frequency'], inplace = True)
+emi_inlib_iso_ant_rep2['ER2 ANT'] = np.log2((emi_inlib_iso_ant_rep2['ANT Frequency']/ emi_inlib_iso_ant_rep2['Input Frequency']))
 
-print(((np.log2((emi_rep1_psr_neg.loc[wt,1]/emi_input_rep1.loc[wt,1])))+(np.log2((emi_rep2_psr_neg.loc[wt,1]/emi_input_rep2.loc[wt,1]))))/2)
+frequency_iso_ant_neg = pd.concat([emi_inlib_iso_ant_rep1, emi_inlib_iso_ant_rep2], axis = 1, ignore_index = False)
+frequency_iso_ant_neg.dropna(subset = ['label', 'label3'], inplace = True)
 
-print(sc.stats.spearmanr(enrichment['AVE ER'], enrichment['OVA2']))
-"""
+frequency_iso_ant = frequency_iso_ant_neg
+frequency_iso_ant['AVE Freq'] = (frequency_iso_ant.iloc[:,2] + frequency_iso_ant.iloc[:,6])/2
+frequency_iso_ant.reset_index(drop = False, inplace = True)
+
 
 #%%
+emi_inlib_iso_psy_rep1 = pd.concat([emi_iso_binding.iloc[:,1], emi_input_rep1, emi_rep1_ova_neg, emi_rep1_psr_neg], axis = 1, ignore_index = False)
+emi_inlib_iso_psy_rep1.columns = ['label', 'Input Frequency', 'OVA Frequency', 'PSR Frequency']
+emi_inlib_iso_psy_rep1.dropna(subset = ['label', 'Input Frequency'], inplace = True)
+emi_inlib_iso_psy_rep1.dropna(thresh = 3, inplace = True)
+emi_inlib_iso_psy_rep1['ER1 OVA'] = np.log2((emi_inlib_iso_psy_rep1['OVA Frequency']/ emi_inlib_iso_psy_rep1['Input Frequency']))
+emi_inlib_iso_psy_rep1['ER1 PSR'] = np.log2((emi_inlib_iso_psy_rep1['PSR Frequency']/ emi_inlib_iso_psy_rep1['Input Frequency']))
+emi_inlib_iso_psy_rep2 = pd.concat([emi_iso_binding.iloc[:,1], emi_input_rep2, emi_rep2_ova_neg, emi_rep2_psr_neg], axis = 1, ignore_index = False)
+emi_inlib_iso_psy_rep2.columns = ['label3', 'Input Frequency', 'OVA Frequency', 'PSR Frequency']
+emi_inlib_iso_psy_rep2.dropna(subset = ['label3', 'Input Frequency'], inplace = True)
+emi_inlib_iso_psy_rep2.dropna(thresh = 3, inplace = True)
+emi_inlib_iso_psy_rep2['ER2 OVA'] = np.log2((emi_inlib_iso_psy_rep2['OVA Frequency']/ emi_inlib_iso_psy_rep2['Input Frequency']))
+emi_inlib_iso_psy_rep2['ER2 PSR'] = np.log2((emi_inlib_iso_psy_rep2['PSR Frequency']/ emi_inlib_iso_psy_rep2['Input Frequency']))
 
-emi_inlib_rep1 = pd.concat([emi_IgG_binding, emi_input_rep1, emi_rep1_antigen_pos], axis = 1, ignore_index = False)
-emi_inlib_rep1.dropna(inplace = True)
-emi_inlib_rep1.columns = ['ANT Binding', 'OVA Binding', 'Input Frequency', 'ANT Frequency']
-emi_inlib_rep1['ER1'] = np.log2((emi_inlib_rep1['ANT Frequency']/ emi_inlib_rep1['Input Frequency']))
-emi_inlib_rep2 = pd.concat([emi_IgG_binding, emi_input_rep2, emi_rep2_antigen_pos], axis = 1, ignore_index = False)
-emi_inlib_rep2.dropna(inplace = True)
-emi_inlib_rep2.columns = ['ANT Binding', 'OVA Binding', 'Input Frequency', 'ANT Frequency']
-emi_inlib_rep2['ER2'] = np.log2((emi_inlib_rep2['ANT Frequency']/ emi_inlib_rep2['Input Frequency']))
-
-enrichment = pd.concat([emi_inlib_rep1, emi_inlib_rep2], axis = 1, ignore_index = False)
-enrichment.dropna(inplace = True)
-enrichment['AVE ER'] = (emi_inlib_rep1['ER1']+emi_inlib_rep2['ER2'])/2
-enrichment['AVE Freq'] = (emi_inlib_rep1['ANT Frequency']+emi_inlib_rep2['ANT Frequency'])/2
-
-print(((np.log2((emi_rep1_antigen_pos.loc[wt,'rep1']/emi_input_rep1.loc[wt,1])))+(np.log2((emi_rep2_antigen_pos.loc[wt,'rep2']/emi_input_rep2.loc[wt,1]))))/2)
+enrichment_iso_psy_neg = pd.concat([emi_inlib_iso_psy_rep1, emi_inlib_iso_psy_rep2], axis = 1, ignore_index = False)
+enrichment_iso_psy_neg.dropna(subset = ['label', 'label3'], inplace = True)
+enrichment_iso_psy = enrichment_iso_psy_neg
+enrichment_iso_psy['AVE ER'] = (enrichment_iso_psy.iloc[:,4] + enrichment_iso_psy.iloc[:,5] + enrichment_iso_psy.iloc[:,10] + enrichment_iso_psy.iloc[:,11])/4
+enrichment_iso_psy.reset_index(drop = False, inplace = True)
 
 
-print(stats.spearmanr(enrichment['AVE ER'], enrichment.iloc[:,0]))
-plt.scatter(enrichment['AVE Freq'], enrichment.iloc[:,0])
+emi_inlib_iso_ant_rep1 = pd.concat([emi_iso_binding.iloc[:,0], emi_input_rep1, emi_rep1_antigen_pos], axis = 1, ignore_index = False)
+emi_inlib_iso_ant_rep1.columns = ['label', 'Input Frequency', 'ANT Frequency']
+emi_inlib_iso_ant_rep1.dropna(subset = ['label', 'Input Frequency', 'ANT Frequency'], inplace = True)
+emi_inlib_iso_ant_rep1['ER1 ANT'] = np.log2((emi_inlib_iso_ant_rep1['ANT Frequency']/ emi_inlib_iso_ant_rep1['Input Frequency']))
+emi_inlib_iso_ant_rep2 = pd.concat([emi_iso_binding.iloc[:,0], emi_input_rep2, emi_rep2_antigen_pos], axis = 1, ignore_index = False)
+emi_inlib_iso_ant_rep2.columns = ['label3', 'Input Frequency', 'ANT Frequency']
+emi_inlib_iso_ant_rep2.dropna(subset = ['label3', 'Input Frequency', 'ANT Frequency'], inplace = True)
+emi_inlib_iso_ant_rep2['ER2 ANT'] = np.log2((emi_inlib_iso_ant_rep2['ANT Frequency']/ emi_inlib_iso_ant_rep2['Input Frequency']))
 
+enrichment_iso_ant_neg = pd.concat([emi_inlib_iso_ant_rep1, emi_inlib_iso_ant_rep2], axis = 1, ignore_index = False)
+enrichment_iso_ant_neg.dropna(inplace = True)
+
+enrichment_iso_ant = enrichment_iso_ant_neg
+enrichment_iso_ant['AVE ER'] = (enrichment_iso_ant.iloc[:,3] + enrichment_iso_ant.iloc[:,7])/2
+enrichment_iso_ant.reset_index(drop = False, inplace = True)
+
+
+#%%
+from matplotlib.colors import ListedColormap, LinearSegmentedColormap
+cmap = plt.cm.get_cmap('plasma')
+colormap9= np.array([cmap(0.25),cmap(0.77)])
+cmap9 = LinearSegmentedColormap.from_list("mycmap", colormap9)
+
+colormap9r= np.array([cmap(0.77),cmap(0.25)])
+cmap9r = LinearSegmentedColormap.from_list("mycmap", colormap9r)
+
+colormap10= np.array([cmap(0.25),cmap(0.40), cmap(0.6), cmap(0.77)])
+cmap10 = LinearSegmentedColormap.from_list("mycmap", colormap10)
+
+fig, axs = plt.subplots(1, 2, figsize = (12,4))
+
+axs[0].scatter(frequency_iso_ant['AVE Freq'], frequency_iso_ant['label'], c = cmap(0.25), s = 150, edgecolor = 'k', linewidth = 0.5)
+axs[0].scatter(frequency_iso_ant.loc[59, 'AVE Freq'], 1, c = 'k', s = 250, edgecolor = 'k', linewidth = 0.5)
+axs[0].set_xticks([-4, -2, 0, 2, 4, 6])
+axs[0].set_xticklabels([-4, -2, 0, 2, 4, 6], fontsize = 18)
+axs[0].set_xscale('log')
+axs[0].set_yticks([0.0, 0.4, 0.8, 1.2, 1.6])
+axs[0].set_yticklabels([0.0, 0.4, 0.8, 1.2, 1.6], fontsize = 18)
+axs[0].set_ylim(-0.35, 1.8)
+
+
+axs[1].scatter(enrichment_iso_ant['AVE ER'], enrichment_iso_ant['label'], c = cmap(0.25), s = 150, edgecolor = 'k', linewidth = 0.5)
+axs[1].scatter(3.37595, 1, c = 'k', s = 250, edgecolor = 'k', linewidth = 0.5)
+axs[1].set_xticks([-4, -2, 0, 2, 4, 6])
+axs[1].set_xticklabels([-4, -2, 0, 2, 4, 6], fontsize = 18)
+axs[1].set_yticks([0.0, 0.4, 0.8, 1.2, 1.6])
+axs[1].set_yticklabels([0.0, 0.4, 0.8, 1.2, 1.6], fontsize = 18)
+axs[1].set_ylim(-0.35, 1.8)
+
+plt.subplots_adjust(wspace = 0.4)
+
+
+#%%
+fig, axs = plt.subplots(1, 2, figsize = (12,4))
+
+axs[0].scatter(frequency_iso_psy['AVE Freq'], frequency_iso_psy['label'], c = cmap(0.77), s = 150, edgecolor = 'k', linewidth = 0.5)
+axs[0].scatter(frequency_iso_psy.loc[122, 'AVE Freq'], 1, c = 'k', s = 250, edgecolor = 'k', linewidth = 0.5)
+axs[0].set_xticks([-4, -2, 0, 2, 4, 6])
+axs[0].set_xticklabels([-4, -2, 0, 2, 4, 6], fontsize = 18)
+axs[0].set_xscale('log')
+axs[0].set_yticks([0.2, 0.4, 0.6, 0.8, 1.0, 1.2])
+axs[0].set_yticklabels([0.2, 0.4, 0.6, 0.8, 1.0, 1.2], fontsize = 18)
+axs[0].set_ylim(0.15, 1.2)
+
+
+axs[1].scatter(enrichment_iso_psy['AVE ER'], enrichment_iso_psy['label'], c = cmap(0.77), s = 150, edgecolor = 'k', linewidth = 0.5)
+axs[1].scatter(-2.93006, 1, c = 'k', s = 250, edgecolor = 'k', linewidth = 0.5)
+axs[1].set_xticks([-4, -2, 0, 2, 4])
+axs[1].set_xticklabels([-4, -2, 0, 2, 4], fontsize = 18)
+axs[1].set_yticks([0.2, 0.4, 0.6, 0.8, 1.0, 1.2])
+axs[1].set_yticklabels([0.2, 0.4, 0.6, 0.8, 1.0, 1.2], fontsize = 18)
+axs[1].set_ylim(0.15, 1.2)
+
+plt.subplots_adjust(wspace = 0.4)
+
+
+
+#%%
+print(sc.stats.spearmanr(frequency_iso_ant['AVE Freq'], frequency_iso_ant['label'], nan_policy = 'omit'))
+print(sc.stats.spearmanr(enrichment_iso_ant['AVE ER'], enrichment_iso_ant['label'], nan_policy = 'omit'))
+print(sc.stats.spearmanr(frequency_iso_psy['AVE Freq'], frequency_iso_psy['label'], nan_policy = 'omit'))
+print(sc.stats.spearmanr(enrichment_iso_psy['AVE ER'], enrichment_iso_psy['label'], nan_policy = 'omit'))
 

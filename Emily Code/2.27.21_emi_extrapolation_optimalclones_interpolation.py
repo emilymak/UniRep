@@ -53,8 +53,8 @@ sns.set_style("white")
 
 
 #%%
-emi_reps = pd.read_csv("..\\Datasets\\emi_reps_stringent.csv", header = 0, index_col = None)
-emi_labels = pd.read_csv("..\\Datasets\\emi_rep_labels_stringent.csv", header = 0, index_col = 0)
+emi_reps = pd.read_csv("..\\Datasets\\emi_reps.csv", header = 0, index_col = None)
+emi_labels = pd.read_csv("..\\Datasets\\emi_rep_labels.csv", header = 0, index_col = 0)
 emi_biophys = pd.read_csv("..\\Datasets\\emi_biophys.csv", header = 0, index_col = 0)
 
 emi_iso_reps = pd.read_csv("..\\Datasets\\emi_iso_reps_reduced.csv", header = 0, index_col = 0)
@@ -65,9 +65,9 @@ emi_wt_rep = pd.read_csv("..\\Datasets\\emi_wt_rep.csv", header = 0, index_col =
 
 emi_seqs = pd.read_csv("..\\Datasets\\seqs\\emi_seqs.txt", header = None, index_col = None)
 emi_seqs.columns = ['Sequences']
-emi_wt_seq = pd.read_csv("..\\Datasets\\emi_wt_seq.csv", header = None, index_col = None)
+emi_wt_seq = pd.read_csv("..\\Datasets\\seqs\\emi_wt_seq.txt", header = None, index_col = None)
 emi_wt_seq.columns = ['Sequences']
-emi_iso_seqs = pd.read_csv("..\\Datasets\\emi_iso_seqs_reduced.csv", header = None)
+emi_iso_seqs = pd.read_csv("..\\Datasets\\seqs\\emi_iso_seqs_reduced.csv", header = None)
 emi_iso_seqs.columns = ['Sequences']
 
 emi_novel_clones_reps = pd.read_csv("..\\Datasets\\emi_novel_clones_reps.csv", header = 0, index_col = 0)
@@ -227,15 +227,15 @@ for index, row in emi_ant_transform.iterrows():
 novel_clones_score = [0]*1440
 emi_novel_optimal_sequences = []
 for index, row in emi_novel_ant_transform.iterrows():
-    if (-4 < emi_novel_ant_transform.iloc[index,0] < -2.5) & (1 < emi_novel_psy_transform.iloc[index,0] < 2):
+    if (-3.75 < emi_novel_ant_transform.iloc[index,0] < -2.75) & (1.5 < emi_novel_psy_transform.iloc[index,0] < 2.5):
         novel_clones_score[index] = 1
-        emi_novel_optimal_sequences.append([index, 1, emi_labels.iloc[index, 0]])
-    if (-3.5 < emi_novel_ant_transform.iloc[index,0] < -2.5) & (0.5 < emi_novel_psy_transform.iloc[index,0] < 1.5):
+        emi_novel_optimal_sequences.append([index, 1, emi_novel_seqs.iloc[index, 2]])
+    if (-3.25 < emi_novel_ant_transform.iloc[index,0] < -2) & (0.75 < emi_novel_psy_transform.iloc[index,0] < 2):
         novel_clones_score[index] = 2
-        emi_novel_optimal_sequences.append([index, 2, emi_labels.iloc[index, 0]])
-    if (-3 < emi_novel_ant_transform.iloc[index,0] < -1.75) & (-0.5 < emi_novel_psy_transform.iloc[index,0] < 0.75):
+        emi_novel_optimal_sequences.append([index, 2, emi_novel_seqs.iloc[index, 2]])
+    if (-2.75 < emi_novel_ant_transform.iloc[index,0] < -1.75) & (0 < emi_novel_psy_transform.iloc[index,0] < 1.25):
         novel_clones_score[index] = 3
-        emi_novel_optimal_sequences.append([index, 3, emi_labels.iloc[index, 0]])
+        emi_novel_optimal_sequences.append([index, 3, emi_novel_seqs.iloc[index, 2]])
         
 emi_novel_optimal_sequences = pd.DataFrame(emi_novel_optimal_sequences)
 plt.scatter(emi_ant_transform.iloc[:,0], emi_psy_transform.iloc[:,0], c = 'gray')
@@ -245,16 +245,17 @@ plt.scatter(-2.8, 2.6, c = 'red')
 
 #%%
 novel_optimal_seqs = []
-for i in emi_novel_optimal_sequences.iloc[:,0]:
-    base_char = list(emi_novel_seqs.iloc[i, 1])
-    new_char = list(emi_novel_seqs.iloc[i, 2])
+for index, row in emi_novel_optimal_sequences.iterrows():
+    base_char = list(emi_novel_seqs.iloc[row[0], 1])
+    new_char = list(emi_novel_seqs.iloc[row[0], 2])
     for j in np.arange(0,115):
         char_diff = list(set(new_char[j]) - set(base_char[j]))
-        if (len(char_diff) != 0) and (j in {49, 54, 55, 56, 98, 100, 103}):
-            novel_optimal_seqs.append([emi_novel_seqs.iloc[i,0], emi_novel_seqs.iloc[i,2], char_diff[0], j])
+        if (len(char_diff) == 1) and (j in {49, 54, 55, 56, 98, 100, 103}):
+            novel_optimal_seqs.append([row[0], row[1], row[2], char_diff[0], j])
 
 novel_optimal_seqs = np.vstack(novel_optimal_seqs)
 novel_optimal_seqs = pd.DataFrame(novel_optimal_seqs)
+novel_optimal_seqs.set_index(0, inplace = True)
 
 
 #%%
@@ -281,16 +282,17 @@ for index, row in mutation_added.iterrows():
     removed_res_div.append(div_removed)
 
 removed_res_div = pd.DataFrame(removed_res_div).astype(float)
-    
+
 
 #%%
 chosen_seqs = []
 
-for index, row in emi_novel_optimal_sequences.iterrows():
-    if (blosum_muts.iloc[row[0], 0] >= 0) and (removed_res_div.iloc[row[0], 0] < 100) and (mutation_added.iloc[row[0], 1] in {32,49,54,55,56,98,100,103}):
-        chosen_seqs.append([emi_novel_seqs.iloc[row[0], 0], row[0], row[1], row[2], blosum_muts.iloc[row[0], 0], removed_res_div.iloc[row[0], 0], mutation_added.iloc[row[0], 0], mutation_added.iloc[row[0], 1], mutation_added.iloc[row[0], 2], emi_novel_ant_transform.iloc[row[0],0], emi_novel_psy_transform.iloc[row[0],0]])
+for index, row in novel_optimal_seqs.iterrows():
+    index = int(index)
+    if (blosum_muts.iloc[index, 0] >= -3) and (removed_res_div.iloc[index, 0] < 100) and (mutation_added.iloc[index, 1] in {49,54,55,56,98,100,103}) and (mutation_added.iloc[index,0] != 'A'):
+        chosen_seqs.append([emi_novel_seqs.iloc[index, 0], row[1], row[2], row[3], row[4], blosum_muts.iloc[index, 0], removed_res_div.iloc[index, 0], mutation_added.iloc[index, 0], mutation_added.iloc[index, 1], mutation_added.iloc[index, 2], emi_novel_ant_transform.iloc[index,0], emi_novel_psy_transform.iloc[index,0]])
 
 chosen_seqs = pd.DataFrame(chosen_seqs)
+chosen_seqs.drop_duplicates(subset = [6,7,8], keep = 'first', inplace = True)
 print(len(chosen_seqs.index))
-
 

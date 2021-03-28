@@ -63,23 +63,32 @@ HTML("<div style='column-count: 2;'>{}</div>".format(code))
 
 
 #%%
-emi_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_reps_stringent.csv", header = 0, index_col = None)
-emi_labels = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_rep_labels_stringent.csv", header = 0, index_col = 0)
+emi_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_reps.csv", header = 0, index_col = None)
+emi_reps = np.load("C:\\Users\\makow\\Documents\\run_rep_batches_pck\\gpu_reps_emi_seqs.npy")
+emi_reps = pd.DataFrame(emi_reps)
+emi_labels = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_rep_labels.csv", header = 0, index_col = 0)
 
 emi_biophys = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_biophys.csv", header = 0, index_col = None)
-emi_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_seqs.txt", header = None, index_col = None)
+emi_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_seqs.txt", header = None, index_col = None)
 
 emi_iso_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_iso_reps_reduced.csv", header = 0, index_col = 0)
+emi_iso_reps = np.load("C:\\Users\\makow\\Documents\\run_rep_batches_pck\\gpu_reps_emi_iso_seqs_reduced.npy")
+emi_iso_reps = pd.DataFrame(emi_iso_reps)
 
 emi_zero_rep = pd.DataFrame(emi_reps.iloc[2945,:]).T
 emi_iso_binding = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_iso_binding_reduced.csv", header = 0, index_col = None)
 emi_iso_biophys_reduced = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_iso_biophys_reduced.csv", header = 0, index_col = None)
 
 emi_IgG_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_IgG_reps.csv", header = 0, index_col = 0)
+emi_IgG_reps = np.load("C:\\Users\\makow\\Documents\\run_rep_batches_pck\\gpu_reps_emi_IgG_seqs.npy")
+emi_IgG_reps = pd.DataFrame(emi_IgG_reps)
 emi_IgG_binding = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_IgG_binding.csv", header = 0, index_col = None)
 emi_IgG_biophys = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_IgG_biophys.csv", header = 0, index_col = None)
 
 emi_wt_rep = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_wt_rep.csv", header = 0, index_col = 0)
+emi_wt_rep = np.load("C:\\Users\\makow\\Documents\\run_rep_batches_pck\\gpu_reps_emi_wt_seq.npy")
+emi_wt_rep = pd.DataFrame(emi_wt_rep)
+
 emi_wt_binding = pd.DataFrame([1,1])
 emi_zero_binding = pd.DataFrame([0,0])
 emi_wt_binding.index = ['ANT Normalized Binding', 'PSY Normalized Binding']
@@ -87,8 +96,8 @@ emi_zero_binding.index = ['ANT Normalized Binding', 'PSY Normalized Binding']
 emi_fit_reps = pd.concat([emi_wt_rep, emi_zero_rep])
 emi_fit_binding = pd.concat([emi_wt_binding, emi_zero_binding], axis = 1, ignore_index = True).T
 
-wt_seq = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_wt_seq.csv", header = None, index_col = None)
-emi_iso_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_iso_seqs_reduced.csv", header = None, index_col = None)
+wt_seq = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_wt_seq.txt", header = None, index_col = None)
+emi_iso_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_iso_seqs_reduced.csv", header = None, index_col = None)
 emi_iso_seqs.columns = ['Sequences']
 
 
@@ -101,6 +110,7 @@ cv_lda = cv(emi_ant, emi_reps, emi_labels.iloc[:,3], cv = 10)
 print(np.mean(cv_lda['test_score']))
 
 emi_ant_transform = pd.DataFrame(-1*(emi_ant.fit_transform(emi_reps, emi_labels.iloc[:,3])))
+scalings_ant = emi_ant.scalings_
 emi_ant_predict = pd.DataFrame(emi_ant.predict(emi_reps))
 print(confusion_matrix(emi_ant_predict.iloc[:,0], emi_labels.iloc[:,3]))
 
@@ -124,8 +134,6 @@ emi_fit_ant_transform['Fraction ANT Binding'] = ((emi_fit_ant_transform.iloc[:,0
 plt.figure(1)
 plt.scatter(emi_iso_ant_transform.iloc[:,0], emi_iso_binding.iloc[:,1], c = emi_iso_ant_predict.iloc[:,0], cmap = cmap3, edgecolor = 'k', s = 75)
 plt.scatter(emi_wt_ant_transform, 1, s = 75, c = 'crimson', edgecolor = 'k')
-xd = np.linspace(-3.5, 2, 100)
-plt.plot(xd, ((xd*x1[0])+x1[1]), c= 'k', lw = 2, linestyle= ':')
 plt.tick_params(labelsize = 12)
 neg_gate_patch = mpatches.Patch(facecolor='dodgerblue', label = 'LDA Predicted No ANT Binding', edgecolor = 'black', linewidth = 0.5)
 pos_gate_patch = mpatches.Patch(facecolor = 'darkorange', label = 'LDA Predicted ANT Binding', edgecolor = 'black', linewidth = 0.5)
@@ -145,10 +153,13 @@ cv_lda = cv(emi_psy, emi_reps, emi_labels.iloc[:,2], cv = 10)
 print(np.mean(cv_lda['test_score']))
 
 emi_psy_transform = pd.DataFrame(emi_psy.fit_transform(emi_reps, emi_labels.iloc[:,2]))
+scalings_psy = emi_psy.scalings_
 emi_psy_predict = pd.DataFrame(emi_psy.predict(emi_reps))
 print(confusion_matrix(emi_psy_predict.iloc[:,0], emi_labels.iloc[:,2]))
 
 emi_wt_psy_transform = pd.DataFrame(emi_psy.transform(emi_wt_rep))
+
+plt.scatter(scalings_ant, scalings_psy)
 
 
 #%%
@@ -179,6 +190,7 @@ plt.ylabel('Display Normalalized psyigen Binding', fontsize = 16)
 plt.xlabel('LDA Transform', fontsize = 16)
 plt.title('Experimental psyigen Binding vs LDA Transform', fontsize = 18)
 plt.tight_layout()
+
 
 
 #%%
@@ -261,6 +273,7 @@ chosen_seqs = emi_optimal_sequences[emi_optimal_sequences.index.isin(chosen_l)]
 #%%
 fig, (ax0, ax1, ax2) = plt.subplots(1, 3, figsize = (18,5))
 ax00 = ax0.scatter(emi_ant_transform.iloc[:,0], emi_psy_transform.iloc[:,0], c = emi_ant_transform['Fraction ANT Binding'], cmap = cmap2)
+ax0.scatter(emi_iso_ant_transform.iloc[:,0], emi_iso_psy_transform.iloc[:,0], c = 'crimson', s = 65, edgecolor = 'k')
 ax0.scatter(emi_wt_ant_transform.iloc[:,0], emi_wt_psy_transform.iloc[:,0], c = 'crimson', s = 65, edgecolor = 'k')
 cbar0 = plt.colorbar(ax00, ax = ax0)
 ax0.set_title('Change in ANT Binding Over Pareto', fontsize = 16)
@@ -332,12 +345,6 @@ print(sc.stats.ks_2samp(emi_ant_transform.loc[emi_labels['PSY Binding']==0, 0], 
 plt.scatter(emi_iso_ant_transform.iloc[:,0], emi_iso_binding.iloc[:,1], c = emi_iso_binding.iloc[:,2], cmap = 'cool', s = 75, edgecolor = 'k')
 
 print(sc.stats.spearmanr(emi_iso_ant_transform.iloc[:,0], emi_iso_binding.iloc[:,2]))
-
-
-#%%
-fig, ax = plt.subplots()
-ax.scatter(emi_IgG_binding.iloc[:,1], emi_IgG_binding.iloc[:,2], c = emi_IgG_nine_mr.iloc[:,2], s = 45, cmap = 'plasma')
-ax.invert_xaxis()
 
 
 #%%

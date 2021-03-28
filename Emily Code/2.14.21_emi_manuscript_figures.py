@@ -75,7 +75,7 @@ HTML("<div style='column-count: 2;'>{}</div>".format(code))
 
 
 #%%
-emi_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_reps_stringent.csv", header = 0, index_col = None)
+emi_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_reps.csv", header = 0, index_col = None)
 emi_labels = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_rep_labels_stringent.csv", header = 0, index_col = 0)
 
 emi_biophys = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_biophys.csv", header = 0, index_col = None)
@@ -209,7 +209,6 @@ plt.ylim(-0.12,0.15)
 
 #%%
 import umap
-
 reducer = umap.UMAP()
 umap_embed = pd.DataFrame(reducer.fit_transform(emi_reps))
 
