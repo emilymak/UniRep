@@ -54,7 +54,7 @@ cmap8 = LinearSegmentedColormap.from_list("mycmap", colormap8)
 #%%
 emi_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_reps.csv", header = 0, index_col = None)
 emi_iso_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_iso_reps_reduced.csv", header = 0, index_col = 0)
-emi_IgG_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_IgG_reps.csv", header = 0, index_col = 0)
+emi_IgG_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_IgG_reps_noed.csv", header = 0, index_col = 0)
 emi_flags = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\flagsummary_emi.csv", header = 0, index_col = 0)
 
 emi_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_seqs.txt", header = None, index_col = None)
@@ -114,9 +114,9 @@ emi_rep_labels_5NotA = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\
 emi_rep_labels_6NotW = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_rep_labels_6NotW.csv", header = 0, index_col = 0)
 emi_rep_labels_7NotY = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_rep_labels_7NotY.csv", header = 0, index_col = 0)
 
-emi_IgG_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_IgG_seqs.txt", header = None, index_col = None)
-emi_IgG_seqs_pI = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_IgG_seqs_pI.txt", sep = '\t', header = None, index_col = None)
-emi_IgG_binding = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_IgG_binding.csv", header = 0, index_col = None)
+emi_IgG_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_IgG_seqs_noed.txt", header = None, index_col = None)
+emi_IgG_seqs_pI = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_IgG_seqs_noed_pI.txt", sep = '\t', header = None, index_col = None)
+emi_IgG_binding = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_IgG_binding_noed.csv", header = 0, index_col = None)
 emi_IgG_flags = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\flagsummary_emi_IgG.csv", header = 0, index_col = 0)
 
 res_dict = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\residue_dict.csv", header = 0, index_col = 0)
@@ -296,7 +296,7 @@ for column in emi_res_counts:
 emi_hydrophobicity = pd.DataFrame(emi_hydrophobicity).T
 emi_hydrophobicity['ave'] = emi_hydrophobicity.sum(axis = 1)/115
 
-emi = pd.concat([emi_reps, emi_res_counts, emi_seqs_pI.iloc[:,1], emi_hydrophobicity['ave'], emi_flags], axis = 1, ignore_index = False)
+emi = pd.concat([emi_reps, emi_res_counts, emi_seqs_pI.iloc[:,1], emi_hydrophobicity['ave']], axis = 1, ignore_index = False)
 
 
 emi_iso_res_counts = pd.DataFrame(index = alph)
@@ -316,7 +316,7 @@ for column in emi_iso_res_counts:
 emi_iso_hydrophobicity = pd.DataFrame(emi_iso_hydrophobicity).T
 emi_iso_hydrophobicity['ave'] = emi_iso_hydrophobicity.sum(axis = 1)/115
 
-emi_iso = pd.concat([emi_iso_reps, emi_iso_res_counts, emi_iso_seqs_pI.iloc[:,1], emi_iso_hydrophobicity['ave'], emi_iso_flags], axis = 1, ignore_index = False)
+emi_iso = pd.concat([emi_iso_reps, emi_iso_res_counts, emi_iso_seqs_pI.iloc[:,1], emi_iso_hydrophobicity['ave']], axis = 1, ignore_index = False)
 
 
 emi_IgG_res_counts = pd.DataFrame(index = alph)
@@ -336,7 +336,7 @@ for column in emi_IgG_res_counts:
 emi_IgG_hydrophobicity = pd.DataFrame(emi_IgG_hydrophobicity).T
 emi_IgG_hydrophobicity['ave'] = emi_IgG_hydrophobicity.sum(axis = 1)/115
 
-emi_IgG = pd.concat([emi_IgG_reps, emi_IgG_res_counts, emi_IgG_seqs_pI.iloc[:,1], emi_IgG_hydrophobicity['ave'], emi_IgG_flags], axis = 1, ignore_index = False)
+emi_IgG = pd.concat([emi_IgG_reps, emi_IgG_res_counts, emi_IgG_seqs_pI.iloc[:,1], emi_IgG_hydrophobicity['ave']], axis = 1, ignore_index = False)
 
 
 emi_0NotY_res_counts = pd.DataFrame(index = alph)
@@ -356,7 +356,7 @@ for column in emi_0NotY_res_counts:
 emi_0NotY_hydrophobicity = pd.DataFrame(emi_0NotY_hydrophobicity).T
 emi_0NotY_hydrophobicity['ave'] = emi_0NotY_hydrophobicity.sum(axis = 1)/115
 
-emi_0NotY = pd.concat([emi_reps_0NotY, emi_0NotY_res_counts, emi_0NotY_seqs_pI.iloc[:,1], emi_0NotY_hydrophobicity['ave'], emi_flags_0NotY], axis = 1, ignore_index = False)
+emi_0NotY = pd.concat([emi_reps_0NotY, emi_0NotY_res_counts, emi_0NotY_seqs_pI.iloc[:,1], emi_0NotY_hydrophobicity['ave']], axis = 1, ignore_index = False)
 
 
 emi_1NotR_res_counts = pd.DataFrame(index = alph)
@@ -376,7 +376,7 @@ for column in emi_1NotR_res_counts:
 emi_1NotR_hydrophobicity = pd.DataFrame(emi_1NotR_hydrophobicity).T
 emi_1NotR_hydrophobicity['ave'] = emi_1NotR_hydrophobicity.sum(axis = 1)/115
 
-emi_1NotR = pd.concat([emi_reps_1NotR, emi_1NotR_res_counts, emi_1NotR_seqs_pI.iloc[:,1], emi_1NotR_hydrophobicity['ave'], emi_flags_1NotR], axis = 1, ignore_index = False)
+emi_1NotR = pd.concat([emi_reps_1NotR, emi_1NotR_res_counts, emi_1NotR_seqs_pI.iloc[:,1], emi_1NotR_hydrophobicity['ave']], axis = 1, ignore_index = False)
 
 
 emi_2NotR_res_counts = pd.DataFrame(index = alph)
@@ -396,7 +396,7 @@ for column in emi_2NotR_res_counts:
 emi_2NotR_hydrophobicity = pd.DataFrame(emi_2NotR_hydrophobicity).T
 emi_2NotR_hydrophobicity['ave'] = emi_2NotR_hydrophobicity.sum(axis = 1)/115
 
-emi_2NotR = pd.concat([emi_reps_2NotR, emi_2NotR_res_counts, emi_2NotR_seqs_pI.iloc[:,1], emi_2NotR_hydrophobicity['ave'], emi_flags_2NotR], axis = 1, ignore_index = False)
+emi_2NotR = pd.concat([emi_reps_2NotR, emi_2NotR_res_counts, emi_2NotR_seqs_pI.iloc[:,1], emi_2NotR_hydrophobicity['ave']], axis = 1, ignore_index = False)
 
 
 emi_3NotR_res_counts = pd.DataFrame(index = alph)
@@ -416,7 +416,7 @@ for column in emi_3NotR_res_counts:
 emi_3NotR_hydrophobicity = pd.DataFrame(emi_3NotR_hydrophobicity).T
 emi_3NotR_hydrophobicity['ave'] = emi_3NotR_hydrophobicity.sum(axis = 1)/115
 
-emi_3NotR = pd.concat([emi_reps_3NotR, emi_3NotR_res_counts, emi_3NotR_seqs_pI.iloc[:,1], emi_3NotR_hydrophobicity['ave'], emi_flags_3NotR], axis = 1, ignore_index = False)
+emi_3NotR = pd.concat([emi_reps_3NotR, emi_3NotR_res_counts, emi_3NotR_seqs_pI.iloc[:,1], emi_3NotR_hydrophobicity['ave']], axis = 1, ignore_index = False)
 
 
 emi_4NotG_res_counts = pd.DataFrame(index = alph)
@@ -436,7 +436,7 @@ for column in emi_4NotG_res_counts:
 emi_4NotG_hydrophobicity = pd.DataFrame(emi_4NotG_hydrophobicity).T
 emi_4NotG_hydrophobicity['ave'] = emi_4NotG_hydrophobicity.sum(axis = 1)/115
 
-emi_4NotG = pd.concat([emi_reps_4NotG, emi_4NotG_res_counts, emi_4NotG_seqs_pI.iloc[:,1], emi_4NotG_hydrophobicity['ave'], emi_flags_4NotG], axis = 1, ignore_index = False)
+emi_4NotG = pd.concat([emi_reps_4NotG, emi_4NotG_res_counts, emi_4NotG_seqs_pI.iloc[:,1], emi_4NotG_hydrophobicity['ave']], axis = 1, ignore_index = False)
 
 
 emi_5NotA_res_counts = pd.DataFrame(index = alph)
@@ -456,7 +456,7 @@ for column in emi_5NotA_res_counts:
 emi_5NotA_hydrophobicity = pd.DataFrame(emi_5NotA_hydrophobicity).T
 emi_5NotA_hydrophobicity['ave'] = emi_5NotA_hydrophobicity.sum(axis = 1)/115
 
-emi_5NotA = pd.concat([emi_reps_5NotA, emi_5NotA_res_counts, emi_5NotA_seqs_pI.iloc[:,1], emi_5NotA_hydrophobicity['ave'], emi_flags_5NotA], axis = 1, ignore_index = False)
+emi_5NotA = pd.concat([emi_reps_5NotA, emi_5NotA_res_counts, emi_5NotA_seqs_pI.iloc[:,1], emi_5NotA_hydrophobicity['ave']], axis = 1, ignore_index = False)
 
 
 emi_6NotW_res_counts = pd.DataFrame(index = alph)
@@ -476,7 +476,7 @@ for column in emi_6NotW_res_counts:
 emi_6NotW_hydrophobicity = pd.DataFrame(emi_6NotW_hydrophobicity).T
 emi_6NotW_hydrophobicity['ave'] = emi_6NotW_hydrophobicity.sum(axis = 1)/115
 
-emi_6NotW = pd.concat([emi_reps_6NotW, emi_6NotW_res_counts, emi_6NotW_seqs_pI.iloc[:,1], emi_6NotW_hydrophobicity['ave'], emi_flags_6NotW], axis = 1, ignore_index = False)
+emi_6NotW = pd.concat([emi_reps_6NotW, emi_6NotW_res_counts, emi_6NotW_seqs_pI.iloc[:,1], emi_6NotW_hydrophobicity['ave']], axis = 1, ignore_index = False)
 
 
 emi_7NotY_res_counts = pd.DataFrame(index = alph)
@@ -496,7 +496,7 @@ for column in emi_7NotY_res_counts:
 emi_7NotY_hydrophobicity = pd.DataFrame(emi_7NotY_hydrophobicity).T
 emi_7NotY_hydrophobicity['ave'] = emi_7NotY_hydrophobicity.sum(axis = 1)/115
 
-emi_7NotY = pd.concat([emi_reps_7NotY, emi_7NotY_res_counts, emi_7NotY_seqs_pI.iloc[:,1], emi_7NotY_hydrophobicity['ave'], emi_flags_7NotY], axis = 1, ignore_index = False)
+emi_7NotY = pd.concat([emi_reps_7NotY, emi_7NotY_res_counts, emi_7NotY_seqs_pI.iloc[:,1], emi_7NotY_hydrophobicity['ave']], axis = 1, ignore_index = False)
 
 
 #%%
@@ -517,7 +517,7 @@ for column in emi_iso_0Y_res_counts:
 emi_iso_0Y_hydrophobicity = pd.DataFrame(emi_iso_0Y_hydrophobicity).T
 emi_iso_0Y_hydrophobicity['ave'] = emi_iso_0Y_hydrophobicity.sum(axis = 1)/115
 
-emi_iso_0Y = pd.concat([emi_iso_0Y_reps, emi_iso_0Y_res_counts, emi_iso_0Y_seqs_pI, emi_iso_0Y_hydrophobicity['ave'], emi_iso_0Y_flags], axis = 1, ignore_index = False)
+emi_iso_0Y = pd.concat([emi_iso_0Y_reps, emi_iso_0Y_res_counts, emi_iso_0Y_seqs_pI, emi_iso_0Y_hydrophobicity['ave']], axis = 1, ignore_index = False)
 
 
 emi_iso_1R_res_counts = pd.DataFrame(index = alph)
@@ -537,7 +537,7 @@ for column in emi_iso_1R_res_counts:
 emi_iso_1R_hydrophobicity = pd.DataFrame(emi_iso_1R_hydrophobicity).T
 emi_iso_1R_hydrophobicity['ave'] = emi_iso_1R_hydrophobicity.sum(axis = 1)/115
 
-emi_iso_1R = pd.concat([emi_iso_1R_reps, emi_iso_1R_res_counts, emi_iso_1R_seqs_pI, emi_iso_1R_hydrophobicity['ave'], emi_iso_1R_flags], axis = 1, ignore_index = False)
+emi_iso_1R = pd.concat([emi_iso_1R_reps, emi_iso_1R_res_counts, emi_iso_1R_seqs_pI, emi_iso_1R_hydrophobicity['ave']], axis = 1, ignore_index = False)
 
 
 emi_iso_2R_res_counts = pd.DataFrame(index = alph)
@@ -557,7 +557,7 @@ for column in emi_iso_2R_res_counts:
 emi_iso_2R_hydrophobicity = pd.DataFrame(emi_iso_2R_hydrophobicity).T
 emi_iso_2R_hydrophobicity['ave'] = emi_iso_2R_hydrophobicity.sum(axis = 1)/115
 
-emi_iso_2R = pd.concat([emi_iso_2R_reps, emi_iso_2R_res_counts, emi_iso_2R_seqs_pI, emi_iso_2R_hydrophobicity['ave'], emi_iso_2R_flags], axis = 1, ignore_index = False)
+emi_iso_2R = pd.concat([emi_iso_2R_reps, emi_iso_2R_res_counts, emi_iso_2R_seqs_pI, emi_iso_2R_hydrophobicity['ave']], axis = 1, ignore_index = False)
 
 
 emi_iso_3R_res_counts = pd.DataFrame(index = alph)
@@ -577,7 +577,7 @@ for column in emi_iso_3R_res_counts:
 emi_iso_3R_hydrophobicity = pd.DataFrame(emi_iso_3R_hydrophobicity).T
 emi_iso_3R_hydrophobicity['ave'] = emi_iso_3R_hydrophobicity.sum(axis = 1)/115
 
-emi_iso_3R = pd.concat([emi_iso_3R_reps, emi_iso_3R_res_counts, emi_iso_3R_seqs_pI, emi_iso_3R_hydrophobicity['ave'], emi_iso_3R_flags], axis = 1, ignore_index = False)
+emi_iso_3R = pd.concat([emi_iso_3R_reps, emi_iso_3R_res_counts, emi_iso_3R_seqs_pI, emi_iso_3R_hydrophobicity['ave']], axis = 1, ignore_index = False)
 
 
 emi_iso_4G_res_counts = pd.DataFrame(index = alph)
@@ -597,7 +597,7 @@ for column in emi_iso_4G_res_counts:
 emi_iso_4G_hydrophobicity = pd.DataFrame(emi_iso_4G_hydrophobicity).T
 emi_iso_4G_hydrophobicity['ave'] = emi_iso_4G_hydrophobicity.sum(axis = 1)/115
 
-emi_iso_4G = pd.concat([emi_iso_4G_reps, emi_iso_4G_res_counts, emi_iso_4G_seqs_pI, emi_iso_4G_hydrophobicity['ave'], emi_iso_4G_flags], axis = 1, ignore_index = False)
+emi_iso_4G = pd.concat([emi_iso_4G_reps, emi_iso_4G_res_counts, emi_iso_4G_seqs_pI, emi_iso_4G_hydrophobicity['ave']], axis = 1, ignore_index = False)
 
 
 emi_iso_5A_res_counts = pd.DataFrame(index = alph)
@@ -617,7 +617,7 @@ for column in emi_iso_5A_res_counts:
 emi_iso_5A_hydrophobicity = pd.DataFrame(emi_iso_5A_hydrophobicity).T
 emi_iso_5A_hydrophobicity['ave'] = emi_iso_5A_hydrophobicity.sum(axis = 1)/115
 
-emi_iso_5A = pd.concat([emi_iso_5A_reps, emi_iso_5A_res_counts, emi_iso_5A_seqs_pI, emi_iso_5A_hydrophobicity['ave'], emi_iso_5A_flags], axis = 1, ignore_index = False)
+emi_iso_5A = pd.concat([emi_iso_5A_reps, emi_iso_5A_res_counts, emi_iso_5A_seqs_pI, emi_iso_5A_hydrophobicity['ave']], axis = 1, ignore_index = False)
 
 
 emi_iso_6W_res_counts = pd.DataFrame(index = alph)
@@ -637,7 +637,7 @@ for column in emi_iso_6W_res_counts:
 emi_iso_6W_hydrophobicity = pd.DataFrame(emi_iso_6W_hydrophobicity).T
 emi_iso_6W_hydrophobicity['ave'] = emi_iso_6W_hydrophobicity.sum(axis = 1)/115
 
-emi_iso_6W = pd.concat([emi_iso_6W_reps, emi_iso_6W_res_counts, emi_iso_6W_seqs_pI, emi_iso_6W_hydrophobicity['ave'], emi_iso_6W_flags], axis = 1, ignore_index = False)
+emi_iso_6W = pd.concat([emi_iso_6W_reps, emi_iso_6W_res_counts, emi_iso_6W_seqs_pI, emi_iso_6W_hydrophobicity['ave']], axis = 1, ignore_index = False)
 
 
 emi_iso_7Y_res_counts = pd.DataFrame(index = alph)
@@ -657,7 +657,7 @@ for column in emi_iso_7Y_res_counts:
 emi_iso_7Y_hydrophobicity = pd.DataFrame(emi_iso_7Y_hydrophobicity).T
 emi_iso_7Y_hydrophobicity['ave'] = emi_iso_7Y_hydrophobicity.sum(axis = 1)/115
 
-emi_iso_7Y = pd.concat([emi_iso_7Y_reps, emi_iso_7Y_res_counts, emi_iso_7Y_seqs_pI, emi_iso_7Y_hydrophobicity['ave'], emi_iso_7Y_flags], axis = 1, ignore_index = False)
+emi_iso_7Y = pd.concat([emi_iso_7Y_reps, emi_iso_7Y_res_counts, emi_iso_7Y_seqs_pI, emi_iso_7Y_hydrophobicity['ave']], axis = 1, ignore_index = False)
 
 
 #%%
@@ -770,23 +770,30 @@ plt.scatter(iso_psy_transform.iloc[:,0], emi_iso_binding.iloc[:,2])
 print(sc.stats.spearmanr(iso_psy_transform.iloc[:,0], emi_iso_binding.iloc[:,2]))
 
 
-plt.scatter(IgG_ant_transform.iloc[0:40,0], emi_IgG_binding.iloc[0:40,1])
-print(sc.stats.spearmanr(IgG_ant_transform.iloc[0:40,0], emi_IgG_binding.iloc[0:40,1]))
+plt.scatter(IgG_ant_transform.iloc[0:41,0], emi_IgG_binding.iloc[0:41,1])
+print(sc.stats.spearmanr(IgG_ant_transform.iloc[0:41,0], emi_IgG_binding.iloc[0:41,1]))
 
-plt.scatter(IgG_psy_transform.iloc[0:40,0], emi_IgG_binding.iloc[0:40,2])
-print(sc.stats.spearmanr(IgG_psy_transform.iloc[0:40,0], emi_IgG_binding.iloc[0:40,2]))
+plt.scatter(IgG_psy_transform.iloc[0:41,0], emi_IgG_binding.iloc[0:41,2])
+print(sc.stats.spearmanr(IgG_psy_transform.iloc[0:41,0], emi_IgG_binding.iloc[0:41,2]))
 
-plt.scatter(IgG_ant_transform.iloc[40:83,0], emi_IgG_binding.iloc[40:83,1])
-print(sc.stats.spearmanr(IgG_ant_transform.iloc[40:83,0], emi_IgG_binding.iloc[40:83,1]))
+plt.scatter(IgG_ant_transform.iloc[41:83,0], emi_IgG_binding.iloc[41:83,1])
+print(sc.stats.spearmanr(IgG_ant_transform.iloc[41:83,0], emi_IgG_binding.iloc[41:83,1]))
 
-plt.scatter(IgG_psy_transform.iloc[40:83,0], emi_IgG_binding.iloc[40:83,2])
-print(sc.stats.spearmanr(IgG_psy_transform.iloc[40:83,0], emi_IgG_binding.iloc[40:83,2]))
+plt.scatter(IgG_psy_transform.iloc[41:83,0], emi_IgG_binding.iloc[41:83,2])
+print(sc.stats.spearmanr(IgG_psy_transform.iloc[41:83,0], emi_IgG_binding.iloc[41:83,2]))
 
 
-plt.scatter(IgG_ant_transform.iloc[40:96,0], emi_IgG_binding.iloc[40:96,1])
-print(sc.stats.spearmanr(IgG_ant_transform.iloc[40:96,0], emi_IgG_binding.iloc[40:96,1]))
+plt.scatter(IgG_ant_transform.iloc[41:98,0], emi_IgG_binding.iloc[41:98,1])
+print(sc.stats.spearmanr(IgG_ant_transform.iloc[41:98,0], emi_IgG_binding.iloc[41:98,1]))
 
-plt.scatter(IgG_psy_transform.iloc[40:96,0], emi_IgG_binding.iloc[40:96,2])
-print(sc.stats.spearmanr(IgG_psy_transform.iloc[40:96,0], emi_IgG_binding.iloc[40:96,2]))
+plt.scatter(IgG_psy_transform.iloc[41:98,0], emi_IgG_binding.iloc[41:98,2])
+print(sc.stats.spearmanr(IgG_psy_transform.iloc[41:98,0], emi_IgG_binding.iloc[41:98,2]))
+
+
+plt.scatter(IgG_ant_transform.iloc[83:98,0], emi_IgG_binding.iloc[83:98,1])
+print(sc.stats.spearmanr(IgG_ant_transform.iloc[83:98,0], emi_IgG_binding.iloc[83:98,1]))
+
+plt.scatter(IgG_psy_transform.iloc[83:98,0], emi_IgG_binding.iloc[83:98,2])
+print(sc.stats.spearmanr(IgG_psy_transform.iloc[83:98,0], emi_IgG_binding.iloc[83:98,2]))
 
 

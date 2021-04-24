@@ -12,12 +12,12 @@ import matplotlib.pyplot as plt
 import scipy as sc
 
 #%%
-emi_R4_rep1_antigen_pos = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_R4_rep1_antigen_pos_1nm_seqs.csv", header = None, index_col = 0)
+emi_R4_rep1_antigen_pos = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_rep1_antigen_pos_1nm_seqs.csv", header = None, index_col = 0)
 emi_R4_rep1_antigen_pos.columns = ['Orep1']
 
-emi_R4_rep1_psr_pos = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_R4_rep1_psr_pos_seqs.csv", header = None, index_col = 0)
+emi_R4_rep1_psr_pos = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_rep1_psr_pos_seqs.csv", header = None, index_col = 0)
 emi_R4_rep1_psr_neg = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_rep1_psr_neg_seqs.csv", header = None, index_col = 0)
-emi_R4_rep1_ova_pos = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_R4_rep1_ova_pos_seqs.csv", header = None, index_col = 0)
+emi_R4_rep1_ova_pos = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_rep1_ova_pos_seqs.csv", header = None, index_col = 0)
 emi_R4_rep1_ova_neg = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_rep1_ova_neg_seqs.csv", header = None, index_col = 0)
 
 
@@ -33,12 +33,12 @@ emi_R4_rep1_neg = emi_R4_rep1_neg[~emi_R4_rep1_neg.index.isin(emi_R4_rep1_pos_in
 
 
 #%%
-emi_R4_rep2_antigen_pos = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_R4_rep2_antigen_pos_1nm_seqs.csv", header = None, index_col = 0)
+emi_R4_rep2_antigen_pos = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_rep2_antigen_pos_1nm_seqs.csv", header = None, index_col = 0)
 emi_R4_rep2_antigen_pos.columns = ['Orep2']
 
-emi_R4_rep2_psr_pos = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_R4_rep2_psr_pos_seqs.csv", header = None, index_col = 0)
+emi_R4_rep2_psr_pos = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_rep2_psr_pos_seqs.csv", header = None, index_col = 0)
 emi_R4_rep2_psr_neg = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_rep2_psr_neg_seqs.csv", header = None, index_col = 0)
-emi_R4_rep2_ova_pos = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_R4_rep2_ova_pos_seqs.csv", header = None, index_col = 0)
+emi_R4_rep2_ova_pos = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_rep2_ova_pos_seqs.csv", header = None, index_col = 0)
 emi_R4_rep2_ova_neg = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_rep2_ova_neg_seqs.csv", header = None, index_col = 0)
 
 
@@ -165,10 +165,10 @@ emi_neg_index = emi_neg_seq.index
 emi_neg_seq = pd.concat([emi_neg_seq, emi_ant], axis = 1)
 emi_neg_seq = emi_neg_seq.loc[emi_neg_index]
 
-emi_pos_seq.sort_values(by = 'Frequency Ave', ascending = False, inplace = True)
+emi_pos_seq.sort_values(by = 'Frequency Ave', ascending = True, inplace = True)
 emi_pos_seq.reset_index(drop = False, inplace = True)
 emi_pos_seq.columns = ['Sequences', 'PSR Freq1', 'OVA Freq1', 'PSR Freq2', 'OVA Freq2', 'Frequency Ave', 'PSY Binding', 'Orep1', 'Orep2']
-emi_neg_seq.sort_values(by = 'Frequency Ave', ascending = False, inplace = True)
+emi_neg_seq.sort_values(by = 'Frequency Ave', ascending = True, inplace = True)
 emi_neg_seq.reset_index(drop = False, inplace = True)
 emi_neg_seq.columns = ['Sequences', 'PSR Freq1', 'OVA Freq1', 'PSR Freq2', 'OVA Freq2', 'Frequency Ave', 'PSY Binding', 'Orep1', 'Orep2']
 
@@ -183,7 +183,7 @@ for index, row in emi_pos_seq_stringent.iterrows():
         emi_pos_seq_stringent.loc[index,'ANT Binding'] = 1
 emi_pos_seq_stringent = emi_pos_seq_stringent[emi_pos_seq_stringent['ANT Binding'] != 2]
 
-emi_neg_seq_stringent = emi_neg_seq.copy()
+emi_neg_seq_stringent = emi_neg_seq.iloc[0:2100,:].copy()
 emi_neg_seq_stringent['ANT Binding'] = 0
 for index, row in emi_neg_seq_stringent.iterrows():
     if sum(row[7:9].isna()) == 1:
@@ -192,12 +192,25 @@ for index, row in emi_neg_seq_stringent.iterrows():
         emi_neg_seq_stringent.loc[index,'ANT Binding'] = 1
 emi_neg_seq_stringent = emi_neg_seq_stringent[emi_neg_seq_stringent['ANT Binding'] != 2]
 
-emi_pos_seq_stringent.sort_values(by = 'ANT Binding', ascending = False, inplace = True)
-emi_neg_seq_stringent.sort_values(by = 'ANT Binding', ascending = False, inplace = True)
+emi_seqs_again = pd.concat([emi_pos_seq_stringent, emi_neg_seq_stringent], axis = 0)
+emi_pos_ant_seq = emi_seqs_again[emi_seqs_again['ANT Binding']==1]
+emi_neg_ant_seq = emi_seqs_again[emi_seqs_again['ANT Binding']==0]
+
+emi_pos_ant_seq.sort_values(by = 'Orep1', ascending = True, inplace = True)
+emi_neg_ant_seq.sort_values(by = 'PSY Binding', ascending = True, inplace = True)
+#emi_neg_ant_seq.sort_values(by = 'Frequency Ave', ascending = True, inplace = True)
+
+#emi_pos_seq_stringent.sort_values(by = 'ANT Binding', ascending = False, inplace = True)
+#emi_neg_seq_stringent.sort_values(by = 'ANT Binding', ascending = True, inplace = True)
 
 
 #%%
-emi_seqs_used_stringent = pd.concat([emi_pos_seq_stringent.iloc[0:2000,:], emi_neg_seq_stringent.iloc[0:2000,:]], axis = 0)
+emi_seqs_used_stringent = pd.concat([emi_pos_ant_seq.iloc[0:2000,:], emi_neg_ant_seq.iloc[0:2000,:]], axis = 0)
+print(((np.mean(emi_seqs_used_stringent['OVA Freq1']))+(np.mean(emi_seqs_used_stringent['OVA Freq2']))+(np.mean(emi_seqs_used_stringent['PSR Freq1']))+(np.mean(emi_seqs_used_stringent['PSR Freq2'])))/4)
+
+print((np.mean(emi_seqs_used_stringent['Orep1'])) + (np.mean(emi_seqs_used_stringent['Orep2']))/2)
+print(sum(emi_seqs_used_stringent['PSY Binding'])/4000)
+
 emi_seqs_used_stringent.drop('OVA Freq1', inplace = True, axis = 1)
 emi_seqs_used_stringent.drop('PSR Freq1', inplace = True, axis = 1)
 emi_seqs_used_stringent.drop('OVA Freq2', inplace = True, axis = 1)
@@ -209,13 +222,15 @@ emi_seqs_used_stringent.drop('Orep2', inplace = True, axis = 1)
 #%%
 
 emi_seqs_used_stringent.reset_index(drop = True, inplace = True)
-emi_seqs_used_stringent.to_csv('emi_R7_rep_labels.csv', header = True, index = True)
+emi_seqs_used_stringent.to_csv('emi_R9_rep_labels.csv', header = True, index = True)
 
-seqs = pd.concat([emi_pos_seq_stringent.iloc[0:2000,0], emi_neg_seq_stringent.iloc[0:2000,0]], axis = 0, ignore_index = True)
+seqs = emi_seqs_used_stringent.iloc[:,0]
 seqs.reset_index(drop = True, inplace = True)
-seqs.to_csv('emi_R7_seqs.txt', header = False, index = False)
-#emi_neg_seq_stringent.iloc[0:2000,0].to_csv('emi_R7_neg_seqs.txt', header = False, index = False)
+seqs.to_csv('emi_R9_seqs.txt', header = False, index = False)
 """
+
+#emi_neg_seq_stringent.iloc[0:2000,0].to_csv('emi_R7_neg_seqs.txt', header = False, index = False)
+
 emi_pos_seq_stringent.iloc[500:1000,0].to_csv('emi_R4_pos_seqs_7NotY_2.txt', header = False, index = False)
 emi_neg_seq_stringent.iloc[500:1000,0].to_csv('emi_R4_neg_seqs_7NotY_2.txt', header = False, index = False)
 

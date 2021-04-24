@@ -53,40 +53,41 @@ cmap8 = LinearSegmentedColormap.from_list("mycmap", colormap8)
 
 
 #%%
-emi_R3_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_R3_seqs.csv", header = 0, index_col = 0)
+emi_R3_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_R3_seqs.txt", header = None, index_col = None)
 emi_R3_labels = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_R3_rep_labels.csv", header = 0, index_col = 0)
 emi_R3_biophys = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_R3_biophys.csv", header = 0, index_col = None)
 
-emi_R4_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_R4_seqs.csv", header = 0, index_col = 0)
+emi_R4_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_R4_seqs.txt", header = None, index_col = None)
 emi_R4_labels = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_R4_rep_labels.csv", header = 0, index_col = 0)
 emi_R4_biophys = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_R4_biophys.csv", header = 0, index_col = None)
 
-emi_R5_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_R5_seqs.csv", header = 0, index_col = 0)
+emi_R5_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_R5_seqs.txt", header = None, index_col = None)
 emi_R5_labels = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_R5_rep_labels.csv", header = 0, index_col = 0)
 emi_R5_biophys = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_R5_biophys.csv", header = 0, index_col = None)
 
-emi_R6_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_R6_seqs.csv", header = 0, index_col = 0)
+emi_R6_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_R6_seqs.txt", header = None, index_col = None)
 emi_R6_labels = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_R6_rep_labels.csv", header = 0, index_col = 0)
 emi_R6_biophys = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_R6_biophys.csv", header = 0, index_col = None)
 
-emi_R7_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_R7_seqs.csv", header = 0, index_col = 0)
+emi_R7_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_R7_seqs.txt", header = None, index_col = None)
 emi_R7_labels = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_R7_rep_labels.csv", header = 0, index_col = 0)
 emi_R7_biophys = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_R7_biophys.csv", header = 0, index_col = None)
 
-emi_R8_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_R8_seqs.csv", header = 0, index_col = 0)
+emi_R8_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_R8_seqs.txt", header = None, index_col = None)
 emi_R8_labels = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_R8_rep_labels.csv", header = 0, index_col = 0)
 emi_R8_biophys = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_R8_biophys.csv", header = 0, index_col = None)
 
-emi_R9_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_R9_seqs.csv", header = 0, index_col = 0)
+emi_R9_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_R9_seqs.txt", header = None, index_col = None)
 emi_R9_labels = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_R9_rep_labels.csv", header = 0, index_col = 0)
 emi_R9_biophys = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_R9_biophys.csv", header = 0, index_col = None)
 
 emi_iso_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_iso_seqs_reduced.csv", header = None)
 emi_iso_binding = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_iso_binding_reduced.csv", header = 0, index_col = None)
 
-emi_IgG_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_IgG_seqs.csv", header = 0, index_col = 0)
+emi_IgG_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_IgG_seqs.txt", header = None, index_col = None)
+emi_IgG_seqs = pd.DataFrame(emi_IgG_seqs.iloc[0:40,0])
 emi_IgG_binding = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_IgG_binding.csv", header = 0, index_col = None)
-
+emi_IgG_binding = pd.DataFrame(emi_IgG_binding.iloc[0:40,:])
 
 
 #%%
@@ -94,18 +95,14 @@ alph_letters = np.array(sorted('ACDEFGHIKLMNPQRSTVWYX'))
 le = LabelEncoder()
 integer_encoded_letters = le.fit_transform(alph_letters)
 integer_encoded_letters = integer_encoded_letters.reshape(len(integer_encoded_letters), 1)
+one = OneHotEncoder(sparse = False)
+ohe_letters = one.fit_transform(integer_encoded_letters)
 
 emi_R3_sequences = []
 for i in emi_R3_seqs.iloc[:,0]:
     chars = le.transform(list(i))
     emi_R3_sequences.append(chars)
-emi_IgG_sequences = []
-
 emi_R3_enc = pd.DataFrame(emi_R3_sequences)
-
-one = OneHotEncoder(sparse = False)
-ohe_letters = one.fit_transform(integer_encoded_letters)
-
 ohe_R3_sequences = []
 for index, row in emi_R3_enc.iterrows():
     row2 = np.array(row)
@@ -119,13 +116,7 @@ emi_R4_sequences = []
 for i in emi_R4_seqs.iloc[:,0]:
     chars = le.transform(list(i))
     emi_R4_sequences.append(chars)
-emi_IgG_sequences = []
-
 emi_R4_enc = pd.DataFrame(emi_R4_sequences)
-
-one = OneHotEncoder(sparse = False)
-ohe_letters = one.fit_transform(integer_encoded_letters)
-
 ohe_R4_sequences = []
 for index, row in emi_R4_enc.iterrows():
     row2 = np.array(row)
@@ -139,13 +130,7 @@ emi_R5_sequences = []
 for i in emi_R5_seqs.iloc[:,0]:
     chars = le.transform(list(i))
     emi_R5_sequences.append(chars)
-emi_IgG_sequences = []
-
 emi_R5_enc = pd.DataFrame(emi_R5_sequences)
-
-one = OneHotEncoder(sparse = False)
-ohe_letters = one.fit_transform(integer_encoded_letters)
-
 ohe_R5_sequences = []
 for index, row in emi_R5_enc.iterrows():
     row2 = np.array(row)
@@ -159,13 +144,7 @@ emi_R6_sequences = []
 for i in emi_R6_seqs.iloc[:,0]:
     chars = le.transform(list(i))
     emi_R6_sequences.append(chars)
-emi_IgG_sequences = []
-
 emi_R6_enc = pd.DataFrame(emi_R6_sequences)
-
-one = OneHotEncoder(sparse = False)
-ohe_letters = one.fit_transform(integer_encoded_letters)
-
 ohe_R6_sequences = []
 for index, row in emi_R6_enc.iterrows():
     row2 = np.array(row)
@@ -179,13 +158,7 @@ emi_R7_sequences = []
 for i in emi_R7_seqs.iloc[:,0]:
     chars = le.transform(list(i))
     emi_R7_sequences.append(chars)
-emi_IgG_sequences = []
-
 emi_R7_enc = pd.DataFrame(emi_R7_sequences)
-
-one = OneHotEncoder(sparse = False)
-ohe_letters = one.fit_transform(integer_encoded_letters)
-
 ohe_R7_sequences = []
 for index, row in emi_R7_enc.iterrows():
     row2 = np.array(row)
@@ -199,13 +172,7 @@ emi_R8_sequences = []
 for i in emi_R8_seqs.iloc[:,0]:
     chars = le.transform(list(i))
     emi_R8_sequences.append(chars)
-emi_IgG_sequences = []
-
 emi_R8_enc = pd.DataFrame(emi_R8_sequences)
-
-one = OneHotEncoder(sparse = False)
-ohe_letters = one.fit_transform(integer_encoded_letters)
-
 ohe_R8_sequences = []
 for index, row in emi_R8_enc.iterrows():
     row2 = np.array(row)
@@ -219,13 +186,7 @@ emi_R9_sequences = []
 for i in emi_R9_seqs.iloc[:,0]:
     chars = le.transform(list(i))
     emi_R9_sequences.append(chars)
-emi_IgG_sequences = []
-
 emi_R9_enc = pd.DataFrame(emi_R9_sequences)
-
-one = OneHotEncoder(sparse = False)
-ohe_letters = one.fit_transform(integer_encoded_letters)
-
 ohe_R9_sequences = []
 for index, row in emi_R9_enc.iterrows():
     row2 = np.array(row)
@@ -239,9 +200,7 @@ emi_iso_sequences = []
 for i in emi_iso_seqs.iloc[:,0]:
     chars = le.transform(list(i))
     emi_iso_sequences.append(chars)
-
 emi_iso_enc = pd.DataFrame(emi_iso_sequences)
-
 ohe_iso = []
 for index, row in emi_iso_enc.iterrows():
     row2 = np.array(row)
@@ -255,9 +214,7 @@ emi_IgG_sequences = []
 for i in emi_IgG_seqs.iloc[:,0]:
     chars = le.transform(list(i))
     emi_IgG_sequences.append(chars)
-
 emi_IgG_enc = pd.DataFrame(emi_IgG_sequences)
-
 ohe_IgG = []
 for index, row in emi_IgG_enc.iterrows():
     row2 = np.array(row)
@@ -269,7 +226,7 @@ ohe_IgG = np.stack(ohe_IgG)
 
 #%%
 lda_ant = LDA()
-cv_lda_ant = cv(lda_ant, ohe_R3_sequences, emi_R3_labels.iloc[:,3])
+cv_lda_ant = cv(lda_ant, ohe_R3_sequences, emi_R3_labels.iloc[:,3], scoring = 'balanced_accuracy')
 print(np.mean(cv_lda_ant['test_score']))
 lda_ant.fit(ohe_R3_sequences, emi_R3_labels.iloc[:,3])
 emi_R3_ant_transform = pd.DataFrame(lda_ant.transform(ohe_R3_sequences))
@@ -279,7 +236,7 @@ IgG_R3_ant_transform = pd.DataFrame(lda_ant.transform(ohe_IgG))
 IgG_R3_ant_predict = pd.DataFrame(lda_ant.predict(ohe_IgG))
 
 lda_ant = LDA()
-cv_lda_ant = cv(lda_ant, ohe_R4_sequences, emi_R4_labels.iloc[:,3])
+cv_lda_ant = cv(lda_ant, ohe_R4_sequences, emi_R4_labels.iloc[:,3], scoring = 'balanced_accuracy')
 print(np.mean(cv_lda_ant['test_score']))
 lda_ant.fit(ohe_R4_sequences, emi_R4_labels.iloc[:,3])
 emi_R4_ant_transform = pd.DataFrame(lda_ant.transform(ohe_R4_sequences))
@@ -289,7 +246,7 @@ IgG_R4_ant_transform = pd.DataFrame(lda_ant.transform(ohe_IgG))
 IgG_R4_ant_predict = pd.DataFrame(lda_ant.predict(ohe_IgG))
 
 lda_ant = LDA()
-cv_lda_ant = cv(lda_ant, ohe_R5_sequences, emi_R5_labels.iloc[:,3])
+cv_lda_ant = cv(lda_ant, ohe_R5_sequences, emi_R5_labels.iloc[:,3], scoring = 'balanced_accuracy')
 print(np.mean(cv_lda_ant['test_score']))
 lda_ant.fit(ohe_R5_sequences, emi_R5_labels.iloc[:,3])
 emi_R5_ant_transform = pd.DataFrame(lda_ant.transform(ohe_R5_sequences))
@@ -299,7 +256,7 @@ IgG_R5_ant_transform = pd.DataFrame(lda_ant.transform(ohe_IgG))
 IgG_R5_ant_predict = pd.DataFrame(lda_ant.predict(ohe_IgG))
 
 lda_ant = LDA()
-cv_lda_ant = cv(lda_ant, ohe_R6_sequences, emi_R6_labels.iloc[:,3])
+cv_lda_ant = cv(lda_ant, ohe_R6_sequences, emi_R6_labels.iloc[:,3], scoring = 'balanced_accuracy')
 print(np.mean(cv_lda_ant['test_score']))
 lda_ant.fit(ohe_R6_sequences, emi_R6_labels.iloc[:,3])
 emi_R6_ant_transform = pd.DataFrame(lda_ant.transform(ohe_R6_sequences))
@@ -309,7 +266,7 @@ IgG_R6_ant_transform = pd.DataFrame(lda_ant.transform(ohe_IgG))
 IgG_R6_ant_predict = pd.DataFrame(lda_ant.predict(ohe_IgG))
 
 lda_ant = LDA()
-cv_lda_ant = cv(lda_ant, ohe_R7_sequences, emi_R7_labels.iloc[:,3])
+cv_lda_ant = cv(lda_ant, ohe_R7_sequences, emi_R7_labels.iloc[:,3], scoring = 'balanced_accuracy')
 print(np.mean(cv_lda_ant['test_score']))
 lda_ant.fit(ohe_R7_sequences, emi_R7_labels.iloc[:,3])
 emi_R7_ant_transform = pd.DataFrame(lda_ant.transform(ohe_R7_sequences))
@@ -319,7 +276,7 @@ IgG_R7_ant_transform = pd.DataFrame(lda_ant.transform(ohe_IgG))
 IgG_R7_ant_predict = pd.DataFrame(lda_ant.predict(ohe_IgG))
 
 lda_ant = LDA()
-cv_lda_ant = cv(lda_ant, ohe_R8_sequences, emi_R8_labels.iloc[:,3])
+cv_lda_ant = cv(lda_ant, ohe_R8_sequences, emi_R8_labels.iloc[:,3], scoring = 'balanced_accuracy')
 print(np.mean(cv_lda_ant['test_score']))
 lda_ant.fit(ohe_R8_sequences, emi_R8_labels.iloc[:,3])
 emi_R8_ant_transform = pd.DataFrame(lda_ant.transform(ohe_R8_sequences))
@@ -329,7 +286,7 @@ IgG_R8_ant_transform = pd.DataFrame(lda_ant.transform(ohe_IgG))
 IgG_R8_ant_predict = pd.DataFrame(lda_ant.predict(ohe_IgG))
 
 lda_ant = LDA()
-cv_lda_ant = cv(lda_ant, ohe_R9_sequences, emi_R9_labels.iloc[:,3])
+cv_lda_ant = cv(lda_ant, ohe_R9_sequences, emi_R9_labels.iloc[:,3], scoring = 'balanced_accuracy')
 print(np.mean(cv_lda_ant['test_score']))
 lda_ant.fit(ohe_R9_sequences, emi_R9_labels.iloc[:,3])
 emi_R9_ant_transform = pd.DataFrame(lda_ant.transform(ohe_R9_sequences))
@@ -342,22 +299,20 @@ IgG_R9_ant_predict = pd.DataFrame(lda_ant.predict(ohe_IgG))
 #%%
 ant_transforms = pd.concat([emi_iso_binding.iloc[:,1], iso_R3_ant_transform, iso_R4_ant_transform, iso_R5_ant_transform, iso_R6_ant_transform, iso_R7_ant_transform, iso_R8_ant_transform, iso_R9_ant_transform], axis = 1)
 ant_transforms_corr = ant_transforms.corr(method = 'spearman')
-
 plt.figure(figsize = (1,8))
 sns.heatmap(ant_transforms_corr.iloc[:,0:1], annot = True, annot_kws = {'fontsize': 16}, square = True, cmap = 'plasma', cbar = False, vmin = 0, vmax = 1)
 
 ant_transforms_IgG = pd.concat([emi_IgG_binding.iloc[:,1], IgG_R3_ant_transform, IgG_R4_ant_transform, IgG_R5_ant_transform, IgG_R6_ant_transform, IgG_R7_ant_transform, IgG_R8_ant_transform, IgG_R9_ant_transform], axis = 1)
 ant_transforms_IgG_corr = ant_transforms_IgG.corr(method = 'spearman')
-
 plt.figure(figsize = (1,8))
 sns.heatmap(ant_transforms_IgG_corr.iloc[:,0:1], annot = True, annot_kws = {'fontsize': 16}, square = True, cmap = 'plasma', cbar = False, vmin = 0, vmax = 1)
 
 
 #%%
 lda_psy = LDA()
-cv_lda_psy = cv(lda_psy, ohe_R3_sequences, emi_R3_labels.iloc[:,3])
+cv_lda_psy = cv(lda_psy, ohe_R3_sequences, emi_R3_labels.iloc[:,2], scoring = 'balanced_accuracy')
 print(np.mean(cv_lda_psy['test_score']))
-lda_psy.fit(ohe_R3_sequences, emi_R3_labels.iloc[:,3])
+lda_psy.fit(ohe_R3_sequences, emi_R3_labels.iloc[:,2])
 emi_R3_psy_transform = pd.DataFrame(lda_psy.transform(ohe_R3_sequences))
 iso_R3_psy_transform = pd.DataFrame(lda_psy.transform(ohe_iso))
 iso_R3_psy_predict = pd.DataFrame(lda_psy.predict(ohe_iso))
@@ -365,9 +320,9 @@ IgG_R3_psy_transform = pd.DataFrame(lda_psy.transform(ohe_IgG))
 IgG_R3_psy_predict = pd.DataFrame(lda_psy.predict(ohe_IgG))
 
 lda_psy = LDA()
-cv_lda_psy = cv(lda_psy, ohe_R4_sequences, emi_R4_labels.iloc[:,3])
+cv_lda_psy = cv(lda_psy, ohe_R4_sequences, emi_R4_labels.iloc[:,2], scoring = 'balanced_accuracy')
 print(np.mean(cv_lda_psy['test_score']))
-lda_psy.fit(ohe_R4_sequences, emi_R4_labels.iloc[:,3])
+lda_psy.fit(ohe_R4_sequences, emi_R4_labels.iloc[:,2])
 emi_R4_psy_transform = pd.DataFrame(lda_psy.transform(ohe_R4_sequences))
 iso_R4_psy_transform = pd.DataFrame(lda_psy.transform(ohe_iso))
 iso_R4_psy_predict = pd.DataFrame(lda_psy.predict(ohe_iso))
@@ -375,9 +330,9 @@ IgG_R4_psy_transform = pd.DataFrame(lda_psy.transform(ohe_IgG))
 IgG_R4_psy_predict = pd.DataFrame(lda_psy.predict(ohe_IgG))
 
 lda_psy = LDA()
-cv_lda_psy = cv(lda_psy, ohe_R5_sequences, emi_R5_labels.iloc[:,3])
+cv_lda_psy = cv(lda_psy, ohe_R5_sequences, emi_R5_labels.iloc[:,2], scoring = 'balanced_accuracy')
 print(np.mean(cv_lda_psy['test_score']))
-lda_psy.fit(ohe_R5_sequences, emi_R5_labels.iloc[:,3])
+lda_psy.fit(ohe_R5_sequences, emi_R5_labels.iloc[:,2])
 emi_R5_psy_transform = pd.DataFrame(lda_psy.transform(ohe_R5_sequences))
 iso_R5_psy_transform = pd.DataFrame(lda_psy.transform(ohe_iso))
 iso_R5_psy_predict = pd.DataFrame(lda_psy.predict(ohe_iso))
@@ -385,9 +340,9 @@ IgG_R5_psy_transform = pd.DataFrame(lda_psy.transform(ohe_IgG))
 IgG_R5_psy_predict = pd.DataFrame(lda_psy.predict(ohe_IgG))
 
 lda_psy = LDA()
-cv_lda_psy = cv(lda_psy, ohe_R6_sequences, emi_R6_labels.iloc[:,3])
+cv_lda_psy = cv(lda_psy, ohe_R6_sequences, emi_R6_labels.iloc[:,2], scoring = 'balanced_accuracy')
 print(np.mean(cv_lda_psy['test_score']))
-lda_psy.fit(ohe_R6_sequences, emi_R6_labels.iloc[:,3])
+lda_psy.fit(ohe_R6_sequences, emi_R6_labels.iloc[:,2])
 emi_R6_psy_transform = pd.DataFrame(lda_psy.transform(ohe_R6_sequences))
 iso_R6_psy_transform = pd.DataFrame(lda_psy.transform(ohe_iso))
 iso_R6_psy_predict = pd.DataFrame(lda_psy.predict(ohe_iso))
@@ -395,9 +350,9 @@ IgG_R6_psy_transform = pd.DataFrame(lda_psy.transform(ohe_IgG))
 IgG_R6_psy_predict = pd.DataFrame(lda_psy.predict(ohe_IgG))
 
 lda_psy = LDA()
-cv_lda_psy = cv(lda_psy, ohe_R7_sequences, emi_R7_labels.iloc[:,3])
+cv_lda_psy = cv(lda_psy, ohe_R7_sequences, emi_R7_labels.iloc[:,2], scoring = 'balanced_accuracy')
 print(np.mean(cv_lda_psy['test_score']))
-lda_psy.fit(ohe_R7_sequences, emi_R7_labels.iloc[:,3])
+lda_psy.fit(ohe_R7_sequences, emi_R7_labels.iloc[:,2])
 emi_R7_psy_transform = pd.DataFrame(lda_psy.transform(ohe_R7_sequences))
 iso_R7_psy_transform = pd.DataFrame(lda_psy.transform(ohe_iso))
 iso_R7_psy_predict = pd.DataFrame(lda_psy.predict(ohe_iso))
@@ -405,9 +360,9 @@ IgG_R7_psy_transform = pd.DataFrame(lda_psy.transform(ohe_IgG))
 IgG_R7_psy_predict = pd.DataFrame(lda_psy.predict(ohe_IgG))
 
 lda_psy = LDA()
-cv_lda_psy = cv(lda_psy, ohe_R8_sequences, emi_R8_labels.iloc[:,3])
+cv_lda_psy = cv(lda_psy, ohe_R8_sequences, emi_R8_labels.iloc[:,2], scoring = 'balanced_accuracy')
 print(np.mean(cv_lda_psy['test_score']))
-lda_psy.fit(ohe_R8_sequences, emi_R8_labels.iloc[:,3])
+lda_psy.fit(ohe_R8_sequences, emi_R8_labels.iloc[:,2])
 emi_R8_psy_transform = pd.DataFrame(lda_psy.transform(ohe_R8_sequences))
 iso_R8_psy_transform = pd.DataFrame(lda_psy.transform(ohe_iso))
 iso_R8_psy_predict = pd.DataFrame(lda_psy.predict(ohe_iso))
@@ -415,9 +370,9 @@ IgG_R8_psy_transform = pd.DataFrame(lda_psy.transform(ohe_IgG))
 IgG_R8_psy_predict = pd.DataFrame(lda_psy.predict(ohe_IgG))
 
 lda_psy = LDA()
-cv_lda_psy = cv(lda_psy, ohe_R9_sequences, emi_R9_labels.iloc[:,3])
+cv_lda_psy = cv(lda_psy, ohe_R9_sequences, emi_R9_labels.iloc[:,2], scoring = 'balanced_accuracy')
 print(np.mean(cv_lda_psy['test_score']))
-lda_psy.fit(ohe_R9_sequences, emi_R9_labels.iloc[:,3])
+lda_psy.fit(ohe_R9_sequences, emi_R9_labels.iloc[:,2])
 emi_R9_psy_transform = pd.DataFrame(lda_psy.transform(ohe_R9_sequences))
 iso_R9_psy_transform = pd.DataFrame(lda_psy.transform(ohe_iso))
 iso_R9_psy_predict = pd.DataFrame(lda_psy.predict(ohe_iso))
@@ -457,33 +412,33 @@ emi_R9_pca = pd.DataFrame(pca.fit_transform(ohe_R9_sequences))
 
 #%%
 fig, axs = plt.subplots(2,4, figsize = (16,8))
-axs[0][0].scatter(emi_R3_pca.iloc[:,0], emi_R3_pca.iloc[:,1], c = emi_R3_labels.iloc[:,3], cmap = cmap9, s = 15, edgecolor = 'k', linewidth = 0.05)
-axs[0][1].scatter(emi_R4_pca.iloc[:,0], emi_R4_pca.iloc[:,1], c = emi_R4_labels.iloc[:,3], cmap = cmap9, s = 15, edgecolor = 'k', linewidth = 0.05)
-axs[0][2].scatter(emi_R5_pca.iloc[:,0], emi_R5_pca.iloc[:,1], c = emi_R5_labels.iloc[:,3], cmap = cmap9, s = 15, edgecolor = 'k', linewidth = 0.05)
-axs[0][3].scatter(emi_R6_pca.iloc[:,0], emi_R6_pca.iloc[:,1], c = emi_R6_labels.iloc[:,3], cmap = cmap9, s = 15, edgecolor = 'k', linewidth = 0.05)
-axs[1][0].scatter(emi_R7_pca.iloc[:,0], emi_R7_pca.iloc[:,1], c = emi_R7_labels.iloc[:,3], cmap = cmap9, s = 15, edgecolor = 'k', linewidth = 0.05)
-axs[1][1].scatter(emi_R8_pca.iloc[:,0], emi_R8_pca.iloc[:,1], c = emi_R8_labels.iloc[:,3], cmap = cmap9, s = 15, edgecolor = 'k', linewidth = 0.05)
-axs[1][2].scatter(emi_R9_pca.iloc[:,0], emi_R9_pca.iloc[:,1], c = emi_R9_labels.iloc[:,3], cmap = cmap9, s = 15, edgecolor = 'k', linewidth = 0.05)
+axs[0][0].scatter(emi_R3_pca.iloc[:,0], emi_R3_pca.iloc[:,1], c = emi_R3_labels.iloc[:,3], cmap = cmap9, s = 15, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[0][1].scatter(emi_R4_pca.iloc[:,0], emi_R4_pca.iloc[:,1], c = emi_R4_labels.iloc[:,3], cmap = cmap9, s = 15, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[0][2].scatter(emi_R5_pca.iloc[:,0], emi_R5_pca.iloc[:,1], c = emi_R5_labels.iloc[:,3], cmap = cmap9, s = 15, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[0][3].scatter(emi_R6_pca.iloc[:,0], emi_R6_pca.iloc[:,1], c = emi_R6_labels.iloc[:,3], cmap = cmap9, s = 15, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[1][0].scatter(emi_R7_pca.iloc[:,0], emi_R7_pca.iloc[:,1], c = emi_R7_labels.iloc[:,3], cmap = cmap9, s = 15, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[1][1].scatter(emi_R8_pca.iloc[:,0], emi_R8_pca.iloc[:,1], c = emi_R8_labels.iloc[:,3], cmap = cmap9, s = 15, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[1][2].scatter(emi_R9_pca.iloc[:,0], emi_R9_pca.iloc[:,1], c = emi_R9_labels.iloc[:,3], cmap = cmap9, s = 15, edgecolor = 'k', linewidth = 0.05, vmin = 0)
 plt.subplots_adjust(wspace = 0.35)
 
 fig, axs = plt.subplots(2,4, figsize = (16,8))
-axs[0][0].scatter(emi_R3_pca.iloc[:,0], emi_R3_pca.iloc[:,1], c = emi_R3_labels.iloc[:,2], cmap = cmap9, s = 15, edgecolor = 'k', linewidth = 0.05)
-axs[0][1].scatter(emi_R4_pca.iloc[:,0], emi_R4_pca.iloc[:,1], c = emi_R4_labels.iloc[:,2], cmap = cmap9, s = 15, edgecolor = 'k', linewidth = 0.05)
-axs[0][2].scatter(emi_R5_pca.iloc[:,0], emi_R5_pca.iloc[:,1], c = emi_R5_labels.iloc[:,2], cmap = cmap9, s = 15, edgecolor = 'k', linewidth = 0.05)
-axs[0][3].scatter(emi_R6_pca.iloc[:,0], emi_R6_pca.iloc[:,1], c = emi_R6_labels.iloc[:,2], cmap = cmap9, s = 15, edgecolor = 'k', linewidth = 0.05)
-axs[1][0].scatter(emi_R7_pca.iloc[:,0], emi_R7_pca.iloc[:,1], c = emi_R7_labels.iloc[:,2], cmap = cmap9, s = 15, edgecolor = 'k', linewidth = 0.05)
-axs[1][1].scatter(emi_R8_pca.iloc[:,0], emi_R8_pca.iloc[:,1], c = emi_R8_labels.iloc[:,2], cmap = cmap9, s = 15, edgecolor = 'k', linewidth = 0.05)
-axs[1][2].scatter(emi_R9_pca.iloc[:,0], emi_R9_pca.iloc[:,1], c = emi_R9_labels.iloc[:,2], cmap = cmap9, s = 15, edgecolor = 'k', linewidth = 0.05)
+axs[0][0].scatter(emi_R3_pca.iloc[:,0], emi_R3_pca.iloc[:,1], c = emi_R3_labels.iloc[:,2], cmap = cmap9, s = 15, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[0][1].scatter(emi_R4_pca.iloc[:,0], emi_R4_pca.iloc[:,1], c = emi_R4_labels.iloc[:,2], cmap = cmap9, s = 15, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[0][2].scatter(emi_R5_pca.iloc[:,0], emi_R5_pca.iloc[:,1], c = emi_R5_labels.iloc[:,2], cmap = cmap9, s = 15, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[0][3].scatter(emi_R6_pca.iloc[:,0], emi_R6_pca.iloc[:,1], c = emi_R6_labels.iloc[:,2], cmap = cmap9, s = 15, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[1][0].scatter(emi_R7_pca.iloc[:,0], emi_R7_pca.iloc[:,1], c = emi_R7_labels.iloc[:,2], cmap = cmap9, s = 15, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[1][1].scatter(emi_R8_pca.iloc[:,0], emi_R8_pca.iloc[:,1], c = emi_R8_labels.iloc[:,2], cmap = cmap9, s = 15, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[1][2].scatter(emi_R9_pca.iloc[:,0], emi_R9_pca.iloc[:,1], c = emi_R9_labels.iloc[:,2], cmap = cmap9, s = 15, edgecolor = 'k', linewidth = 0.05, vmin = 0)
 plt.subplots_adjust(wspace = 0.35)
 
 fig, axs = plt.subplots(2,4, figsize = (16,8))
-axs[0][0].scatter(emi_R3_pca.iloc[:,0], emi_R3_pca.iloc[:,1], c = emi_R3_biophys.iloc[:,63], cmap = 'plasma', s = 15, edgecolor = 'k', linewidth = 0.05)
-axs[0][1].scatter(emi_R4_pca.iloc[:,0], emi_R4_pca.iloc[:,1], c = emi_R4_biophys.iloc[:,63], cmap = 'plasma', s = 15, edgecolor = 'k', linewidth = 0.05)
-axs[0][2].scatter(emi_R5_pca.iloc[:,0], emi_R5_pca.iloc[:,1], c = emi_R5_biophys.iloc[:,63], cmap = 'plasma', s = 15, edgecolor = 'k', linewidth = 0.05)
-axs[0][3].scatter(emi_R6_pca.iloc[:,0], emi_R6_pca.iloc[:,1], c = emi_R6_biophys.iloc[:,63], cmap = 'plasma', s = 15, edgecolor = 'k', linewidth = 0.05)
-axs[1][0].scatter(emi_R7_pca.iloc[:,0], emi_R7_pca.iloc[:,1], c = emi_R7_biophys.iloc[:,63], cmap = 'plasma', s = 15, edgecolor = 'k', linewidth = 0.05)
-axs[1][1].scatter(emi_R8_pca.iloc[:,0], emi_R8_pca.iloc[:,1], c = emi_R8_biophys.iloc[:,63], cmap = 'plasma', s = 15, edgecolor = 'k', linewidth = 0.05)
-axs[1][2].scatter(emi_R9_pca.iloc[:,0], emi_R9_pca.iloc[:,1], c = emi_R9_biophys.iloc[:,63], cmap = 'plasma', s = 15, edgecolor = 'k', linewidth = 0.05)
+axs[0][0].scatter(emi_R3_pca.iloc[:,0], emi_R3_pca.iloc[:,1], c = emi_R3_biophys.iloc[:,63], cmap = 'plasma', s = 15, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[0][1].scatter(emi_R4_pca.iloc[:,0], emi_R4_pca.iloc[:,1], c = emi_R4_biophys.iloc[:,63], cmap = 'plasma', s = 15, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[0][2].scatter(emi_R5_pca.iloc[:,0], emi_R5_pca.iloc[:,1], c = emi_R5_biophys.iloc[:,63], cmap = 'plasma', s = 15, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[0][3].scatter(emi_R6_pca.iloc[:,0], emi_R6_pca.iloc[:,1], c = emi_R6_biophys.iloc[:,63], cmap = 'plasma', s = 15, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[1][0].scatter(emi_R7_pca.iloc[:,0], emi_R7_pca.iloc[:,1], c = emi_R7_biophys.iloc[:,63], cmap = 'plasma', s = 15, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[1][1].scatter(emi_R8_pca.iloc[:,0], emi_R8_pca.iloc[:,1], c = emi_R8_biophys.iloc[:,63], cmap = 'plasma', s = 15, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[1][2].scatter(emi_R9_pca.iloc[:,0], emi_R9_pca.iloc[:,1], c = emi_R9_biophys.iloc[:,63], cmap = 'plasma', s = 15, edgecolor = 'k', linewidth = 0.05, vmin = 0)
 plt.subplots_adjust(wspace = 0.35)
 
 
@@ -513,49 +468,192 @@ emi_R3_psy_transform_R9 = pd.DataFrame(lda_psy.transform(ohe_R9_sequences))
 
 
 #%%
-#plt.scatter(emi_R3_ant_transform_R4.iloc[:,0], emi_R3_psy_transform_R4.iloc[:,0], c = 'crimson', edgecolor = 'k', linewidth = 0.25)
-#plt.scatter(emi_R3_ant_transform_R5.iloc[:,0], emi_R3_psy_transform_R5.iloc[:,0], c = 'darkorange', edgecolor = 'k', linewidth = 0.25)
-#plt.scatter(emi_R3_ant_transform_R6.iloc[:,0], emi_R3_psy_transform_R6.iloc[:,0], c = 'limegreen', edgecolor = 'k', linewidth = 0.25)
-plt.scatter(emi_R3_ant_transform_R7.iloc[:,0], emi_R3_psy_transform_R7.iloc[:,0], c = 'deepskyblue', edgecolor = 'k', linewidth = 0.25)
-#plt.scatter(emi_R3_ant_transform_R8.iloc[:,0], emi_R3_psy_transform_R8.iloc[:,0], c = 'darkviolet', edgecolor = 'k', linewidth = 0.25)
-#plt.scatter(emi_R3_ant_transform_R9.iloc[:,0], emi_R3_psy_transform_R9.iloc[:,0], c = 'navy', edgecolor = 'k', linewidth = 0.25)
+fig, axs = plt.subplots(2,4, figsize = (16,8))
+axs[0][0].scatter(emi_R3_ant_transform.iloc[:,0], emi_R3_psy_transform.iloc[:,0], c = emi_R3_labels.iloc[:,2], cmap = cmap9, s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[0][1].scatter(emi_R4_ant_transform.iloc[:,0], emi_R4_psy_transform.iloc[:,0], c = emi_R4_labels.iloc[:,2], cmap = cmap9, s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[0][2].scatter(emi_R5_ant_transform.iloc[:,0], emi_R5_psy_transform.iloc[:,0], c = emi_R5_labels.iloc[:,2], cmap = cmap9, s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[0][3].scatter(emi_R6_ant_transform.iloc[:,0], emi_R6_psy_transform.iloc[:,0], c = emi_R6_labels.iloc[:,2], cmap = cmap9, s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[1][0].scatter(emi_R7_ant_transform.iloc[:,0], emi_R7_psy_transform.iloc[:,0], c = emi_R7_labels.iloc[:,2], cmap = cmap9, s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[1][1].scatter(emi_R8_ant_transform.iloc[:,0], emi_R8_psy_transform.iloc[:,0], c = emi_R8_labels.iloc[:,2], cmap = cmap9, s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[1][2].scatter(emi_R9_ant_transform.iloc[:,0], emi_R3_psy_transform.iloc[:,0], c = emi_R9_labels.iloc[:,2], cmap = cmap9, s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
 
-plt.scatter(emi_R3_ant_transform.iloc[:,0], emi_R3_psy_transform.iloc[:,0], c = 'whitesmoke', edgecolor = 'k', linewidth = 0.25)
-plt.scatter(iso_R3_ant_transform.iloc[:,0], iso_R3_psy_transform.iloc[:,0], c = 'magenta', edgecolor = 'k', linewidth = 0.25)
+axs[0][0].scatter(iso_R3_ant_transform.iloc[:,0], iso_R3_psy_transform.iloc[:,0], c = 'k', s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[0][1].scatter(iso_R4_ant_transform.iloc[:,0], iso_R4_psy_transform.iloc[:,0], c = 'k', s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[0][2].scatter(iso_R5_ant_transform.iloc[:,0], iso_R5_psy_transform.iloc[:,0], c = 'k', s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[0][3].scatter(iso_R6_ant_transform.iloc[:,0], iso_R6_psy_transform.iloc[:,0], c = 'k', s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[1][0].scatter(iso_R7_ant_transform.iloc[:,0], iso_R7_psy_transform.iloc[:,0], c = 'k', s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[1][1].scatter(iso_R8_ant_transform.iloc[:,0], iso_R8_psy_transform.iloc[:,0], c = 'k', s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[1][2].scatter(iso_R9_ant_transform.iloc[:,0], iso_R3_psy_transform.iloc[:,0], c = 'k', s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
 
-
-#%%
-plt.figure()
-plt.scatter(iso_R3_ant_transform.iloc[:,0], emi_iso_binding.iloc[:,1], c = iso_R3_ant_predict.iloc[:,0], cmap = cmap9, edgecolor = 'k', linewidth = 0.25)
-plt.figure()
-plt.scatter(iso_R4_ant_transform.iloc[:,0], emi_iso_binding.iloc[:,1], c = iso_R4_ant_predict.iloc[:,0], cmap = cmap9, edgecolor = 'k', linewidth = 0.25)
-plt.figure()
-plt.scatter(iso_R5_ant_transform.iloc[:,0], emi_iso_binding.iloc[:,1], c = iso_R5_ant_predict.iloc[:,0], cmap = cmap9, edgecolor = 'k', linewidth = 0.25)
-plt.figure()
-plt.scatter(iso_R6_ant_transform.iloc[:,0], emi_iso_binding.iloc[:,1], c = iso_R6_ant_predict.iloc[:,0], cmap = cmap9, edgecolor = 'k', linewidth = 0.25)
-plt.figure()
-plt.scatter(iso_R7_ant_transform.iloc[:,0], emi_iso_binding.iloc[:,1], c = iso_R7_ant_predict.iloc[:,0], cmap = cmap9, edgecolor = 'k', linewidth = 0.25)
-plt.figure()
-plt.scatter(iso_R8_ant_transform.iloc[:,0], emi_iso_binding.iloc[:,1], c = iso_R8_ant_predict.iloc[:,0], cmap = cmap9, edgecolor = 'k', linewidth = 0.25)
-plt.figure()
-plt.scatter(iso_R9_ant_transform.iloc[:,0], emi_iso_binding.iloc[:,1], c = iso_R9_ant_predict.iloc[:,0], cmap = cmap9, edgecolor = 'k', linewidth = 0.25)
+plt.subplots_adjust(wspace = 0.35)
 
 
 #%%
-plt.figure()
-plt.scatter(iso_R3_psy_transform.iloc[:,0], emi_iso_binding.iloc[:,2], c = iso_R3_psy_predict.iloc[:,0], cmap = cmap9, edgecolor = 'k', linewidth = 0.25)
-plt.figure()
-plt.scatter(iso_R4_psy_transform.iloc[:,0], emi_iso_binding.iloc[:,2], c = iso_R4_psy_predict.iloc[:,0], cmap = cmap9, edgecolor = 'k', linewidth = 0.25)
-plt.figure()
-plt.scatter(iso_R5_psy_transform.iloc[:,0], emi_iso_binding.iloc[:,2], c = iso_R5_psy_predict.iloc[:,0], cmap = cmap9, edgecolor = 'k', linewidth = 0.25)
-plt.figure()
-plt.scatter(iso_R6_psy_transform.iloc[:,0], emi_iso_binding.iloc[:,2], c = iso_R6_psy_predict.iloc[:,0], cmap = cmap9, edgecolor = 'k', linewidth = 0.25)
-plt.figure()
-plt.scatter(iso_R7_psy_transform.iloc[:,0], emi_iso_binding.iloc[:,2], c = iso_R7_psy_predict.iloc[:,0], cmap = cmap9, edgecolor = 'k', linewidth = 0.25)
-plt.figure()
-plt.scatter(iso_R8_psy_transform.iloc[:,0], emi_iso_binding.iloc[:,2], c = iso_R8_psy_predict.iloc[:,0], cmap = cmap9, edgecolor = 'k', linewidth = 0.25)
-plt.figure()
-plt.scatter(iso_R9_psy_transform.iloc[:,0], emi_iso_binding.iloc[:,2], c = iso_R9_psy_predict.iloc[:,0], cmap = cmap9, edgecolor = 'k', linewidth = 0.25)
+fig, axs = plt.subplots(2,4, figsize = (16,8))
+axs[0][0].scatter(emi_R3_ant_transform.iloc[:,0], emi_R3_psy_transform.iloc[:,0], c = emi_R3_labels.iloc[:,3], cmap = cmap9, s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[0][1].scatter(emi_R4_ant_transform.iloc[:,0], emi_R4_psy_transform.iloc[:,0], c = emi_R4_labels.iloc[:,3], cmap = cmap9, s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[0][2].scatter(emi_R5_ant_transform.iloc[:,0], emi_R5_psy_transform.iloc[:,0], c = emi_R5_labels.iloc[:,3], cmap = cmap9, s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[0][3].scatter(emi_R6_ant_transform.iloc[:,0], emi_R6_psy_transform.iloc[:,0], c = emi_R6_labels.iloc[:,3], cmap = cmap9, s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[1][0].scatter(emi_R7_ant_transform.iloc[:,0], emi_R7_psy_transform.iloc[:,0], c = emi_R7_labels.iloc[:,3], cmap = cmap9, s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[1][1].scatter(emi_R8_ant_transform.iloc[:,0], emi_R8_psy_transform.iloc[:,0], c = emi_R8_labels.iloc[:,3], cmap = cmap9, s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[1][2].scatter(emi_R9_ant_transform.iloc[:,0], emi_R3_psy_transform.iloc[:,0], c = emi_R9_labels.iloc[:,3], cmap = cmap9, s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
 
+axs[0][0].scatter(IgG_R3_ant_transform.iloc[:,0], IgG_R3_psy_transform.iloc[:,0], c = 'k', s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[0][1].scatter(IgG_R4_ant_transform.iloc[:,0], IgG_R4_psy_transform.iloc[:,0], c = 'k', s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[0][2].scatter(IgG_R5_ant_transform.iloc[:,0], IgG_R5_psy_transform.iloc[:,0], c = 'k', s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[0][3].scatter(IgG_R6_ant_transform.iloc[:,0], IgG_R6_psy_transform.iloc[:,0], c = 'k', s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[1][0].scatter(IgG_R7_ant_transform.iloc[:,0], IgG_R7_psy_transform.iloc[:,0], c = 'k', s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[1][1].scatter(IgG_R8_ant_transform.iloc[:,0], IgG_R8_psy_transform.iloc[:,0], c = 'k', s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[1][2].scatter(IgG_R9_ant_transform.iloc[:,0], IgG_R3_psy_transform.iloc[:,0], c = 'k', s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+
+plt.subplots_adjust(wspace = 0.35)
+
+
+#%%
+"""
+print(sc.stats.spearmanr(iso_R3_ant_transform.loc[iso_R3_ant_predict.iloc[:,0] == 0, 0], emi_iso_binding.loc[iso_R3_ant_predict.iloc[:,0] == 0, 'Normalized ANT Binding']))
+print(sc.stats.spearmanr(iso_R3_ant_transform.loc[iso_R3_ant_predict.iloc[:,0] == 1, 0], emi_iso_binding.loc[iso_R3_ant_predict.iloc[:,0] == 1, 'Normalized ANT Binding']))
+
+print(sc.stats.spearmanr(iso_R4_ant_transform.loc[iso_R4_ant_predict.iloc[:,0] == 0, 0], emi_iso_binding.loc[iso_R4_ant_predict.iloc[:,0] == 0, 'Normalized ANT Binding']))
+print(sc.stats.spearmanr(iso_R4_ant_transform.loc[iso_R4_ant_predict.iloc[:,0] == 1, 0], emi_iso_binding.loc[iso_R4_ant_predict.iloc[:,0] == 1, 'Normalized ANT Binding']))
+
+print(sc.stats.spearmanr(iso_R5_ant_transform.loc[iso_R5_ant_predict.iloc[:,0] == 0, 0], emi_iso_binding.loc[iso_R5_ant_predict.iloc[:,0] == 0, 'Normalized ANT Binding']))
+print(sc.stats.spearmanr(iso_R5_ant_transform.loc[iso_R5_ant_predict.iloc[:,0] == 1, 0], emi_iso_binding.loc[iso_R5_ant_predict.iloc[:,0] == 1, 'Normalized ANT Binding']))
+
+print(sc.stats.spearmanr(iso_R6_ant_transform.loc[iso_R6_ant_predict.iloc[:,0] == 0, 0], emi_iso_binding.loc[iso_R6_ant_predict.iloc[:,0] == 0, 'Normalized ANT Binding']))
+print(sc.stats.spearmanr(iso_R6_ant_transform.loc[iso_R6_ant_predict.iloc[:,0] == 1, 0], emi_iso_binding.loc[iso_R6_ant_predict.iloc[:,0] == 1, 'Normalized ANT Binding']))
+
+print(sc.stats.spearmanr(iso_R7_ant_transform.loc[iso_R7_ant_predict.iloc[:,0] == 0, 0], emi_iso_binding.loc[iso_R7_ant_predict.iloc[:,0] == 0, 'Normalized ANT Binding']))
+print(sc.stats.spearmanr(iso_R7_ant_transform.loc[iso_R7_ant_predict.iloc[:,0] == 1, 0], emi_iso_binding.loc[iso_R7_ant_predict.iloc[:,0] == 1, 'Normalized ANT Binding']))
+
+print(sc.stats.spearmanr(iso_R8_ant_transform.loc[iso_R8_ant_predict.iloc[:,0] == 0, 0], emi_iso_binding.loc[iso_R8_ant_predict.iloc[:,0] == 0, 'Normalized ANT Binding']))
+print(sc.stats.spearmanr(iso_R8_ant_transform.loc[iso_R8_ant_predict.iloc[:,0] == 1, 0], emi_iso_binding.loc[iso_R8_ant_predict.iloc[:,0] == 1, 'Normalized ANT Binding']))
+
+print(sc.stats.spearmanr(iso_R9_ant_transform.loc[iso_R9_ant_predict.iloc[:,0] == 0, 0], emi_iso_binding.loc[iso_R9_ant_predict.iloc[:,0] == 0, 'Normalized ANT Binding']))
+print(sc.stats.spearmanr(iso_R9_ant_transform.loc[iso_R9_ant_predict.iloc[:,0] == 1, 0], emi_iso_binding.loc[iso_R9_ant_predict.iloc[:,0] == 1, 'Normalized ANT Binding']))
+"""
+
+fig, axs = plt.subplots(2,4, figsize = (16,8))
+axs[0][0].scatter(iso_R3_ant_transform.iloc[:,0], emi_iso_binding.iloc[:,1], c = iso_R3_ant_predict.iloc[:,0], cmap = cmap9, s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[0][1].scatter(iso_R4_ant_transform.iloc[:,0], emi_iso_binding.iloc[:,1], c = iso_R4_ant_predict.iloc[:,0], cmap = cmap9, s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[0][2].scatter(iso_R5_ant_transform.iloc[:,0], emi_iso_binding.iloc[:,1], c = iso_R5_ant_predict.iloc[:,0], cmap = cmap9, s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[0][3].scatter(iso_R6_ant_transform.iloc[:,0], emi_iso_binding.iloc[:,1], c = iso_R6_ant_predict.iloc[:,0], cmap = cmap9, s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[1][0].scatter(iso_R7_ant_transform.iloc[:,0], emi_iso_binding.iloc[:,1], c = iso_R7_ant_predict.iloc[:,0], cmap = cmap9, s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[1][1].scatter(iso_R8_ant_transform.iloc[:,0], emi_iso_binding.iloc[:,1], c = iso_R8_ant_predict.iloc[:,0], cmap = cmap9, s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[1][2].scatter(iso_R9_ant_transform.iloc[:,0], emi_iso_binding.iloc[:,1], c = iso_R9_ant_predict.iloc[:,0], cmap = cmap9, s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+plt.subplots_adjust(wspace = 0.35)
+
+
+#%%
+"""
+print(sc.stats.spearmanr(IgG_R3_ant_transform.loc[IgG_R3_ant_predict.iloc[:,0] == 0, 0], emi_IgG_binding.loc[IgG_R3_ant_predict.iloc[:,0] == 0, 'ANT Binding']))
+print(sc.stats.spearmanr(IgG_R3_ant_transform.loc[IgG_R3_ant_predict.iloc[:,0] == 1, 0], emi_IgG_binding.loc[IgG_R3_ant_predict.iloc[:,0] == 1, 'ANT Binding']))
+
+print(sc.stats.spearmanr(IgG_R4_ant_transform.loc[IgG_R4_ant_predict.iloc[:,0] == 0, 0], emi_IgG_binding.loc[IgG_R4_ant_predict.iloc[:,0] == 0, 'ANT Binding']))
+print(sc.stats.spearmanr(IgG_R4_ant_transform.loc[IgG_R4_ant_predict.iloc[:,0] == 1, 0], emi_IgG_binding.loc[IgG_R4_ant_predict.iloc[:,0] == 1, 'ANT Binding']))
+
+print(sc.stats.spearmanr(IgG_R5_ant_transform.loc[IgG_R5_ant_predict.iloc[:,0] == 0, 0], emi_IgG_binding.loc[IgG_R5_ant_predict.iloc[:,0] == 0, 'ANT Binding']))
+print(sc.stats.spearmanr(IgG_R5_ant_transform.loc[IgG_R5_ant_predict.iloc[:,0] == 1, 0], emi_IgG_binding.loc[IgG_R5_ant_predict.iloc[:,0] == 1, 'ANT Binding']))
+
+print(sc.stats.spearmanr(IgG_R6_ant_transform.loc[IgG_R6_ant_predict.iloc[:,0] == 0, 0], emi_IgG_binding.loc[IgG_R6_ant_predict.iloc[:,0] == 0, 'ANT Binding']))
+print(sc.stats.spearmanr(IgG_R6_ant_transform.loc[IgG_R6_ant_predict.iloc[:,0] == 1, 0], emi_IgG_binding.loc[IgG_R6_ant_predict.iloc[:,0] == 1, 'ANT Binding']))
+
+print(sc.stats.spearmanr(IgG_R7_ant_transform.loc[IgG_R7_ant_predict.iloc[:,0] == 0, 0], emi_IgG_binding.loc[IgG_R7_ant_predict.iloc[:,0] == 0, 'ANT Binding']))
+print(sc.stats.spearmanr(IgG_R7_ant_transform.loc[IgG_R7_ant_predict.iloc[:,0] == 1, 0], emi_IgG_binding.loc[IgG_R7_ant_predict.iloc[:,0] == 1, 'ANT Binding']))
+
+print(sc.stats.spearmanr(IgG_R8_ant_transform.loc[IgG_R8_ant_predict.iloc[:,0] == 0, 0], emi_IgG_binding.loc[IgG_R8_ant_predict.iloc[:,0] == 0, 'ANT Binding']))
+print(sc.stats.spearmanr(IgG_R8_ant_transform.loc[IgG_R8_ant_predict.iloc[:,0] == 1, 0], emi_IgG_binding.loc[IgG_R8_ant_predict.iloc[:,0] == 1, 'ANT Binding']))
+
+print(sc.stats.spearmanr(IgG_R9_ant_transform.loc[IgG_R9_ant_predict.iloc[:,0] == 0, 0], emi_IgG_binding.loc[IgG_R9_ant_predict.iloc[:,0] == 0, 'ANT Binding']))
+print(sc.stats.spearmanr(IgG_R9_ant_transform.loc[IgG_R9_ant_predict.iloc[:,0] == 1, 0], emi_IgG_binding.loc[IgG_R9_ant_predict.iloc[:,0] == 1, 'ANT Binding']))
+"""
+
+fig, axs = plt.subplots(2,4, figsize = (16,8))
+axs[0][0].scatter(IgG_R3_ant_transform.iloc[:,0], emi_IgG_binding.iloc[:,1], c = IgG_R3_ant_predict.iloc[:,0], cmap = cmap9, s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[0][1].scatter(IgG_R4_ant_transform.iloc[:,0], emi_IgG_binding.iloc[:,1], c = IgG_R4_ant_predict.iloc[:,0], cmap = cmap9, s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[0][2].scatter(IgG_R5_ant_transform.iloc[:,0], emi_IgG_binding.iloc[:,1], c = IgG_R5_ant_predict.iloc[:,0], cmap = cmap9, s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[0][3].scatter(IgG_R6_ant_transform.iloc[:,0], emi_IgG_binding.iloc[:,1], c = IgG_R6_ant_predict.iloc[:,0], cmap = cmap9, s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[1][0].scatter(IgG_R7_ant_transform.iloc[:,0], emi_IgG_binding.iloc[:,1], c = IgG_R7_ant_predict.iloc[:,0], cmap = cmap9, s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[1][1].scatter(IgG_R8_ant_transform.iloc[:,0], emi_IgG_binding.iloc[:,1], c = IgG_R8_ant_predict.iloc[:,0], cmap = cmap9, s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[1][2].scatter(IgG_R9_ant_transform.iloc[:,0], emi_IgG_binding.iloc[:,1], c = IgG_R9_ant_predict.iloc[:,0], cmap = cmap9, s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+plt.subplots_adjust(wspace = 0.35)
+
+
+#%%
+"""
+print(sc.stats.spearmanr(iso_R3_psy_transform.loc[iso_R3_psy_predict.iloc[:,0] == 0, 0], emi_iso_binding.loc[iso_R3_psy_predict.iloc[:,0] == 0, 'Normalized PSY Binding']))
+print(sc.stats.spearmanr(iso_R3_psy_transform.loc[iso_R3_psy_predict.iloc[:,0] == 1, 0], emi_iso_binding.loc[iso_R3_psy_predict.iloc[:,0] == 1, 'Normalized PSY Binding']))
+
+print(sc.stats.spearmanr(iso_R4_psy_transform.loc[iso_R4_psy_predict.iloc[:,0] == 0, 0], emi_iso_binding.loc[iso_R4_psy_predict.iloc[:,0] == 0, 'Normalized PSY Binding']))
+print(sc.stats.spearmanr(iso_R4_psy_transform.loc[iso_R4_psy_predict.iloc[:,0] == 1, 0], emi_iso_binding.loc[iso_R4_psy_predict.iloc[:,0] == 1, 'Normalized PSY Binding']))
+
+print(sc.stats.spearmanr(iso_R5_psy_transform.loc[iso_R5_psy_predict.iloc[:,0] == 0, 0], emi_iso_binding.loc[iso_R5_psy_predict.iloc[:,0] == 0, 'Normalized PSY Binding']))
+print(sc.stats.spearmanr(iso_R5_psy_transform.loc[iso_R5_psy_predict.iloc[:,0] == 1, 0], emi_iso_binding.loc[iso_R5_psy_predict.iloc[:,0] == 1, 'Normalized PSY Binding']))
+
+print(sc.stats.spearmanr(iso_R6_psy_transform.loc[iso_R6_psy_predict.iloc[:,0] == 0, 0], emi_iso_binding.loc[iso_R6_psy_predict.iloc[:,0] == 0, 'Normalized PSY Binding']))
+print(sc.stats.spearmanr(iso_R6_psy_transform.loc[iso_R6_psy_predict.iloc[:,0] == 1, 0], emi_iso_binding.loc[iso_R6_psy_predict.iloc[:,0] == 1, 'Normalized PSY Binding']))
+
+print(sc.stats.spearmanr(iso_R7_psy_transform.loc[iso_R7_psy_predict.iloc[:,0] == 0, 0], emi_iso_binding.loc[iso_R7_psy_predict.iloc[:,0] == 0, 'Normalized PSY Binding']))
+print(sc.stats.spearmanr(iso_R7_psy_transform.loc[iso_R7_psy_predict.iloc[:,0] == 1, 0], emi_iso_binding.loc[iso_R7_psy_predict.iloc[:,0] == 1, 'Normalized PSY Binding']))
+
+print(sc.stats.spearmanr(iso_R8_psy_transform.loc[iso_R8_psy_predict.iloc[:,0] == 0, 0], emi_iso_binding.loc[iso_R8_psy_predict.iloc[:,0] == 0, 'Normalized PSY Binding']))
+print(sc.stats.spearmanr(iso_R8_psy_transform.loc[iso_R8_psy_predict.iloc[:,0] == 1, 0], emi_iso_binding.loc[iso_R8_psy_predict.iloc[:,0] == 1, 'Normalized PSY Binding']))
+
+print(sc.stats.spearmanr(iso_R9_psy_transform.loc[iso_R9_psy_predict.iloc[:,0] == 0, 0], emi_iso_binding.loc[iso_R9_psy_predict.iloc[:,0] == 0, 'Normalized PSY Binding']))
+print(sc.stats.spearmanr(iso_R9_psy_transform.loc[iso_R9_psy_predict.iloc[:,0] == 1, 0], emi_iso_binding.loc[iso_R9_psy_predict.iloc[:,0] == 1, 'Normalized PSY Binding']))
+"""
+
+fig, axs = plt.subplots(2,4, figsize = (16,8))
+axs[0][0].scatter(iso_R3_psy_transform.iloc[:,0], emi_iso_binding.iloc[:,2], c = iso_R3_psy_predict.iloc[:,0], cmap = cmap9, s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[0][1].scatter(iso_R4_psy_transform.iloc[:,0], emi_iso_binding.iloc[:,2], c = iso_R4_psy_predict.iloc[:,0], cmap = cmap9, s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[0][2].scatter(iso_R5_psy_transform.iloc[:,0], emi_iso_binding.iloc[:,2], c = iso_R5_psy_predict.iloc[:,0], cmap = cmap9, s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[0][3].scatter(iso_R6_psy_transform.iloc[:,0], emi_iso_binding.iloc[:,2], c = iso_R6_psy_predict.iloc[:,0], cmap = cmap9, s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[1][0].scatter(iso_R7_psy_transform.iloc[:,0], emi_iso_binding.iloc[:,2], c = iso_R7_psy_predict.iloc[:,0], cmap = cmap9, s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[1][1].scatter(iso_R8_psy_transform.iloc[:,0], emi_iso_binding.iloc[:,2], c = iso_R8_psy_predict.iloc[:,0], cmap = cmap9, s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[1][2].scatter(iso_R9_psy_transform.iloc[:,0], emi_iso_binding.iloc[:,2], c = iso_R9_psy_predict.iloc[:,0], cmap = cmap9, s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+plt.subplots_adjust(wspace = 0.35)
+
+
+#%%
+"""
+print(sc.stats.spearmanr(IgG_R3_psy_transform.loc[IgG_R3_psy_predict.iloc[:,0] == 0, 0], emi_IgG_binding.loc[IgG_R3_psy_predict.iloc[:,0] == 0, 'OVA Binding']))
+print(sc.stats.spearmanr(IgG_R3_psy_transform.loc[IgG_R3_psy_predict.iloc[:,0] == 1, 0], emi_IgG_binding.loc[IgG_R3_psy_predict.iloc[:,0] == 1, 'OVA Binding']))
+
+print(sc.stats.spearmanr(IgG_R4_psy_transform.loc[IgG_R4_psy_predict.iloc[:,0] == 0, 0], emi_IgG_binding.loc[IgG_R4_psy_predict.iloc[:,0] == 0, 'OVA Binding']))
+print(sc.stats.spearmanr(IgG_R4_psy_transform.loc[IgG_R4_psy_predict.iloc[:,0] == 1, 0], emi_IgG_binding.loc[IgG_R4_psy_predict.iloc[:,0] == 1, 'OVA Binding']))
+
+print(sc.stats.spearmanr(IgG_R5_psy_transform.loc[IgG_R5_psy_predict.iloc[:,0] == 0, 0], emi_IgG_binding.loc[IgG_R5_psy_predict.iloc[:,0] == 0, 'OVA Binding']))
+print(sc.stats.spearmanr(IgG_R5_psy_transform.loc[IgG_R5_psy_predict.iloc[:,0] == 1, 0], emi_IgG_binding.loc[IgG_R5_psy_predict.iloc[:,0] == 1, 'OVA Binding']))
+
+print(sc.stats.spearmanr(IgG_R6_psy_transform.loc[IgG_R6_psy_predict.iloc[:,0] == 0, 0], emi_IgG_binding.loc[IgG_R6_psy_predict.iloc[:,0] == 0, 'OVA Binding']))
+print(sc.stats.spearmanr(IgG_R6_psy_transform.loc[IgG_R6_psy_predict.iloc[:,0] == 1, 0], emi_IgG_binding.loc[IgG_R6_psy_predict.iloc[:,0] == 1, 'OVA Binding']))
+
+print(sc.stats.spearmanr(IgG_R7_psy_transform.loc[IgG_R7_psy_predict.iloc[:,0] == 0, 0], emi_IgG_binding.loc[IgG_R7_psy_predict.iloc[:,0] == 0, 'OVA Binding']))
+print(sc.stats.spearmanr(IgG_R7_psy_transform.loc[IgG_R7_psy_predict.iloc[:,0] == 1, 0], emi_IgG_binding.loc[IgG_R7_psy_predict.iloc[:,0] == 1, 'OVA Binding']))
+
+print(sc.stats.spearmanr(IgG_R8_psy_transform.loc[IgG_R8_psy_predict.iloc[:,0] == 0, 0], emi_IgG_binding.loc[IgG_R8_psy_predict.iloc[:,0] == 0, 'OVA Binding']))
+print(sc.stats.spearmanr(IgG_R8_psy_transform.loc[IgG_R8_psy_predict.iloc[:,0] == 1, 0], emi_IgG_binding.loc[IgG_R8_psy_predict.iloc[:,0] == 1, 'OVA Binding']))
+
+print(sc.stats.spearmanr(IgG_R9_psy_transform.loc[IgG_R9_psy_predict.iloc[:,0] == 0, 0], emi_IgG_binding.loc[IgG_R9_psy_predict.iloc[:,0] == 0, 'OVA Binding']))
+print(sc.stats.spearmanr(IgG_R9_psy_transform.loc[IgG_R9_psy_predict.iloc[:,0] == 1, 0], emi_IgG_binding.loc[IgG_R9_psy_predict.iloc[:,0] == 1, 'OVA Binding']))
+"""
+
+fig, axs = plt.subplots(2,4, figsize = (16,8))
+axs[0][0].scatter(IgG_R3_psy_transform.iloc[:,0], emi_IgG_binding.iloc[:,2], c = IgG_R3_psy_predict.iloc[:,0], cmap = cmap9, s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[0][1].scatter(IgG_R4_psy_transform.iloc[:,0], emi_IgG_binding.iloc[:,2], c = IgG_R4_psy_predict.iloc[:,0], cmap = cmap9, s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[0][2].scatter(IgG_R5_psy_transform.iloc[:,0], emi_IgG_binding.iloc[:,2], c = IgG_R5_psy_predict.iloc[:,0], cmap = cmap9, s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[0][3].scatter(IgG_R6_psy_transform.iloc[:,0], emi_IgG_binding.iloc[:,2], c = IgG_R6_psy_predict.iloc[:,0], cmap = cmap9, s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[1][0].scatter(IgG_R7_psy_transform.iloc[:,0], emi_IgG_binding.iloc[:,2], c = IgG_R7_psy_predict.iloc[:,0], cmap = cmap9, s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[1][1].scatter(IgG_R8_psy_transform.iloc[:,0], emi_IgG_binding.iloc[:,2], c = IgG_R8_psy_predict.iloc[:,0], cmap = cmap9, s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+axs[1][2].scatter(IgG_R9_psy_transform.iloc[:,0], emi_IgG_binding.iloc[:,2], c = IgG_R9_psy_predict.iloc[:,0], cmap = cmap9, s = 50, edgecolor = 'k', linewidth = 0.05, vmin = 0)
+plt.subplots_adjust(wspace = 0.35)
+
+
+#%%
+ant_accuracies = [93.3, 94.9, 95.1, 86.0, 97.1, 90.4, 86.1]
+plt.scatter(ant_accuracies, ant_transforms_corr.iloc[1:8,0:1], s = 75)
+
+psy_accuracies = [87.8, 93.4, 94.5, 91, 97, 88.3, 87.6]
+plt.scatter(psy_accuracies, psy_transforms_corr.iloc[1:8,0:1], s = 75)
 
 

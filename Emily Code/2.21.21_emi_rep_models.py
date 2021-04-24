@@ -71,8 +71,8 @@ emi_rep_labels_5NotA = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\
 emi_rep_labels_6NotW = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_rep_labels_6NotW.csv", header = 0, index_col = 0)
 emi_rep_labels_7NotY = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_rep_labels_7NotY.csv", header = 0, index_col = 0)
 
-emi_IgG_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_IgG_reps.csv", header = 0, index_col = 0)
-emi_IgG_binding = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_IgG_binding.csv", header = 0, index_col = None)
+emi_IgG_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_IgG_reps_noed.csv", header = 0, index_col = 0)
+emi_IgG_binding = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_IgG_binding_noed.csv", header = 0, index_col = None)
 
 
 #%%
@@ -265,14 +265,63 @@ mask[np.triu_indices_from(mask)] = True
 sns.heatmap(abs(psy_transforms_corr), annot = True, annot_kws = {'fontsize': 16}, mask = mask, cmap = cmap6_r, cbar = False, vmin = 0, vmax = 1)
 
 
-plt.scatter(IgG_ant_transform.iloc[0:40,0], emi_IgG_binding.iloc[0:40,1])
-print(sc.stats.spearmanr(IgG_ant_transform.iloc[0:40,0], emi_IgG_binding.iloc[0:40,1]))
+plt.scatter(IgG_ant_transform.iloc[0:41,0], emi_IgG_binding.iloc[0:41,1])
+print(sc.stats.spearmanr(IgG_ant_transform.iloc[0:41,0], emi_IgG_binding.iloc[0:41,1]))
 
-plt.scatter(IgG_psy_transform.iloc[0:40,0], emi_IgG_binding.iloc[0:40,2])
-print(sc.stats.spearmanr(IgG_psy_transform.iloc[0:40,0], emi_IgG_binding.iloc[0:40,2]))
+plt.scatter(IgG_psy_transform.iloc[0:41,0], emi_IgG_binding.iloc[0:41,2])
+print(sc.stats.spearmanr(IgG_psy_transform.iloc[0:41,0], emi_IgG_binding.iloc[0:41,2]))
+
+plt.scatter(IgG_ant_transform.iloc[41:98,0], emi_IgG_binding.iloc[41:98,1])
+print(sc.stats.spearmanr(IgG_ant_transform.iloc[41:98,0], emi_IgG_binding.iloc[41:98,1]))
+
+plt.scatter(IgG_psy_transform.iloc[41:98,0], emi_IgG_binding.iloc[41:98,2])
+print(sc.stats.spearmanr(IgG_psy_transform.iloc[41:98,0], emi_IgG_binding.iloc[41:98,2]))
+
+plt.scatter(IgG_ant_transform.iloc[83:98,0], emi_IgG_binding.iloc[83:98,1])
+print(sc.stats.spearmanr(IgG_ant_transform.iloc[83:98,0], emi_IgG_binding.iloc[83:98,1]))
+
+plt.scatter(IgG_psy_transform.iloc[83:98,0], emi_IgG_binding.iloc[83:98,2])
+print(sc.stats.spearmanr(IgG_psy_transform.iloc[83:98,0], emi_IgG_binding.iloc[83:98,2]))
+
 
 
 #%%
+"""
+plt.scatter(IgG_ant_transform.iloc[40:111,0], emi_IgG_binding.iloc[40:111,1])
+print(sc.stats.spearmanr(IgG_ant_transform.iloc[:,0], emi_IgG_binding.iloc[:,1]))
+
+plt.scatter(IgG_psy_transform.iloc[40:111,0], emi_IgG_binding.iloc[40:111,2])
+print(sc.stats.spearmanr(IgG_psy_transform.iloc[40:111,0], emi_IgG_binding.iloc[40:111,2]))
+
+
+#%%
+cmap = plt.cm.get_cmap('plasma')
+colormap9= np.array([cmap(0.25),cmap(0.77)])
+cmap9 = LinearSegmentedColormap.from_list("mycmap", colormap9)
+
+colormap9r= np.array([cmap(0.77),cmap(0.25)])
+cmap9r = LinearSegmentedColormap.from_list("mycmap", colormap9r)
+
+colormap10= np.array([cmap(0.25),cmap(0.40), cmap(0.6), cmap(0.77)])
+cmap10 = LinearSegmentedColormap.from_list("mycmap", colormap10)
+
+fig, axs = plt.subplots(1, 1, figsize = (5, 5))
+axs.scatter(emi_IgG_binding.iloc[0:40,1], emi_IgG_binding.iloc[0:40,2], color = 'blueviolet', edgecolor = 'k', s = 75, linewidth = 0.25)
+
+axs.scatter(emi_IgG_binding.iloc[40:111,1], emi_IgG_binding.iloc[40:111,2], color = cmap(0.77), edgecolor = 'k', s = 75, linewidth = 0.25)
+axs.scatter(1,1, color = 'yellow', edgecolor= 'k', s = 200, linewidth = 0.5)
+axs.scatter(1.2, 0.42, color = 'deepskyblue', s = 200, edgecolor= 'k', linewidth = 0.5)
+axs.set_xlim(-0.2, 1.35)
+axs.set_ylim(-0.05, 1.1)
+axs.set_xticks([0.0, 0.4, 0.8, 1.2])
+axs.set_xticklabels([0.0, 0.4, 0.8, 1.2], fontsize = 20)
+axs.set_yticks([0.0, 0.2, 0.4, 0.6, 0.8, 1.0])
+axs.set_yticklabels([0.0, 0.2, 0.4, 0.6, 0.8, 1.0], fontsize = 20)
+axs.set_ylabel('')
+
+
+#%%
+
 from sklearn.tree import DecisionTreeClassifier as DTC
 cmap = plt.cm.get_cmap('inferno')
 colormap9= np.array([cmap(0.25),cmap(0.77)])
@@ -403,5 +452,5 @@ dtc = DTC(max_depth = 2)
 dtc.fit(emi_umap, emi_labels.iloc[:,2])
 dtc_predict = dtc.predict(emi_umap)
 print(accuracy_score(dtc_predict, emi_labels.iloc[:,2]))
-
+"""
 

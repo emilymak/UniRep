@@ -96,9 +96,9 @@ for index, row in lenzi_pos_seqs.iterrows():
         char = ''.join(str(i) for i in char)
         lenzi_pos_seqs_char.append([row[0], row[1], row[2], row[3], row[4], row[5]])
 lenzi_pos_seqs = pd.DataFrame(lenzi_pos_seqs_char)
-"""
-lenzi_pos_seqs.set_index('index', drop = True, inplace = True)
 
+lenzi_pos_seqs.set_index('index', drop = True, inplace = True)
+"""
 lenzi_neg_seqs = lenzi_seqs.iloc[len(lenzi_pos_duplicates):(len(lenzi_pos_duplicates)+len(lenzi_neg_duplicates)+1),:]
 """
 lenzi_neg_seqs_char = []
@@ -108,12 +108,12 @@ for index, row in lenzi_neg_seqs.iterrows():
         char = ''.join(str(i) for i in char)
         lenzi_neg_seqs_char.append([row[0], row[1], row[2], row[3], row[4], row[5]])
 lenzi_neg_seqs = pd.DataFrame(lenzi_neg_seqs_char)
-"""
-lenzi_neg_seqs.set_index('index', drop = True, inplace = True)
 
+lenzi_neg_seqs.set_index('index', drop = True, inplace = True)
+"""
 lenzi_pos_seq = []
 for index, row in lenzi_pos_seqs.iterrows():
-    characters = list(index)
+    characters = list(row[0])
     if len(characters) == 124:
         lenzi_pos_seq.append([index, row[0], row[1], row[2], row[3], row[4]])
 lenzi_pos_seq = pd.DataFrame(lenzi_pos_seq)
@@ -131,7 +131,7 @@ lenzi_pos_seq.reset_index(drop = True, inplace = True)
 
 lenzi_neg_seq = []
 for index, row in lenzi_neg_seqs.iterrows():
-    characters = list(index)
+    characters = list(row[0])
     if len(characters) == 124:
         lenzi_neg_seq.append([index, row[0], row[1], row[2], row[3], row[4]])
 lenzi_neg_seq = pd.DataFrame(lenzi_neg_seq)
@@ -194,6 +194,7 @@ lenzi_neg_seq_stringent.sort_values(by = 'ANT Binding', ascending = False, inpla
 
 
 #%%
+"""
 lenzi_seqs_used_stringent = pd.concat([lenzi_pos_seq_stringent.iloc[0:2000,:], lenzi_neg_seq_stringent.iloc[0:2000,:]], axis = 0)
 lenzi_seqs_used_stringent.drop('OVA Freq1', inplace = True, axis = 1)
 lenzi_seqs_used_stringent.drop('PSR Freq1', inplace = True, axis = 1)
@@ -218,4 +219,4 @@ lenzi_neg_seq_stringent.iloc[1000:1500,0].to_csv('lenzi_neg_seqs_3.txt', header 
 
 lenzi_pos_seq_stringent.iloc[1500:2000,0].to_csv('lenzi_pos_seqs_4.txt', header = False, index = False)
 lenzi_neg_seq_stringent.iloc[1500:2000,0].to_csv('lenzi_neg_seqs_4.txt', header = False, index = False)
-
+"""

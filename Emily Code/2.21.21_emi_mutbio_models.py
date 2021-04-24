@@ -71,8 +71,8 @@ emi_rep_labels_5NotA = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\
 emi_rep_labels_6NotW = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_rep_labels_6NotW.csv", header = 0, index_col = 0)
 emi_rep_labels_7NotY = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_rep_labels_7NotY.csv", header = 0, index_col = 0)
 
-emi_IgG_biophys = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_IgG_biophys.csv", header = 0, index_col = None)
-emi_IgG_binding = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_IgG_binding.csv", header = 0, index_col = None)
+emi_IgG_biophys = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_IgG_biophys_noed.csv", header = 0, index_col = None)
+emi_IgG_binding = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_IgG_binding_noed.csv", header = 0, index_col = None)
 
 
 #%%
@@ -270,6 +270,13 @@ print(sc.stats.spearmanr(IgG_ant_transform.iloc[0:40,0], emi_IgG_binding.iloc[0:
 
 plt.scatter(IgG_psy_transform.iloc[0:40,0], emi_IgG_binding.iloc[0:40,2])
 print(sc.stats.spearmanr(IgG_psy_transform.iloc[0:40,0], emi_IgG_binding.iloc[0:40,2]))
+
+
+plt.scatter(IgG_ant_transform.iloc[83:98,0], emi_IgG_binding.iloc[83:98,1])
+print(sc.stats.spearmanr(IgG_ant_transform.iloc[83:98,0], emi_IgG_binding.iloc[83:98,1]))
+
+plt.scatter(IgG_psy_transform.iloc[83:98,0], emi_IgG_binding.iloc[83:98,2])
+print(sc.stats.spearmanr(IgG_psy_transform.iloc[83:98,0], emi_IgG_binding.iloc[83:98,2]))
 
 
 

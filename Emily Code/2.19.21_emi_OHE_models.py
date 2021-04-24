@@ -81,6 +81,7 @@ emi_rep_labels_7NotY = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\
 emi_IgG_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_IgG_seqs.csv", header = 0, index_col = 0)
 emi_IgG_binding = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_IgG_binding.csv", header = 0, index_col = None)
 
+emi_novel_seqs = pd.read_pickle("..\\Datasets\\scaffold_AH_multiclone.pickle")
 
 #%%
 emi_iso_seqs_0Y = []
@@ -209,6 +210,12 @@ emi_7NotY= []
 for i in emi_seqs_7NotY.iloc[:,0]:
     chars = le.transform(list(i))
     emi_7NotY.append(chars)
+    
+emi_novel= []
+for i in emi_novel_seqs.iloc[:,2]:
+    chars = le.transform(list(i))
+    emi_novel.append(chars)
+
 
 wt_enc = pd.DataFrame(le.transform(list(wt_seq.iloc[0,0])))
 
@@ -222,6 +229,7 @@ emi_4NotG_enc = pd.DataFrame(emi_4NotG)
 emi_5NotA_enc = pd.DataFrame(emi_5NotA)
 emi_6NotW_enc = pd.DataFrame(emi_6NotW)
 emi_7NotY_enc = pd.DataFrame(emi_7NotY)
+emi_novel_enc = pd.DataFrame(emi_novel)
 
 
 one = OneHotEncoder(sparse = False)
@@ -298,6 +306,14 @@ for index, row in emi_7NotY_enc.iterrows():
     ohe_let = pd.DataFrame(one.transform(let))
     ohe_7NotY.append(ohe_let.values.flatten())
 ohe_7NotY = np.stack(ohe_7NotY)
+
+ohe_novel = []
+for index, row in emi_novel_enc.iterrows():
+    row2 = np.array(row)
+    let = row2.reshape(len(row2), 1)
+    ohe_let = pd.DataFrame(one.transform(let))
+    ohe_novel.append(ohe_let.values.flatten())
+ohe_novel = np.stack(ohe_novel)
 
 
 #%%
@@ -427,6 +443,7 @@ iso_ant_predict = pd.DataFrame(lda_ant.predict(ohe_iso))
 IgG_ant_transform = pd.DataFrame(lda_ant.transform(ohe_IgG_sequences))
 IgG_ant_predict = pd.DataFrame(lda_ant.predict(ohe_IgG_sequences))
 wt_ant_transform = pd.DataFrame(lda_ant.transform(ohe_wt.reshape(1,-1)))
+novel_ant_transform = pd.DataFrame(lda_ant.transform(ohe_novel))
 
 lda_ant.fit(ohe_0NotY, emi_rep_labels_0NotY.iloc[:,3])
 iso_transform_0Y = pd.DataFrame(lda_ant.transform(ohe_iso_0Y))
@@ -473,6 +490,7 @@ iso_psy_predict = pd.DataFrame(lda_psy.predict(ohe_iso))
 IgG_psy_transform = pd.DataFrame(lda_psy.transform(ohe_IgG_sequences))
 IgG_psy_predict = pd.DataFrame(lda_psy.predict(ohe_IgG_sequences))
 wt_psy_transform = pd.DataFrame(lda_psy.transform(ohe_wt.reshape(1,-1)))
+novel_psy_transform = pd.DataFrame(lda_psy.transform(ohe_novel))
 
 lda_psy.fit(ohe_0NotY, emi_rep_labels_0NotY.iloc[:,2])
 iso_transform_0Y = pd.DataFrame(lda_psy.transform(ohe_iso_0Y))
@@ -598,6 +616,8 @@ plt.subplots_adjust(hspace = 0.5)
 
 
 #%%
+
+
 fig, axs = plt.subplots(1, 1, figsize = (4.75,4.75))
 axs.scatter(emi_ant_transform, emi_psy_transform, color = 'white', edgecolor = 'k', s = 40, linewidth = 0.25)
 axs.scatter(IgG_ant_transform, IgG_psy_transform, color = cmap(0.25), edgecolor= 'k', s = 80, linewidth = 0.25)

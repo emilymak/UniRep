@@ -22,7 +22,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.model_selection import cross_validate as cv
 from matplotlib.colors import ListedColormap, LinearSegmentedColormap
 from sklearn.metrics import confusion_matrix
-from sklearn.linear_model import LinearRegression as LR
+from sklearn.linear_model import LogisticRegression as LR
 from scipy.spatial.distance import hamming
 
 def get_prediction_interval(prediction, y_test, test_predictions, pi=.90):    
@@ -38,7 +38,7 @@ def get_prediction_interval(prediction, y_test, test_predictions, pi=.90):
     lower, upper = prediction - interval, prediction + interval
     return lower, prediction, upper
 
-colormap1 = np.array(['mediumspringgreen','darkviolet'])
+colormap1 = np.array(['darkviolet', 'deepskyblue'])
 colormap2 = np.array(['mediumspringgreen', 'darkturquoise', 'navy', 'darkviolet'])
 colormap3 = np.array(['dodgerblue', 'darkorange'])
 colormap4 = np.array(['black', 'orangered', 'darkorange', 'yellow'])
@@ -64,29 +64,22 @@ HTML("<div style='column-count: 2;'>{}</div>".format(code))
 
 #%%
 emi_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_reps.csv", header = 0, index_col = None)
-emi_reps = np.load("C:\\Users\\makow\\Documents\\run_rep_batches_pck\\gpu_reps_emi_seqs.npy")
-emi_reps = pd.DataFrame(emi_reps)
 emi_labels = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_rep_labels.csv", header = 0, index_col = 0)
 
 emi_biophys = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_biophys.csv", header = 0, index_col = None)
 emi_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_seqs.txt", header = None, index_col = None)
 
 emi_iso_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_iso_reps_reduced.csv", header = 0, index_col = 0)
-emi_iso_reps = np.load("C:\\Users\\makow\\Documents\\run_rep_batches_pck\\gpu_reps_emi_iso_seqs_reduced.npy")
-emi_iso_reps = pd.DataFrame(emi_iso_reps)
 
 emi_zero_rep = pd.DataFrame(emi_reps.iloc[2945,:]).T
 emi_iso_binding = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_iso_binding_reduced.csv", header = 0, index_col = None)
 emi_iso_biophys_reduced = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_iso_biophys_reduced.csv", header = 0, index_col = None)
 
-emi_IgG_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_IgG_reps.csv", header = 0, index_col = 0)
-emi_IgG_reps = np.load("C:\\Users\\makow\\Documents\\run_rep_batches_pck\\gpu_reps_emi_IgG_seqs.npy")
-emi_IgG_reps = pd.DataFrame(emi_IgG_reps)
-emi_IgG_binding = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_IgG_binding.csv", header = 0, index_col = None)
-emi_IgG_biophys = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_IgG_biophys.csv", header = 0, index_col = None)
+emi_IgG_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_IgG_reps_noed.csv", header = 0, index_col = 0)
+emi_IgG_binding = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_IgG_binding_noed.csv", header = 0, index_col = None)
+emi_IgG_biophys = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_IgG_biophys_noed.csv", header = 0, index_col = None)
 
 emi_wt_rep = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_wt_rep.csv", header = 0, index_col = 0)
-emi_wt_rep = np.load("C:\\Users\\makow\\Documents\\run_rep_batches_pck\\gpu_reps_emi_wt_seq.npy")
 emi_wt_rep = pd.DataFrame(emi_wt_rep)
 
 emi_wt_binding = pd.DataFrame([1,1])
@@ -124,7 +117,7 @@ emi_fit_ant_transform= pd.DataFrame(-1*(emi_ant.transform(emi_fit_reps)))
 emi_IgG_ant_transform= pd.DataFrame(-1*(emi_ant.transform(emi_IgG_reps)))
 emi_iso_ant_predict = pd.DataFrame(emi_ant.predict(emi_iso_reps))
 emi_fit_ant_predict = pd.DataFrame(emi_ant.predict(emi_fit_reps))
-print(stats.spearmanr(emi_iso_ant_transform.iloc[:,0], emi_iso_binding.iloc[:,1]))
+print(stats.spearmanr(emi_IgG_ant_transform.iloc[41:114,0], emi_IgG_binding.iloc[41:114,1]))
 
 x1 = np.polyfit(emi_fit_ant_transform.iloc[:,0], emi_fit_binding.iloc[:,0],1)
 emi_ant_transform['Fraction ANT Binding'] = ((emi_ant_transform.iloc[:,0]*x1[0])+x1[1])
@@ -169,7 +162,7 @@ emi_fit_psy_transform= pd.DataFrame(emi_psy.transform(emi_fit_reps))
 emi_IgG_psy_transform= pd.DataFrame(emi_psy.transform(emi_IgG_reps))
 emi_iso_psy_predict = pd.DataFrame(emi_psy.predict(emi_iso_reps))
 emi_fit_psy_predict = pd.DataFrame(emi_psy.predict(emi_fit_reps))
-print(stats.spearmanr(emi_iso_psy_transform.iloc[:,0], emi_iso_binding.iloc[:,2]))
+print(stats.spearmanr(emi_IgG_psy_transform.iloc[41:114,0], emi_IgG_binding.iloc[41:114,2]))
 
 x2 = np.polyfit(emi_fit_psy_transform.iloc[:,0], emi_fit_binding.iloc[:,1],1)
 emi_psy_transform['Fraction PSY Binding'] = ((emi_psy_transform.iloc[:,0]*x2[0])+x2[1])
@@ -272,34 +265,41 @@ chosen_seqs = emi_optimal_sequences[emi_optimal_sequences.index.isin(chosen_l)]
 
 #%%
 fig, (ax0, ax1, ax2) = plt.subplots(1, 3, figsize = (18,5))
-ax00 = ax0.scatter(emi_ant_transform.iloc[:,0], emi_psy_transform.iloc[:,0], c = emi_ant_transform['Fraction ANT Binding'], cmap = cmap2)
-ax0.scatter(emi_iso_ant_transform.iloc[:,0], emi_iso_psy_transform.iloc[:,0], c = 'crimson', s = 65, edgecolor = 'k')
+ax00 = ax0.scatter(emi_ant_transform.iloc[:,0], emi_psy_transform.iloc[:,0], c = emi_psy_predict, cmap = cmap1)
+ax0.scatter(emi_iso_ant_transform.iloc[:,0], emi_iso_psy_transform.iloc[:,0], c = 'black', s = 50, edgecolor = 'k')
 ax0.scatter(emi_wt_ant_transform.iloc[:,0], emi_wt_psy_transform.iloc[:,0], c = 'crimson', s = 65, edgecolor = 'k')
-cbar0 = plt.colorbar(ax00, ax = ax0)
-ax0.set_title('Change in ANT Binding Over Pareto', fontsize = 16)
-binding_patch = mpatches.Patch(facecolor='black', label = 'Binding', edgecolor = 'black', linewidth = 0.1)
-nonbinding_patch = mpatches.Patch(facecolor = 'white', label = 'Non-Binding', edgecolor = 'black', linewidth = 0.1)
-ax0.legend(handles=[binding_patch, nonbinding_patch], fontsize = 12)
+binding_patch = mpatches.Patch(facecolor='black', label = 'Yeast clones', edgecolor = 'black', linewidth = 0.1)
+ax0.legend(handles=[binding_patch], fontsize = 12)
 
-ax10 = ax1.scatter(emi_ant_transform.iloc[:,0], emi_psy_transform.iloc[:,0], c = emi_psy_transform['Fraction PSY Binding'], cmap = cmap2)
+ax10 = ax1.scatter(emi_ant_transform.iloc[:,0], emi_psy_transform.iloc[:,0], c = emi_psy_predict, cmap = cmap1)
+ax10 = ax1.scatter(emi_IgG_ant_transform.iloc[0:41,0], emi_IgG_psy_transform.iloc[0:41,0], c = 'black', s = 50)
 ax1.scatter(emi_wt_ant_transform.iloc[:,0], emi_wt_psy_transform.iloc[:,0], c = 'crimson', s = 65, edgecolor = 'k')
-cbar1 = plt.colorbar(ax10, ax = ax1)
-ax1.set_title('Change in PSY Binding Over Pareto', fontsize = 16)
-ax1.legend(handles=[binding_patch, nonbinding_patch], fontsize = 12)
+optimal_patch = mpatches.Patch(facecolor='black', label = 'All IgG', edgecolor = 'black', linewidth = 0.1)
+ax1.legend(handles=[optimal_patch], fontsize = 12)
 
-ax20 = ax2.scatter(emi_ant_transform.iloc[:,0], emi_psy_transform.iloc[:,0], c = clones_score, cmap = cmap2)
-#ax21 = ax2.scatter(emi_iso_ant_transform.iloc[:,0], emi_iso_psy_transform.iloc[:,0], c = iso_score, cmap = 'Greys', edgecolor = 'k')
+ax20 = ax2.scatter(emi_ant_transform.iloc[:,0], emi_psy_transform.iloc[:,0], c = 'deepskyblue')
+ax20 = ax2.scatter(emi_IgG_ant_transform.iloc[41:99,0], emi_IgG_psy_transform.iloc[41:99,0], c = 'black', s = 50)
 ax2.scatter(emi_wt_ant_transform.iloc[:,0], emi_wt_psy_transform.iloc[:,0], c = 'crimson', s = 65, edgecolor = 'k')
-cbar2 = plt.colorbar(ax20, ax = ax2)
-cbar2.set_ticks([])
-cbar2.set_label('Increasing Stringency of Property Requirements', fontsize = 14)
-ax2.set_title('Isolation of Clones with\nChosen Binding Properties', fontsize = 16)
-optimal_patch = mpatches.Patch(facecolor='darkviolet', label = 'Population 1', edgecolor = 'black', linewidth = 0.1)
-nonoptimal_patch = mpatches.Patch(facecolor = 'navy', label = 'Population 2', edgecolor = 'black', linewidth = 0.1)
-lessoptimal_patch = mpatches.Patch(facecolor='darkturquoise', label = 'Population 3', edgecolor = 'black', linewidth = 0.1)
-ax2.legend(handles=[optimal_patch, nonoptimal_patch, lessoptimal_patch], fontsize = 12)
-ax2.scatter(ant_baseseq_ant, ant_baseseq_psy, c = 'blue', edgecolor = 'k', s = 125, marker = '*', linewidth = 1)
-ax2.scatter(chosen_seqs.iloc[:,2], chosen_seqs.iloc[:,3], s = 15, c = 'white', edgecolor = 'k')
+optimal_patch = mpatches.Patch(facecolor='black', label = 'Out-of-library IgG', edgecolor = 'black', linewidth = 0.1)
+ax2.legend(handles=[optimal_patch], fontsize = 12)
+
+
+#%%
+fig, (ax0, ax1, ax2) = plt.subplots(1, 3, figsize = (18,5))
+ax00 = ax0.scatter(emi_iso_ant_transform.iloc[:,0], emi_iso_binding.iloc[:,1], c = 'deepskyblue', s = 65, edgecolor = 'black', linewidth = 0.1)
+ax0.scatter(emi_wt_ant_transform.iloc[0,0], 1, c = 'crimson', s = 65, edgecolor = 'k')
+binding_patch = mpatches.Patch(facecolor='deepskyblue', label = 'Yeast clones', edgecolor = 'black', linewidth = 0.5)
+ax0.legend(handles=[binding_patch], fontsize = 12)
+
+ax10 = ax1.scatter(emi_IgG_ant_transform.iloc[0:41,0], emi_IgG_binding.iloc[0:41,1], c = 'deepskyblue', s = 65, edgecolor = 'black', linewidth = 0.1)
+ax1.scatter(emi_wt_ant_transform.iloc[:,0], 1, c = 'crimson', s = 65, edgecolor = 'k')
+optimal_patch = mpatches.Patch(facecolor='deepskyblue', label = 'In-library IgG', edgecolor = 'black', linewidth = 0.5)
+ax1.legend(handles=[optimal_patch], fontsize = 12)
+
+ax20 = ax2.scatter(emi_IgG_ant_transform.iloc[41:99,0], emi_IgG_binding.iloc[41:99,1], c = 'deepskyblue', s = 65, edgecolor = 'black', linewidth = 0.1)
+ax2.scatter(emi_wt_ant_transform.iloc[:,0], 1, c = 'crimson', s = 65, edgecolor = 'k')
+optimal_patch = mpatches.Patch(facecolor='deepskyblue', label = 'Out-of-library IgG', edgecolor = 'black', linewidth = 0.5)
+ax2.legend(handles=[optimal_patch], fontsize = 12)
 
 
 
@@ -338,14 +338,168 @@ plt.ylabel('<-- Decreasing PSY Binding', fontsize = 18)
 
 #%%
 print(sc.stats.ks_2samp(emi_ant_transform.loc[emi_labels['ANT Binding']==0, 0], emi_ant_transform.loc[emi_labels['ANT Binding']==1, 0]))
-
 print(sc.stats.ks_2samp(emi_ant_transform.loc[emi_labels['PSY Binding']==0, 0], emi_ant_transform.loc[emi_labels['PSY Binding']==1, 0]))
+
 
 #%%
 plt.scatter(emi_iso_ant_transform.iloc[:,0], emi_iso_binding.iloc[:,1], c = emi_iso_binding.iloc[:,2], cmap = 'cool', s = 75, edgecolor = 'k')
-
 print(sc.stats.spearmanr(emi_iso_ant_transform.iloc[:,0], emi_iso_binding.iloc[:,2]))
 
+
+#%%
+### making new datasets of the transform values for ANT pos and neg sequences
+emi_ant_pos_transforms = emi_ant_transform
+emi_ant_pos_reps = emi_reps
+emi_ant_neg_transforms = emi_ant_transform[emi_labels['ANT Binding']==0]
+emi_ant_neg_reps = emi_reps[emi_labels['ANT Binding']==0]
+
+### making new classification labels for ANT pos sequences based on quartiles of transform values
+emi_ant_pos_transforms['Label'] = 0
+emi_ant_pos_transforms.loc[emi_ant_pos_transforms[0] > emi_ant_pos_transforms[0].quantile(0.2), 'Label'] = 1
+emi_ant_pos_transforms.loc[emi_ant_pos_transforms[0] > emi_ant_pos_transforms[0].quantile(0.2), 'Label'] = 2
+emi_ant_pos_transforms.loc[emi_ant_pos_transforms[0] > emi_ant_pos_transforms[0].quantile(0.3), 'Label'] = 3
+emi_ant_pos_transforms.loc[emi_ant_pos_transforms[0] > emi_ant_pos_transforms[0].quantile(0.4), 'Label'] = 4
+emi_ant_pos_transforms.loc[emi_ant_pos_transforms[0] > emi_ant_pos_transforms[0].quantile(0.5), 'Label'] = 5
+emi_ant_pos_transforms.loc[emi_ant_pos_transforms[0] > emi_ant_pos_transforms[0].quantile(0.6), 'Label'] = 6
+emi_ant_pos_transforms.loc[emi_ant_pos_transforms[0] > emi_ant_pos_transforms[0].quantile(0.7), 'Label'] = 7
+emi_ant_pos_transforms.loc[emi_ant_pos_transforms[0] > emi_ant_pos_transforms[0].quantile(0.8), 'Label'] = 8
+emi_ant_pos_transforms.loc[emi_ant_pos_transforms[0] > emi_ant_pos_transforms[0].quantile(0.9), 'Label'] = 9
+
+emi_ant_neg_transforms['Label'] = 0
+#emi_ant_neg_transforms.loc[emi_ant_neg_transforms[0] < emi_ant_neg_transforms[0].quantile(0.1), 'Label'] = 2
+emi_ant_neg_transforms.loc[emi_ant_neg_transforms[0] > emi_ant_neg_transforms[0].quantile(0.2), 'Label'] = 0
+emi_ant_neg_transforms.loc[emi_ant_neg_transforms[0] > emi_ant_neg_transforms[0].quantile(0.3), 'Label'] = 9
+emi_ant_neg_transforms.loc[emi_ant_neg_transforms[0] > emi_ant_neg_transforms[0].quantile(0.4), 'Label'] = 9
+emi_ant_neg_transforms.loc[emi_ant_neg_transforms[0] > emi_ant_neg_transforms[0].quantile(0.5), 'Label'] = 9
+emi_ant_neg_transforms.loc[emi_ant_neg_transforms[0] > emi_ant_neg_transforms[0].quantile(0.6), 'Label'] = 9
+emi_ant_neg_transforms.loc[emi_ant_neg_transforms[0] > emi_ant_neg_transforms[0].quantile(0.7), 'Label'] = 1
+emi_ant_neg_transforms.loc[emi_ant_neg_transforms[0] > emi_ant_neg_transforms[0].quantile(0.8), 'Label'] = 1
+#emi_ant_neg_transforms.loc[emi_ant_neg_transforms[0] > emi_ant_neg_transforms[0].quantile(0.9), 'Label'] = 9
+"""
+emi_ant_pos_dist = []
+for index, row in emi_ant_pos_reps.iterrows():
+    dist = np.linalg.norm(emi_wt_rep - row)
+    emi_ant_pos_dist.append(dist)
+emi_ant_pos_dist = []
+for index, row in emi_ant_pos_reps.iterrows():
+    dist = sc.spatial.distance.cosine(emi_wt_rep, row)
+    emi_ant_pos_dist.append(dist)
+emi_ant_neg_dist = []
+for index, row in emi_ant_neg_reps.iterrows():
+    dist = sc.spatial.distance.cosine(emi_wt_rep, row)
+    emi_ant_neg_dist.append(dist)
+
+plt.figure(0)
+sns.stripplot(emi_ant_pos_transforms['Label'], emi_ant_pos_dist)
+plt.ylim(0.000, 0.0020)
+plt.figure(1)
+sns.stripplot(emi_ant_neg_transforms['Label'], emi_ant_neg_dist)
+plt.ylim(0.000, 0.0020)
+
+emi_ant_pos_reps = emi_ant_pos_reps[emi_ant_pos_transforms['Label'] != 2]
+emi_ant_pos_transforms = emi_ant_pos_transforms[emi_ant_pos_transforms['Label'] != 2]
+
+emi_ant_pos_reps = emi_ant_pos_reps[emi_ant_pos_transforms['Label'] != 9]
+emi_ant_pos_transforms = emi_ant_pos_transforms[emi_ant_pos_transforms['Label'] != 9]
+"""
+#emi_ant_pos_reps = emi_ant_pos_reps[emi_ant_pos_transforms['Label'] > 1]
+#emi_ant_pos_transforms = emi_ant_pos_transforms[emi_ant_pos_transforms['Label'] > 1]
+
+lda = LDA(n_components = 1)
+emi_pos_ant_transform = lda.fit_transform(emi_ant_pos_reps, emi_ant_pos_transforms['Label'])
+emi_pos_IgG_transform = pd.DataFrame(lda.transform(emi_IgG_reps))
+emi_pos_iso_transform = pd.DataFrame(lda.transform(emi_iso_reps))
+emi_pos_wt_transform = pd.DataFrame(lda.transform(emi_wt_rep))
+
+print(sc.stats.spearmanr(emi_pos_iso_transform.iloc[0:125,0], emi_iso_binding.iloc[0:125,1]))
+plt.scatter(-1*emi_pos_iso_transform.iloc[0:125,0], emi_iso_binding.iloc[0:125,1], c = 'deepskyblue', edgecolor = 'k', linewidth = 0.5, s = 65)
+
+plt.scatter(-1*emi_pos_IgG_transform.iloc[0:41,0], emi_IgG_binding.iloc[0:41,1], c = 'deepskyblue', edgecolor = 'k', linewidth = 0.5, s = 65)
+plt.scatter(-1*emi_pos_wt_transform.iloc[0,0], 1, c = 'crimson', s = 75, edgecolor = 'k', linewidth = 0.5)
+print(sc.stats.spearmanr(emi_pos_IgG_transform.iloc[0:41,0], emi_IgG_binding.iloc[0:41,1]))
+
+plt.scatter(-1*emi_pos_IgG_transform.iloc[41:98,0], emi_IgG_binding.iloc[41:98,1], c = 'blueviolet', edgecolor = 'k', linewidth = 0.5, s = 65)
+plt.scatter(-1*emi_pos_wt_transform.iloc[0,0], 1, c = 'crimson', s = 75, edgecolor = 'k', linewidth = 0.5)
+print(sc.stats.spearmanr(emi_pos_IgG_transform.iloc[41:98,0], emi_IgG_binding.iloc[41:98,1]))
+
+
+"""
+plt.scatter(emi_pos_IgG_transform.iloc[41:82,:], emi_IgG_binding.iloc[41:82,1])
+print(sc.stats.spearmanr(emi_pos_IgG_transform.iloc[41:82,:], emi_IgG_binding.iloc[41:82,1]))
+
+plt.scatter(emi_pos_IgG_transform.iloc[83:98,:], emi_IgG_binding.iloc[83:98,1])
+print(sc.stats.spearmanr(emi_pos_IgG_transform.iloc[83:98,:], emi_IgG_binding.iloc[83:98,1]))
+
+#plt.bar(x = np.arange(0,111), height = (emi_pos_IgG_transform.iloc[:,0] - emi_IgG_ant_transform.iloc[:,0]))
+
+"""
+#%%
+### making new datasets of the transform values for psy pos and neg sequences
+emi_psy_neg_transforms = emi_psy_transform[emi_labels['PSY Binding']==1]
+emi_psy_neg_reps = emi_reps[emi_labels['PSY Binding']==1]
+emi_psy_pos_transforms = emi_psy_transform[emi_labels['PSY Binding']==0]
+
+### making new classification labels for psy neg sequences based on quartiles of transform values
+emi_psy_neg_transforms['Label'] = 0
+
+emi_psy_neg_transforms.loc[emi_psy_neg_transforms[0] > emi_psy_neg_transforms[0].quantile(0.1), 'Label'] = 0
+emi_psy_neg_transforms.loc[emi_psy_neg_transforms[0] > emi_psy_neg_transforms[0].quantile(0.2), 'Label'] = 9
+emi_psy_neg_transforms.loc[emi_psy_neg_transforms[0] > emi_psy_neg_transforms[0].quantile(0.3), 'Label'] = 9
+emi_psy_neg_transforms.loc[emi_psy_neg_transforms[0] > emi_psy_neg_transforms[0].quantile(0.4), 'Label'] = 9
+emi_psy_neg_transforms.loc[emi_psy_neg_transforms[0] > emi_psy_neg_transforms[0].quantile(0.5), 'Label'] = 9
+emi_psy_neg_transforms.loc[emi_psy_neg_transforms[0] > emi_psy_neg_transforms[0].quantile(0.6), 'Label'] = 9
+emi_psy_neg_transforms.loc[emi_psy_neg_transforms[0] > emi_psy_neg_transforms[0].quantile(0.7), 'Label'] = 9
+emi_psy_neg_transforms.loc[emi_psy_neg_transforms[0] > emi_psy_neg_transforms[0].quantile(0.8), 'Label'] = 1
+emi_psy_neg_transforms.loc[emi_psy_neg_transforms[0] > emi_psy_neg_transforms[0].quantile(0.9), 'Label'] = 1
+
+"""
+emi_psy_neg_dist = []
+for index, row in emi_psy_neg_reps.iterrows():
+    dist = np.linalg.norm(emi_wt_rep - row)
+    emi_psy_neg_dist.append(dist)
+emi_psy_neg_dist = []
+for index, row in emi_psy_neg_reps.iterrows():
+    dist = sc.spatial.distance.cosine(emi_wt_rep, row)
+    emi_psy_neg_dist.append(dist)
+
+sns.stripplot(emi_psy_neg_transforms['Label'], emi_psy_neg_dist)
+"""
+emi_psy_neg_reps = emi_psy_neg_reps[emi_psy_neg_transforms['Label'] != 9]
+emi_psy_neg_transforms = emi_psy_neg_transforms[emi_psy_neg_transforms['Label'] != 9]
+
+#emi_psy_neg_reps = emi_psy_neg_reps[emi_psy_neg_transforms['Label'] > 3]
+#emi_psy_neg_transforms = emi_psy_neg_transforms[emi_psy_neg_transforms['Label'] > 3]
+
+lda = LDA(n_components = 1)
+emi_neg_psy_transform = lda.fit_transform(emi_psy_neg_reps, emi_psy_neg_transforms['Label'])
+emi_neg_IgG_transform = pd.DataFrame(lda.transform(emi_IgG_reps))
+emi_neg_iso_transform = pd.DataFrame(lda.transform(emi_iso_reps))
+emi_neg_wt_transform = pd.DataFrame(lda.transform(emi_wt_rep))
+
+print(sc.stats.spearmanr(emi_neg_iso_transform.iloc[0:125,0], emi_iso_binding.iloc[0:125,2]))
+plt.scatter(emi_neg_iso_transform.iloc[0:125,0], emi_iso_binding.iloc[0:125,2], c = 'deepskyblue', edgecolor = 'k', linewidth = 0.5, s = 65)
+
+plt.scatter(emi_neg_IgG_transform.iloc[0:41,0], emi_IgG_binding.iloc[0:41,2], c = 'deepskyblue', edgecolor = 'k', linewidth = 0.5, s = 65)
+plt.scatter(emi_neg_wt_transform.iloc[0,0], 1, c = 'crimson', s = 75, edgecolor = 'k', linewidth = 0.5)
+print(sc.stats.spearmanr(emi_neg_IgG_transform.iloc[0:41,0], emi_IgG_binding.iloc[0:41,2]))
+
+plt.scatter(emi_neg_IgG_transform.iloc[41:98,0], emi_IgG_binding.iloc[41:98,2], c = 'deepskyblue', edgecolor = 'k', linewidth = 0.5, s = 65)
+plt.scatter(emi_neg_wt_transform.iloc[0,0], 1, c = 'crimson', s = 75, edgecolor = 'k', linewidth = 0.5)
+print(sc.stats.spearmanr(emi_neg_IgG_transform.iloc[41:98,0], emi_IgG_binding.iloc[41:98,2]))
+
+plt.scatter(emi_IgG_binding.iloc[0:41,1], emi_IgG_binding.iloc[0:41,2], s = 65, c = 'deepskyblue', edgecolor = 'k', linewidth = 0.75)
+plt.scatter(emi_IgG_binding.iloc[41:83,1], emi_IgG_binding.iloc[41:83,2], s = 65, c = 'blueviolet', edgecolor = 'k', linewidth = 0.75)
+plt.scatter(emi_IgG_binding.iloc[83:98,1], emi_IgG_binding.iloc[83:98,2], s = 65, c = 'navy', edgecolor = 'k', linewidth = 0.75)
+plt.xlim(1.4,0)
+
+"""
+plt.scatter(emi_neg_IgG_transform.iloc[41:82,:], emi_IgG_binding.iloc[41:82,2])
+print(sc.stats.spearmanr(emi_neg_IgG_transform.iloc[41:82,:], emi_IgG_binding.iloc[41:82,2]))
+
+plt.scatter(emi_neg_IgG_transform.iloc[83:98,:], emi_IgG_binding.iloc[83:98,2])
+print(sc.stats.spearmanr(emi_neg_IgG_transform.iloc[83:98,:], emi_IgG_binding.iloc[83:98,2]))
+
+"""
 
 #%%
 """
