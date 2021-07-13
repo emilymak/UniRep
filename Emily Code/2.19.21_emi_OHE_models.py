@@ -78,10 +78,10 @@ emi_rep_labels_5NotA = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\
 emi_rep_labels_6NotW = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_rep_labels_6NotW.csv", header = 0, index_col = 0)
 emi_rep_labels_7NotY = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_rep_labels_7NotY.csv", header = 0, index_col = 0)
 
-emi_IgG_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_IgG_seqs.csv", header = 0, index_col = 0)
-emi_IgG_binding = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_IgG_binding.csv", header = 0, index_col = None)
+emi_IgG_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_IgG_seqs_noed.txt", header = None, index_col = None)
+emi_IgG_binding = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_IgG_binding_noed.csv", header = 0, index_col = None)
 
-emi_novel_seqs = pd.read_pickle("..\\Datasets\\scaffold_AH_multiclone.pickle")
+#emi_novel_seqs = pd.read_pickle("..\\Datasets\\scaffold_AH_multiclone.pickle")
 
 #%%
 emi_iso_seqs_0Y = []
@@ -210,12 +210,12 @@ emi_7NotY= []
 for i in emi_seqs_7NotY.iloc[:,0]:
     chars = le.transform(list(i))
     emi_7NotY.append(chars)
-    
+"""  
 emi_novel= []
 for i in emi_novel_seqs.iloc[:,2]:
     chars = le.transform(list(i))
     emi_novel.append(chars)
-
+"""
 
 wt_enc = pd.DataFrame(le.transform(list(wt_seq.iloc[0,0])))
 
@@ -229,7 +229,7 @@ emi_4NotG_enc = pd.DataFrame(emi_4NotG)
 emi_5NotA_enc = pd.DataFrame(emi_5NotA)
 emi_6NotW_enc = pd.DataFrame(emi_6NotW)
 emi_7NotY_enc = pd.DataFrame(emi_7NotY)
-emi_novel_enc = pd.DataFrame(emi_novel)
+#emi_novel_enc = pd.DataFrame(emi_novel)
 
 
 one = OneHotEncoder(sparse = False)
@@ -307,6 +307,7 @@ for index, row in emi_7NotY_enc.iterrows():
     ohe_7NotY.append(ohe_let.values.flatten())
 ohe_7NotY = np.stack(ohe_7NotY)
 
+"""
 ohe_novel = []
 for index, row in emi_novel_enc.iterrows():
     row2 = np.array(row)
@@ -314,7 +315,7 @@ for index, row in emi_novel_enc.iterrows():
     ohe_let = pd.DataFrame(one.transform(let))
     ohe_novel.append(ohe_let.values.flatten())
 ohe_novel = np.stack(ohe_novel)
-
+"""
 
 #%%
 emi_iso_sequences = []
@@ -443,7 +444,7 @@ iso_ant_predict = pd.DataFrame(lda_ant.predict(ohe_iso))
 IgG_ant_transform = pd.DataFrame(lda_ant.transform(ohe_IgG_sequences))
 IgG_ant_predict = pd.DataFrame(lda_ant.predict(ohe_IgG_sequences))
 wt_ant_transform = pd.DataFrame(lda_ant.transform(ohe_wt.reshape(1,-1)))
-novel_ant_transform = pd.DataFrame(lda_ant.transform(ohe_novel))
+#novel_ant_transform = pd.DataFrame(lda_ant.transform(ohe_novel))
 
 lda_ant.fit(ohe_0NotY, emi_rep_labels_0NotY.iloc[:,3])
 iso_transform_0Y = pd.DataFrame(lda_ant.transform(ohe_iso_0Y))
@@ -490,7 +491,7 @@ iso_psy_predict = pd.DataFrame(lda_psy.predict(ohe_iso))
 IgG_psy_transform = pd.DataFrame(lda_psy.transform(ohe_IgG_sequences))
 IgG_psy_predict = pd.DataFrame(lda_psy.predict(ohe_IgG_sequences))
 wt_psy_transform = pd.DataFrame(lda_psy.transform(ohe_wt.reshape(1,-1)))
-novel_psy_transform = pd.DataFrame(lda_psy.transform(ohe_novel))
+#novel_psy_transform = pd.DataFrame(lda_psy.transform(ohe_novel))
 
 lda_psy.fit(ohe_0NotY, emi_rep_labels_0NotY.iloc[:,2])
 iso_transform_0Y = pd.DataFrame(lda_psy.transform(ohe_iso_0Y))
@@ -532,124 +533,84 @@ plt.scatter(psy_transforms.iloc[:,7], psy_transforms.iloc[:,8])
 ant_transforms_corr = ant_transforms.corr(method = 'spearman')
 psy_transforms_corr = psy_transforms.corr(method = 'spearman')
 
-plt.figure(figsize = (6,6))
-mask = np.zeros_like(ant_transforms_corr)
-mask[np.triu_indices_from(mask)] = True
-sns.heatmap(abs(ant_transforms_corr), annot = True, annot_kws = {'fontsize': 16}, mask = mask, cmap = 'inferno', cbar = False, vmin = 0.3, vmax = 1)
-
-plt.figure(figsize = (6,6))
-mask = np.zeros_like(psy_transforms_corr)
-mask[np.triu_indices_from(mask)] = True
-sns.heatmap(abs(psy_transforms_corr), annot = True, annot_kws = {'fontsize': 16}, mask = mask, cmap = 'plasma', cbar = False, vmin = 0.3, vmax = 1)
-
 
 #%%
 print(sc.stats.spearmanr(iso_ant_transform.iloc[:,0], emi_iso_binding.iloc[:,1]))
 print(sc.stats.spearmanr(iso_psy_transform.iloc[:,0], emi_iso_binding.iloc[:,2]))
 
 
-plt.scatter(IgG_ant_transform.iloc[0:40,0], emi_IgG_binding.iloc[0:40,1])
-print(sc.stats.spearmanr(IgG_ant_transform.iloc[0:40,0], emi_IgG_binding.iloc[0:40,1]))
+plt.scatter(IgG_ant_transform.iloc[0:42,0], emi_IgG_binding.iloc[0:42,1])
+print(sc.stats.spearmanr(IgG_ant_transform.iloc[0:42,0], emi_IgG_binding.iloc[0:42,1]))
 
-plt.scatter(IgG_psy_transform.iloc[0:40,0], emi_IgG_binding.iloc[0:40,2])
-print(sc.stats.spearmanr(IgG_psy_transform.iloc[0:40,0], emi_IgG_binding.iloc[0:40,2]))
-
-plt.scatter(IgG_ant_transform.iloc[40:83,0], emi_IgG_binding.iloc[40:83,1])
-print(sc.stats.spearmanr(IgG_ant_transform.iloc[40:83,0], emi_IgG_binding.iloc[40:83,1]))
-
-plt.scatter(IgG_psy_transform.iloc[40:83,0], emi_IgG_binding.iloc[40:83,2])
-print(sc.stats.spearmanr(IgG_psy_transform.iloc[40:83,0], emi_IgG_binding.iloc[40:83,2]))
+plt.scatter(IgG_psy_transform.iloc[0:42,0], emi_IgG_binding.iloc[0:42,2])
+print(sc.stats.spearmanr(IgG_psy_transform.iloc[0:42,0], emi_IgG_binding.iloc[0:42,2]))
 
 
 #%%
-fig, axs = plt.subplots(1, 2, figsize = (10,4))
-sns.distplot(emi_ant_transform.loc[emi_labels['ANT Binding'] == 0, 0], color = 'orange', ax = axs[0])
-sns.distplot(emi_ant_transform.loc[emi_labels['ANT Binding'] == 1, 0], color = 'blueviolet', ax = axs[0])
-axs[0].set_xticks([-4, -2, 0, 2, 4])
-axs[0].set_xticklabels([-4, -2, 0, 2, 4], fontsize = 26)
-axs[0].set_yticks([0.0, 0.2, 0.4, 0.6])
-axs[0].set_yticklabels([0.0, 0.2, 0.4, 0.6], fontsize = 26)
-axs[0].set_ylabel('')
+plt.figure()
+sns.distplot(emi_ant_transform.loc[emi_labels['ANT Binding'] == 0, 0], color = 'red')
+sns.distplot(emi_ant_transform.loc[emi_labels['ANT Binding'] == 1, 0], color = 'blue')
+plt.xticks([-4, -2, 0, 2, 4], [-4, -2, 0, 2, 4], fontsize = 22)
+plt.yticks([0.0, 0.2, 0.4, 0.6], [0.0, 0.2, 0.4, 0.6], fontsize = 22)
+plt.ylabel('')
 
-
-sns.distplot(emi_psy_transform.loc[emi_labels['PSY Binding'] == 0, 0], color = 'orange', ax = axs[1])
-sns.distplot(emi_psy_transform.loc[emi_labels['PSY Binding'] == 1, 0], color = 'blueviolet', ax = axs[1])
-axs[1].set_xticks([-4, -2, 0, 2, 4])
-axs[1].set_xticklabels([-4, -2, 0, 2, 4], fontsize = 26)
-axs[1].set_yticks([0.0, 0.2, 0.4, 0.6])
-axs[1].set_yticklabels([0.0, 0.2, 0.4, 0.6], fontsize = 26)
-axs[1].set_ylabel('')
+plt.figure()
+sns.distplot(emi_psy_transform.loc[emi_labels['PSY Binding'] == 0, 0], color = 'blue')
+sns.distplot(emi_psy_transform.loc[emi_labels['PSY Binding'] == 1, 0], color = 'red')
+plt.xticks([-4, -2, 0, 2, 4], [-4, -2, 0, 2, 4], fontsize = 22)
+plt.yticks([0.0, 0.2, 0.4, 0.6], [0.0, 0.2, 0.4, 0.6], fontsize = 22)
+plt.ylabel('')
 
 
 #%%
-cmap = plt.cm.get_cmap('plasma')
-colormap9= np.array([cmap(0.25),cmap(0.77)])
+cmap = plt.cm.get_cmap('bwr')
+colormap9= np.array([cmap(0.15),cmap(0.85)])
 cmap9 = LinearSegmentedColormap.from_list("mycmap", colormap9)
 
-colormap9r= np.array([cmap(0.77),cmap(0.25)])
+colormap9r= np.array([cmap(0.85),cmap(0.15)])
 cmap9r = LinearSegmentedColormap.from_list("mycmap", colormap9r)
 
-colormap10= np.array([cmap(0.25),cmap(0.40), cmap(0.6), cmap(0.77)])
-cmap10 = LinearSegmentedColormap.from_list("mycmap", colormap10)
+plt.figure()
+plt.scatter(iso_ant_transform.iloc[:,0], emi_iso_binding.iloc[:,1], c = iso_ant_predict.iloc[:,0], cmap = cmap9r, s = 150, edgecolor = 'k', linewidth = 0.5)
+plt.scatter(wt_ant_transform.iloc[:,0], 1, c = 'k', s = 250, edgecolor = 'k', linewidth = 0.5)
+plt.xticks([-4, -2, 0, 2, 4], [-4, -2, 0, 2, 4], fontsize = 22)
+plt.yticks([0.0, 0.4, 0.8, 1.2, 1.6], [0.0, 0.4, 0.8, 1.2, 1.6], fontsize = 22)
+plt.ylim(-0.15, 1.85)
 
-fig, ax = plt.subplots(2, 1, figsize = (4.55,8))
-
-ax[0].scatter(iso_ant_transform.iloc[:,0], emi_iso_binding.iloc[:,1], c = iso_ant_predict.iloc[:,0], cmap = cmap9r, s = 150, edgecolor = 'k', linewidth = 0.5)
-ax[0].scatter(wt_ant_transform.iloc[:,0], 1, c = 'k', s = 250, edgecolor = 'k', linewidth = 0.5)
-
-ax[0].set_xticks([-4, -2, 0, 2, 4])
-ax[0].set_xticklabels([-4, -2, 0, 2, 4], fontsize = 20)
-ax[0].set_yticks([0.0, 0.4, 0.8, 1.2, 1.6])
-ax[0].set_yticklabels([0.0, 0.4, 0.8, 1.2, 1.6], fontsize = 20)
-ax[0].set_ylim(-0.15, 1.85)
-
-
-ax[1].scatter(iso_psy_transform.iloc[:,0], emi_iso_binding.iloc[:,2], c = iso_psy_predict.iloc[:,0], cmap = cmap9r, s = 150, edgecolor = 'k', linewidth = 0.5)
-ax[1].scatter(wt_psy_transform.iloc[:,0], 1, c = 'k', s = 250, edgecolor = 'k', linewidth = 0.5)
-ax[1].set_xticks([-4, -2, 0, 2, 4])
-ax[1].set_xticklabels([-4, -2, 0, 2, 4], fontsize = 20)
-ax[1].set_yticks([0.0, 0.4, 0.8, 1.2, 1.6])
-ax[1].set_yticklabels([0.0, 0.4, 0.8, 1.2, 1.6], fontsize = 20)
-ax[1].set_ylim(-0.15, 1.85)
-
-plt.subplots_adjust(hspace = 0.5)
+plt.figure()
+plt.scatter(iso_psy_transform.iloc[:,0], emi_iso_binding.iloc[:,2], c = iso_psy_predict.iloc[:,0], cmap = cmap9, s = 150, edgecolor = 'k', linewidth = 0.5)
+plt.scatter(wt_psy_transform.iloc[:,0], 1, c = 'k', s = 250, edgecolor = 'k', linewidth = 0.5)
+plt.xticks([-4, -2, 0, 2, 4], [-4, -2, 0, 2, 4], fontsize = 22)
+plt.yticks([0.0, 0.4, 0.8, 1.2, 1.6], [0.0, 0.4, 0.8, 1.2, 1.6], fontsize = 22)
+plt.ylim(-0.15, 1.85)
 
 
 #%%
-
-
-fig, axs = plt.subplots(1, 1, figsize = (4.75,4.75))
-axs.scatter(emi_ant_transform, emi_psy_transform, color = 'white', edgecolor = 'k', s = 40, linewidth = 0.25)
-axs.scatter(IgG_ant_transform, IgG_psy_transform, color = cmap(0.25), edgecolor= 'k', s = 80, linewidth = 0.25)
-axs.scatter(wt_ant_transform.iloc[0,0], wt_psy_transform.iloc[0,0], color = cmap(0.77), s = 80, edgecolor= 'k', linewidth = 0.25)
-axs.set_xticks([-6, -4, -2, 0, 2, 4, 6])
-axs.set_xticklabels([-6, -4, -2, 0, 2, 4, 6], fontsize = 20)
-axs.set_yticks([-6, -4, -2, 0, 2, 4, 6])
-axs.set_yticklabels([-6, -4, -2, 0, 2, 4, 6], fontsize = 20)
-axs.set_ylabel('')
+plt.figure
+plt.scatter(emi_ant_transform, emi_psy_transform, color = 'white', edgecolor = 'k', s = 40, linewidth = 0.25)
+plt.scatter(IgG_ant_transform.iloc[0:41,0], IgG_psy_transform.iloc[0:41,0], color = cmap(0.15), edgecolor= 'k', s = 80, linewidth = 0.25)
+plt.scatter(wt_ant_transform.iloc[0,0], wt_psy_transform.iloc[0,0], color = 'black', s = 150, edgecolor= 'k', linewidth = 0.25)
+plt.xticks([-6, -4, -2, 0, 2, 4, 6], [-6, -4, -2, 0, 2, 4, 6], fontsize = 22)
+plt.yticks([-6, -4, -2, 0, 2, 4, 6], [-6, -4, -2, 0, 2, 4, 6], fontsize = 22)
+plt.ylabel('')
 
 
 #%%
-fig, ax = plt.subplots(2, 1, figsize = (4.55,8))
+plt.figure()
+plt.errorbar(IgG_ant_transform.iloc[0:41,0], emi_IgG_binding.iloc[0:41,1], yerr = emi_IgG_binding.iloc[0:41,5], linewidth = 0, elinewidth = 0.5, ecolor = 'k', capsize = 3, zorder = 1)
+plt.scatter(IgG_ant_transform.iloc[0:41,0], emi_IgG_binding.iloc[0:41,1], c = cmap(0.15), s = 150, edgecolor = 'k', linewidth = 0.25, zorder = 2)
+plt.scatter(wt_ant_transform.iloc[0,0], 1, color = 'k', s = 250, edgecolor= 'k', linewidth = 0.25)
+plt.xticks([1, 2, 3], [1, 2, 3], fontsize = 22)
+plt.yticks([0.0, 0.4, 0.8, 1.2, 1.6], [0.0, 0.4, 0.8, 1.2, 1.6], fontsize = 22)
+plt.ylim(-0.05, 1.65)
 
-ax[0].scatter(IgG_ant_transform.iloc[0:40,0], emi_IgG_binding.iloc[0:40,1], c = cmap(0.25), s = 150, edgecolor = 'k', linewidth = 0.5)
-ax[0].scatter(wt_ant_transform.iloc[0,0], 1, color = 'k', s = 250, edgecolor= 'k', linewidth = 0.25)
-ax[0].set_xticks([1, 2, 3])
-ax[0].set_xticklabels([1, 2, 3], fontsize = 20)
-ax[0].set_yticks([0.0, 0.4, 0.8, 1.2, 1.6])
-ax[0].set_yticklabels([0.0, 0.4, 0.8, 1.2, 1.6], fontsize = 20)
-ax[0].set_ylim(-0.05, 1.65)
-
-
-ax[1].scatter(IgG_psy_transform.iloc[0:40,0], emi_IgG_binding.iloc[0:40,2], c = cmap(0.25), s = 150, edgecolor = 'k', linewidth = 0.5)
-ax[1].scatter(wt_psy_transform.iloc[0,0], 1, color = 'k', s = 250, edgecolor= 'k', linewidth = 0.25)
-ax[1].set_xticks([1, 2, 3])
-ax[1].set_xticklabels([1, 2, 3], fontsize = 20)
-ax[1].set_yticks([0.0, 0.4, 0.8, 1.2])
-ax[1].set_yticklabels([0.0, 0.4, 0.8, 1.2], fontsize = 20)
-ax[1].set_ylim(-0.15, 1.45)
-
-plt.subplots_adjust(hspace = 0.5)
+plt.figure()
+plt.errorbar(IgG_psy_transform.iloc[0:41,0], emi_IgG_binding.iloc[0:41,2], yerr = emi_IgG_binding.iloc[0:41,6], linewidth = 0, elinewidth = 0.5, ecolor = 'k', capsize = 3, zorder = 1)
+plt.scatter(IgG_psy_transform.iloc[0:41,0], emi_IgG_binding.iloc[0:41,2], c = cmap(0.15), s = 150, edgecolor = 'k', linewidth = 0.25, zorder = 2)
+plt.scatter(wt_psy_transform.iloc[0,0], 1, color = 'k', s = 250, edgecolor= 'k', linewidth = 0.25)
+plt.xticks([1, 2, 3], [1, 2, 3], fontsize = 22)
+plt.yticks([0.0, 0.4, 0.8, 1.2], [0.0, 0.4, 0.8, 1.2], fontsize = 22)
+plt.ylim(-0.15, 1.45)
 
 
 #%%

@@ -52,7 +52,7 @@ b = babbler(batch_size=batch_size, model_path=MODEL_WEIGHT_PATH)
 
 # Before you can train your model, 
 sequences = []
-with open("lenzi_wt_seq.txt", "r") as source:
+with open("emi_IgG_seqs_noed.txt", "r") as source:
     with open("formatted.txt", "w") as destination:
         for i,seq in enumerate(source):
             seq = seq.strip()
@@ -102,7 +102,7 @@ print(average_hidden_pd)
 # In[7]:
 
 
-average_hidden_pd.to_csv("lenzi_wt_rep.csv")
+average_hidden_pd.to_csv("emi_IgG_reps_noed.csv")
 
 
 # In[8]:

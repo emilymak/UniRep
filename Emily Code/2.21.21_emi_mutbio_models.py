@@ -21,9 +21,7 @@ from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import cross_validate as cv
 from matplotlib.colors import ListedColormap, LinearSegmentedColormap
-import sgt
-sgt.__version__
-from sgt import SGT
+
 
 def split(word): 
     return [char for char in word]
@@ -254,29 +252,12 @@ plt.scatter(emi_iso_psy_transform.iloc[:,0], emi_iso_binding.iloc[:,2])
 ant_transforms_corr = ant_transforms.corr(method = 'spearman')
 psy_transforms_corr = psy_transforms.corr(method = 'spearman')
 
-plt.figure(figsize = (6,6))
-mask = np.zeros_like(ant_transforms_corr)
-mask[np.triu_indices_from(mask)] = True
-sns.heatmap(abs(ant_transforms_corr), annot = True, annot_kws = {'fontsize': 16}, mask = mask, cmap = cmap6_r, cbar = False, vmin = 0, vmax = 1)
 
-plt.figure(figsize = (6,6))
-mask = np.zeros_like(psy_transforms_corr)
-mask[np.triu_indices_from(mask)] = True
-sns.heatmap(abs(psy_transforms_corr), annot = True, annot_kws = {'fontsize': 16}, mask = mask, cmap = cmap6_r, cbar = False, vmin = 0, vmax = 1)
+plt.scatter(IgG_ant_transform.iloc[0:42,0], emi_IgG_binding.iloc[0:42,1])
+print(sc.stats.spearmanr(IgG_ant_transform.iloc[0:42,0], emi_IgG_binding.iloc[0:42,1]))
 
-
-plt.scatter(IgG_ant_transform.iloc[0:40,0], emi_IgG_binding.iloc[0:40,1])
-print(sc.stats.spearmanr(IgG_ant_transform.iloc[0:40,0], emi_IgG_binding.iloc[0:40,1]))
-
-plt.scatter(IgG_psy_transform.iloc[0:40,0], emi_IgG_binding.iloc[0:40,2])
-print(sc.stats.spearmanr(IgG_psy_transform.iloc[0:40,0], emi_IgG_binding.iloc[0:40,2]))
-
-
-plt.scatter(IgG_ant_transform.iloc[83:98,0], emi_IgG_binding.iloc[83:98,1])
-print(sc.stats.spearmanr(IgG_ant_transform.iloc[83:98,0], emi_IgG_binding.iloc[83:98,1]))
-
-plt.scatter(IgG_psy_transform.iloc[83:98,0], emi_IgG_binding.iloc[83:98,2])
-print(sc.stats.spearmanr(IgG_psy_transform.iloc[83:98,0], emi_IgG_binding.iloc[83:98,2]))
+plt.scatter(IgG_psy_transform.iloc[0:42,0], emi_IgG_binding.iloc[0:42,2])
+print(sc.stats.spearmanr(IgG_psy_transform.iloc[0:42,0], emi_IgG_binding.iloc[0:42,2]))
 
 
 

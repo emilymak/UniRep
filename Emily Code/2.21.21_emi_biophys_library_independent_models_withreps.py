@@ -668,6 +668,7 @@ lda_ant.fit(emi, emi_labels.iloc[:,3])
 iso_ant_transform = pd.DataFrame(lda_ant.transform(emi_iso))
 IgG_ant_transform = pd.DataFrame(lda_ant.transform(emi_IgG))
 ant_scalings = lda_ant.scalings_
+emi_ant_transform = pd.DataFrame(lda_ant.transform(emi))
 
 lda_ant.fit(emi_0NotY, emi_rep_labels_0NotY.iloc[:,3])
 iso_transform_0Y = pd.DataFrame(lda_ant.transform(emi_iso_0Y))
@@ -711,6 +712,7 @@ lda_psy.fit(emi, emi_labels.iloc[:,2])
 iso_psy_transform = pd.DataFrame(lda_psy.transform(emi_iso))
 IgG_psy_transform = pd.DataFrame(lda_psy.transform(emi_IgG))
 psy_scalings = lda_psy.scalings_
+emi_psy_transform = pd.DataFrame(lda_psy.transform(emi))
 
 lda_psy.fit(emi_0NotY, emi_rep_labels_0NotY.iloc[:,2])
 iso_transform_0Y = pd.DataFrame(lda_psy.transform(emi_iso_0Y))
@@ -751,18 +753,7 @@ psy_transforms = pd.concat([emi_iso_binding.iloc[:,2], iso_psy_transform.iloc[:,
 ant_transforms_corr = ant_transforms.corr(method = 'spearman')
 psy_transforms_corr = psy_transforms.corr(method = 'spearman')
 
-plt.figure(figsize = (6,6))
-mask = np.zeros_like(ant_transforms_corr)
-mask[np.triu_indices_from(mask)] = True
-sns.heatmap(abs(ant_transforms_corr), annot = True, annot_kws = {'fontsize': 16}, mask = mask, cmap = cmap6_r, cbar = False, vmin = 0, vmax = 1)
 
-plt.figure(figsize = (6,6))
-mask = np.zeros_like(psy_transforms_corr)
-mask[np.triu_indices_from(mask)] = True
-sns.heatmap(abs(psy_transforms_corr), annot = True, annot_kws = {'fontsize': 16}, mask = mask, cmap = cmap6_r, cbar = False, vmin = 0, vmax = 1)
-
-
-#%%
 plt.scatter(iso_ant_transform.iloc[:,0], emi_iso_binding.iloc[:,1])
 print(sc.stats.spearmanr(iso_ant_transform.iloc[:,0], emi_iso_binding.iloc[:,1]))
 
@@ -770,30 +761,46 @@ plt.scatter(iso_psy_transform.iloc[:,0], emi_iso_binding.iloc[:,2])
 print(sc.stats.spearmanr(iso_psy_transform.iloc[:,0], emi_iso_binding.iloc[:,2]))
 
 
-plt.scatter(IgG_ant_transform.iloc[0:41,0], emi_IgG_binding.iloc[0:41,1])
-print(sc.stats.spearmanr(IgG_ant_transform.iloc[0:41,0], emi_IgG_binding.iloc[0:41,1]))
+plt.scatter(IgG_ant_transform.iloc[0:42,0], emi_IgG_binding.iloc[0:42,1])
+print(sc.stats.spearmanr(IgG_ant_transform.iloc[0:42,0], emi_IgG_binding.iloc[0:42,1]))
 
-plt.scatter(IgG_psy_transform.iloc[0:41,0], emi_IgG_binding.iloc[0:41,2])
-print(sc.stats.spearmanr(IgG_psy_transform.iloc[0:41,0], emi_IgG_binding.iloc[0:41,2]))
+plt.scatter(IgG_psy_transform.iloc[0:42,0], emi_IgG_binding.iloc[0:42,2])
+print(sc.stats.spearmanr(IgG_psy_transform.iloc[0:42,0], emi_IgG_binding.iloc[0:42,2]))
 
-plt.scatter(IgG_ant_transform.iloc[41:83,0], emi_IgG_binding.iloc[41:83,1])
-print(sc.stats.spearmanr(IgG_ant_transform.iloc[41:83,0], emi_IgG_binding.iloc[41:83,1]))
+plt.scatter(IgG_ant_transform.iloc[41:103,0], emi_IgG_binding.iloc[41:103,1])
+print(sc.stats.spearmanr(IgG_ant_transform.iloc[41:103,0], emi_IgG_binding.iloc[41:103,1]))
 
-plt.scatter(IgG_psy_transform.iloc[41:83,0], emi_IgG_binding.iloc[41:83,2])
-print(sc.stats.spearmanr(IgG_psy_transform.iloc[41:83,0], emi_IgG_binding.iloc[41:83,2]))
-
-
-plt.scatter(IgG_ant_transform.iloc[41:98,0], emi_IgG_binding.iloc[41:98,1])
-print(sc.stats.spearmanr(IgG_ant_transform.iloc[41:98,0], emi_IgG_binding.iloc[41:98,1]))
-
-plt.scatter(IgG_psy_transform.iloc[41:98,0], emi_IgG_binding.iloc[41:98,2])
-print(sc.stats.spearmanr(IgG_psy_transform.iloc[41:98,0], emi_IgG_binding.iloc[41:98,2]))
+plt.scatter(IgG_psy_transform.iloc[41:103,0], emi_IgG_binding.iloc[41:103,2])
+print(sc.stats.spearmanr(IgG_psy_transform.iloc[41:103,0], emi_IgG_binding.iloc[41:103,2]))
 
 
-plt.scatter(IgG_ant_transform.iloc[83:98,0], emi_IgG_binding.iloc[83:98,1])
-print(sc.stats.spearmanr(IgG_ant_transform.iloc[83:98,0], emi_IgG_binding.iloc[83:98,1]))
+#%%
+cmap = plt.cm.get_cmap('bwr')
 
-plt.scatter(IgG_psy_transform.iloc[83:98,0], emi_IgG_binding.iloc[83:98,2])
-print(sc.stats.spearmanr(IgG_psy_transform.iloc[83:98,0], emi_IgG_binding.iloc[83:98,2]))
+plt.figure()
+plt.scatter(emi_ant_transform, emi_psy_transform, color = 'white', edgecolor = 'k', s = 40, linewidth = 0.25)
+plt.scatter(IgG_ant_transform.iloc[42:103,0], IgG_psy_transform.iloc[42:103,0], color = cmap(0.15), edgecolor= 'k', s = 80, linewidth = 0.25)
+plt.scatter(IgG_ant_transform.iloc[41,0], IgG_psy_transform.iloc[41,0], color = 'black', s = 150, edgecolor= 'k', linewidth = 0.25)
+plt.xticks([-6, -4, -2, 0, 2, 4, 6], [-6, -4, -2, 0, 2, 4, 6], fontsize = 22)
+plt.yticks([-6, -4, -2, 0, 2, 4, 6], [-6, -4, -2, 0, 2, 4, 6], fontsize = 22)
+plt.ylabel('')
+
+
+#%%
+emi_corr_columns = list(np.arange(1,65))
+emi_corr_columns.extend(list('ACDEFGHIKLMNPQRSTVWY'))
+emi_corr_columns.append('pI')
+emi_corr_columns.append('HM')
+
+emi_corr = emi.corr()
+emi_corr.columns = emi_corr_columns
+
+ax = sns.heatmap(emi_corr.iloc[0:64, 64:87], cmap = 'bwr')
+cbar = ax.collections[0].colorbar
+cbar.ax.tick_params(labelsize=20)
+ax.tick_params(axis = 'x', labelsize = 20)
+ax.tick_params(axis = 'y', labelsize = 20)
+ax.set_yticks([0,4,8,12,16,20,24, 28,32,36,40,44,48,52,56,60,64])
+ax.set_yticklabels([0,4,8,12,16,20,24, 28,32,36,40,44,48,52,56,60,64])
 
 

@@ -22,6 +22,8 @@ from scipy import stats
 import math
 import seaborn as sns
 
+cmap = plt.cm.get_cmap('bwr')
+
 
 #%%
 emi_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_seqs.txt", header = None, index_col = 0)
@@ -36,8 +38,8 @@ emi_iso_binding = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Data
 emi_iso_binding.set_index('VH Sequence', inplace = True)
 emi_iso_binding.drop('Sample.Name', axis = 1, inplace = True)
 
-emi_IgG_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_IgG_seqs.txt", header = None, index_col = None)
-emi_IgG_binding = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_IgG_binding.csv", header = 0, index_col = None)
+emi_IgG_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_IgG_seqs_noed.txt", header = None, index_col = None)
+emi_IgG_binding = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_IgG_binding_noed.csv", header = 0, index_col = None)
 emi_IgG_binding = emi_IgG_binding.iloc[:,1:3]
 emi_IgG_binding.set_index(emi_IgG_seqs.iloc[:,0], inplace = True)
 res_dict = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\residue_dict.csv", header = 0, index_col = 0)
@@ -74,7 +76,6 @@ emi_rep1_psr_pos.set_index(0, inplace = True)
 emi_rep2_psr_pos.set_index(0, inplace = True)
 
 
-
 #%%
 emi_inlib_iso_psy_rep1 = pd.concat([emi_iso_binding.iloc[:,1], emi_input_rep1, emi_rep1_ova_neg, emi_rep1_psr_neg], axis = 1, ignore_index = False)
 emi_inlib_iso_psy_rep1.columns = ['label', 'Input Frequency', 'OVA Frequency', 'PSR Frequency']
@@ -95,7 +96,6 @@ frequency_iso_psy_neg.dropna(subset = ['label', 'label3'], inplace = True)
 frequency_iso_psy = frequency_iso_psy_neg
 frequency_iso_psy['AVE Freq'] = (frequency_iso_psy.iloc[:,2] + frequency_iso_psy.iloc[:,3] + frequency_iso_psy.iloc[:,8] + frequency_iso_psy.iloc[:,9])/4
 frequency_iso_psy.reset_index(drop = False, inplace = True)
-
 
 
 emi_inlib_iso_ant_rep1 = pd.concat([emi_iso_binding.iloc[:,0], emi_input_rep1, emi_rep1_antigen_pos], axis = 1, ignore_index = False)
@@ -155,7 +155,7 @@ enrichment_iso_ant.reset_index(drop = False, inplace = True)
 
 #%%
 from matplotlib.colors import ListedColormap, LinearSegmentedColormap
-cmap = plt.cm.get_cmap('plasma')
+cmap = plt.cm.get_cmap('bwr')
 colormap9= np.array([cmap(0.25),cmap(0.77)])
 cmap9 = LinearSegmentedColormap.from_list("mycmap", colormap9)
 
@@ -165,52 +165,38 @@ cmap9r = LinearSegmentedColormap.from_list("mycmap", colormap9r)
 colormap10= np.array([cmap(0.25),cmap(0.40), cmap(0.6), cmap(0.77)])
 cmap10 = LinearSegmentedColormap.from_list("mycmap", colormap10)
 
-fig, axs = plt.subplots(1, 2, figsize = (12,4))
 
-axs[0].scatter(frequency_iso_ant['AVE Freq'], frequency_iso_ant['label'], c = cmap(0.25), s = 150, edgecolor = 'k', linewidth = 0.5)
-axs[0].scatter(frequency_iso_ant.loc[59, 'AVE Freq'], 1, c = 'k', s = 250, edgecolor = 'k', linewidth = 0.5)
-axs[0].set_xticks([-4, -2, 0, 2, 4, 6])
-axs[0].set_xticklabels([-4, -2, 0, 2, 4, 6], fontsize = 18)
-axs[0].set_xscale('log')
-axs[0].set_yticks([0.0, 0.4, 0.8, 1.2, 1.6])
-axs[0].set_yticklabels([0.0, 0.4, 0.8, 1.2, 1.6], fontsize = 18)
-axs[0].set_ylim(-0.35, 1.8)
+plt.figure()
+plt.scatter(frequency_iso_ant['AVE Freq'], frequency_iso_ant['label'], c = cmap(0.15), s = 150, edgecolor = 'k', linewidth = 0.5)
+plt.scatter(frequency_iso_ant.loc[59, 'AVE Freq'], 1, c = 'k', s = 250, edgecolor = 'k', linewidth = 0.5)
+plt.xticks([-4, -2, 0, 2, 4, 6], [-4, -2, 0, 2, 4, 6], fontsize = 22)
+plt.xscale('log')
+plt.yticks([0.0, 0.4, 0.8, 1.2, 1.6], [0.0, 0.4, 0.8, 1.2, 1.6], fontsize = 22)
+plt.ylim(-0.4, 1.8)
 
-
-axs[1].scatter(enrichment_iso_ant['AVE ER'], enrichment_iso_ant['label'], c = cmap(0.25), s = 150, edgecolor = 'k', linewidth = 0.5)
-axs[1].scatter(3.37595, 1, c = 'k', s = 250, edgecolor = 'k', linewidth = 0.5)
-axs[1].set_xticks([-4, -2, 0, 2, 4, 6])
-axs[1].set_xticklabels([-4, -2, 0, 2, 4, 6], fontsize = 18)
-axs[1].set_yticks([0.0, 0.4, 0.8, 1.2, 1.6])
-axs[1].set_yticklabels([0.0, 0.4, 0.8, 1.2, 1.6], fontsize = 18)
-axs[1].set_ylim(-0.35, 1.8)
-
-plt.subplots_adjust(wspace = 0.4)
+plt.figure()
+plt.scatter(enrichment_iso_ant['AVE ER'], enrichment_iso_ant['label'], c = cmap(0.15), s = 150, edgecolor = 'k', linewidth = 0.5)
+plt.scatter(3.37595, 1, c = 'k', s = 250, edgecolor = 'k', linewidth = 0.5)
+plt.xticks([-4, -2, 0, 2, 4, 6], [-4, -2, 0, 2, 4, 6], fontsize = 22)
+plt.yticks([0.0, 0.4, 0.8, 1.2, 1.6], [0.0, 0.4, 0.8, 1.2, 1.6], fontsize = 22)
+plt.ylim(-0.4, 1.8)
 
 
 #%%
-fig, axs = plt.subplots(1, 2, figsize = (12,4))
+plt.figure()
+plt.scatter(frequency_iso_psy['AVE Freq'], frequency_iso_psy['label'], c = cmap(0.85), s = 150, edgecolor = 'k', linewidth = 0.5)
+plt.scatter(frequency_iso_psy.loc[122, 'AVE Freq'], 1, c = 'k', s = 250, edgecolor = 'k', linewidth = 0.5)
+plt.xticks([-4, -2, 0, 2, 4, 6], [-4, -2, 0, 2, 4, 6], fontsize = 22)
+plt.xscale('log')
+plt.yticks([0.2, 0.4, 0.6, 0.8, 1.0, 1.2], [0.2, 0.4, 0.6, 0.8, 1.0, 1.2], fontsize = 22)
+plt.ylim(0.15, 1.2)
 
-axs[0].scatter(frequency_iso_psy['AVE Freq'], frequency_iso_psy['label'], c = cmap(0.77), s = 150, edgecolor = 'k', linewidth = 0.5)
-axs[0].scatter(frequency_iso_psy.loc[122, 'AVE Freq'], 1, c = 'k', s = 250, edgecolor = 'k', linewidth = 0.5)
-axs[0].set_xticks([-4, -2, 0, 2, 4, 6])
-axs[0].set_xticklabels([-4, -2, 0, 2, 4, 6], fontsize = 18)
-axs[0].set_xscale('log')
-axs[0].set_yticks([0.2, 0.4, 0.6, 0.8, 1.0, 1.2])
-axs[0].set_yticklabels([0.2, 0.4, 0.6, 0.8, 1.0, 1.2], fontsize = 18)
-axs[0].set_ylim(0.15, 1.2)
-
-
-axs[1].scatter(enrichment_iso_psy['AVE ER'], enrichment_iso_psy['label'], c = cmap(0.77), s = 150, edgecolor = 'k', linewidth = 0.5)
-axs[1].scatter(-2.93006, 1, c = 'k', s = 250, edgecolor = 'k', linewidth = 0.5)
-axs[1].set_xticks([-4, -2, 0, 2, 4])
-axs[1].set_xticklabels([-4, -2, 0, 2, 4], fontsize = 18)
-axs[1].set_yticks([0.2, 0.4, 0.6, 0.8, 1.0, 1.2])
-axs[1].set_yticklabels([0.2, 0.4, 0.6, 0.8, 1.0, 1.2], fontsize = 18)
-axs[1].set_ylim(0.15, 1.2)
-
-plt.subplots_adjust(wspace = 0.4)
-
+plt.figure()
+plt.scatter(enrichment_iso_psy['AVE ER'], enrichment_iso_psy['label'], c = cmap(0.85), s = 150, edgecolor = 'k', linewidth = 0.5)
+plt.scatter(-2.93006, 1, c = 'k', s = 250, edgecolor = 'k', linewidth = 0.5)
+plt.xticks([-4, -2, 0, 2, 4], [-4, -2, 0, 2, 4], fontsize = 22)
+plt.yticks([0.2, 0.4, 0.6, 0.8, 1.0, 1.2], [0.2, 0.4, 0.6, 0.8, 1.0, 1.2], fontsize = 22)
+plt.ylim(0.15, 1.2)
 
 
 #%%

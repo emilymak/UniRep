@@ -99,9 +99,9 @@ emi_rep_labels_5NotA = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\
 emi_rep_labels_6NotW = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_rep_labels_6NotW.csv", header = 0, index_col = 0)
 emi_rep_labels_7NotY = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_rep_labels_7NotY.csv", header = 0, index_col = 0)
 
-emi_IgG_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_IgG_seqs_noed.txt", header = None, index_col = None)
-emi_IgG_seqs_pI = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_IgG_seqs_noed_pI.txt", sep = '\t', header = None, index_col = None)
-emi_IgG_binding = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_IgG_binding_noed.csv", header = 0, index_col = None)
+emi_IgG_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_IgG_seqs_noed_blosum.txt", header = None, index_col = None)
+emi_IgG_seqs_pI = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_IgG_seqs_noed_blosum_pI.txt", sep = '\t', header = None, index_col = None)
+emi_IgG_binding = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_IgG_binding_noed_blosum.csv", header = 0, index_col = None)
 emi_IgG_flags = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\flagsummary_emi_IgG.csv", header = 0, index_col = 0)
 
 res_dict = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\residue_dict.csv", header = 0, index_col = 0)
@@ -715,6 +715,7 @@ lda_ant = LDA()
 cv_lda_ant = cv(lda_ant, emi, emi_labels.iloc[:,3])
 print(np.mean(cv_lda_ant['test_score']))
 lda_ant.fit(emi, emi_labels.iloc[:,3])
+emi_ant_transform = pd.DataFrame(lda_ant.transform(emi))
 iso_ant_transform = pd.DataFrame(lda_ant.transform(emi_iso))
 IgG_ant_transform = pd.DataFrame(lda_ant.transform(emi_IgG))
 ant_scalings = lda_ant.scalings_
@@ -758,9 +759,9 @@ lda_psy = LDA()
 cv_lda_psy = cv(lda_psy, emi, emi_labels.iloc[:,2])
 print(np.mean(cv_lda_psy['test_score']))
 lda_psy.fit(emi, emi_labels.iloc[:,2])
+emi_psy_transform = pd.DataFrame(lda_psy.transform(emi))
 iso_psy_transform = pd.DataFrame(lda_psy.transform(emi_iso))
 IgG_psy_transform = pd.DataFrame(lda_psy.transform(emi_IgG))
-psy_scalings = lda_psy.scalings_
 
 lda_psy.fit(emi_0NotY, emi_rep_labels_0NotY.iloc[:,2])
 iso_transform_0Y = pd.DataFrame(lda_psy.transform(emi_iso_0Y))
@@ -801,16 +802,6 @@ psy_transforms = pd.concat([emi_iso_binding.iloc[:,2], iso_psy_transform.iloc[:,
 ant_transforms_corr = ant_transforms.corr(method = 'spearman')
 psy_transforms_corr = psy_transforms.corr(method = 'spearman')
 
-plt.figure(figsize = (6,6))
-mask = np.zeros_like(ant_transforms_corr)
-mask[np.triu_indices_from(mask)] = True
-sns.heatmap(abs(ant_transforms_corr), annot = True, annot_kws = {'fontsize': 16}, mask = mask, cmap = cmap6_r, cbar = False, vmin = 0, vmax = 1)
-
-plt.figure(figsize = (6,6))
-mask = np.zeros_like(psy_transforms_corr)
-mask[np.triu_indices_from(mask)] = True
-sns.heatmap(abs(psy_transforms_corr), annot = True, annot_kws = {'fontsize': 16}, mask = mask, cmap = cmap6_r, cbar = False, vmin = 0, vmax = 1)
-
 
 #%%
 plt.scatter(iso_ant_transform.iloc[:,0], emi_iso_binding.iloc[:,1])
@@ -819,23 +810,87 @@ print(sc.stats.spearmanr(iso_ant_transform.iloc[:,0], emi_iso_binding.iloc[:,1])
 plt.scatter(iso_psy_transform.iloc[:,0], emi_iso_binding.iloc[:,2])
 print(sc.stats.spearmanr(iso_psy_transform.iloc[:,0], emi_iso_binding.iloc[:,2]))
 
+plt.scatter(IgG_ant_transform.iloc[0:42,0], emi_IgG_binding.iloc[0:42,1])
+print(sc.stats.spearmanr(IgG_ant_transform.iloc[0:42,0], emi_IgG_binding.iloc[0:42,1]))
 
-plt.scatter(IgG_ant_transform.iloc[0:41,0], emi_IgG_binding.iloc[0:41,1])
-print(sc.stats.spearmanr(IgG_ant_transform.iloc[0:41,0], emi_IgG_binding.iloc[0:41,1]))
+plt.scatter(IgG_psy_transform.iloc[0:42,0], emi_IgG_binding.iloc[0:42,2])
+print(sc.stats.spearmanr(IgG_psy_transform.iloc[0:42,0], emi_IgG_binding.iloc[0:42,2]))
 
-plt.scatter(IgG_psy_transform.iloc[0:41,0], emi_IgG_binding.iloc[0:41,2])
-print(sc.stats.spearmanr(IgG_psy_transform.iloc[0:41,0], emi_IgG_binding.iloc[0:41,2]))
+plt.scatter(IgG_ant_transform.iloc[41:103,0], emi_IgG_binding.iloc[41:103,1])
+print(sc.stats.spearmanr(IgG_ant_transform.iloc[41:103,0], emi_IgG_binding.iloc[41:103,1]))
 
-plt.scatter(IgG_ant_transform.iloc[41:98,0], emi_IgG_binding.iloc[41:98,1])
-print(sc.stats.spearmanr(IgG_ant_transform.iloc[41:98,0], emi_IgG_binding.iloc[41:98,1]))
+plt.scatter(IgG_psy_transform.iloc[41:103,0], emi_IgG_binding.iloc[41:103,2])
+print(sc.stats.spearmanr(IgG_psy_transform.iloc[41:103,0], emi_IgG_binding.iloc[41:103,2]))
 
-plt.scatter(IgG_psy_transform.iloc[41:98,0], emi_IgG_binding.iloc[41:98,2])
-print(sc.stats.spearmanr(IgG_psy_transform.iloc[41:98,0], emi_IgG_binding.iloc[41:98,2]))
 
-plt.scatter(IgG_ant_transform.iloc[83:98,0], emi_IgG_binding.iloc[83:98,1])
-print(sc.stats.spearmanr(IgG_ant_transform.iloc[83:98,0], emi_IgG_binding.iloc[83:98,1]))
+#%%
+cmap = plt.cm.get_cmap('bwr')
 
-plt.scatter(IgG_psy_transform.iloc[83:98,0], emi_IgG_binding.iloc[83:98,2])
-print(sc.stats.spearmanr(IgG_psy_transform.iloc[83:98,0], emi_IgG_binding.iloc[83:98,2]))
+plt.figure()
+plt.scatter(emi_ant_transform, -1*emi_psy_transform, color = 'white', edgecolor = 'k', s = 40, linewidth = 0.25)
+plt.scatter(IgG_ant_transform.iloc[42:103,0], -1*IgG_psy_transform.iloc[42:103,0], color = cmap(0.15), edgecolor= 'k', s = 80, linewidth = 0.25)
+plt.scatter(IgG_ant_transform.iloc[41,0], -1*IgG_psy_transform.iloc[41,0], color = 'black', s = 150, edgecolor= 'k', linewidth = 0.25)
+plt.xticks([-6, -4, -2, 0, 2, 4, 6], [-6, -4, -2, 0, 2, 4, 6], fontsize = 22)
+plt.yticks([-6, -4, -2, 0, 2, 4, 6], [-6, -4, -2, 0, 2, 4, 6], fontsize = 22)
+plt.ylabel('')
+
+
+#%%
+from sklearn.decomposition import PCA
+pca = PCA(n_components = 2)
+emi_pca = pd.DataFrame(pca.fit_transform(emi.iloc[:,:]))
+iso_pca = pd.DataFrame(pca.transform(emi_iso.iloc[:,:]))
+IgG_pca = pd.DataFrame(pca.transform(emi_IgG.iloc[:,:]))
+
+emi_mutations = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs_mutations.csv", header = 0, index_col = 0)
+emi_biophys = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_biophys.csv", header = 0, index_col = None)
+
+
+#%%
+cmap = plt.cm.get_cmap('bwr')
+colormap9= np.array([cmap(0.15),cmap(0.85)])
+cmap9 = LinearSegmentedColormap.from_list("mycmap", colormap9)
+
+colormap9r= np.array([cmap(0.85),cmap(0.15)])
+cmap9r = LinearSegmentedColormap.from_list("mycmap", colormap9r)
+
+colormap10= np.array([cmap(0.0010),cmap(0.45), cmap(0.6), cmap(0.99)])
+cmap10 = LinearSegmentedColormap.from_list("mycmap", colormap10)
+
+"""
+fig, axs = plt.subplots(1,3, figsize = (13,3))
+axs[0].scatter(emi_pca.iloc[1000:3000,0], emi_pca.iloc[1000:3000,1], c = emi_labels.iloc[1000:3000,3], cmap = cmap9r, s = 15, edgecolor = 'k', linewidth = 0.0005)
+axs[1].scatter(emi_pca.iloc[1000:3000,0], emi_pca.iloc[1000:3000,1], c = emi_labels.iloc[1000:3000,2], cmap = cmap9, s = 15, edgecolor = 'k', linewidth = 0.0005)
+axs[2].scatter(emi_pca.iloc[1000:3000,0], emi_pca.iloc[1000:3000,1], c = emi_biophys.iloc[1000:3000,50], cmap = cmap10, s = 15, edgecolor = 'k', linewidth = 0.0005)
+plt.subplots_adjust(wspace = 0.4)
+"""
+
+fig, axs = plt.subplots(1,3, figsize = (13,3))
+axs[0].scatter(IgG_pca.iloc[:,0], IgG_pca.iloc[:,1], c = emi_IgG_binding.iloc[:,1], cmap = cmap10, s = 25, edgecolor = 'k', linewidth = 0.0005)
+axs[1].scatter(IgG_pca.iloc[:,0], IgG_pca.iloc[:,1], c = emi_IgG.iloc[:,0], cmap = cmap10, s = 25, edgecolor = 'k', linewidth = 0.0005)
+axs[2].scatter(IgG_pca.iloc[:,0], IgG_pca.iloc[:,1], c = emi_IgG.iloc[:,2], cmap = cmap10, s = 25, edgecolor = 'k', linewidth = 0.0005)
+plt.subplots_adjust(wspace = 0.4)
+
+#%%
+from sklearn.cluster import DBSCAN
+cluster = DBSCAN(min_samples=1).fit(emi_IgG)
+plt.scatter(emi_IgG_binding.iloc[:,1], emi_IgG_binding.iloc[:,2], c = cluster.labels_)
+
+#%%
+from sklearn.cluster import SpectralClustering
+cluster = SpectralClustering(n_clusters=4).fit(emi_IgG)
+plt.scatter(emi_IgG_binding.iloc[:,1], emi_IgG_binding.iloc[:,2], c = cluster.labels_)
+
+#%%
+from sklearn.mixture import GaussianMixture
+cluster = GaussianMixture(n_components=6).fit_predict(emi_IgG)
+plt.scatter(emi_IgG_binding.iloc[:,1], emi_IgG_binding.iloc[:,2], c = cluster)
+
+#%%
+IgG_corr_df = pd.concat([emi_IgG_binding.iloc[:,1:4], emi_IgG], axis = 1, ignore_index = True).corr()
+
+sns.heatmap(IgG_corr_df.iloc[:,0:3], cmap = 'inferno', annot = True)
+
+
 
 
