@@ -5,14 +5,6 @@ Created on Mon Feb 20 13:13:08 2021
 @author: makow
 """
 
-
-# -*- coding: utf-8 -*-
-"""
-Created on Wed May 27 15:05:03 2020
-
-@author: makow
-"""
-
 import numpy as np
 import pandas as pd
 import statistics
@@ -76,7 +68,6 @@ emi_rep2_psr_pos.set_index(0, inplace = True)
 
 
 #%%
-"""
 emi_inlib_IgG_psy_rep1 = pd.concat([emi_IgG_binding.iloc[0:42,2], emi_input_rep1, emi_rep1_ova_neg, emi_rep1_psr_neg], axis = 1, ignore_index = False)
 emi_inlib_IgG_psy_rep1.columns = ['label', 'Input Frequency', 'OVA Frequency', 'PSR Frequency']
 emi_inlib_IgG_psy_rep1.dropna(subset = ['label'], inplace = True)
@@ -95,7 +86,9 @@ frequency_IgG_psy_neg.dropna(subset = ['label', 'label3'], inplace = True)
 
 frequency_IgG_psy = frequency_IgG_psy_neg
 frequency_IgG_psy['AVE Freq'] = (frequency_IgG_psy.iloc[:,2] + frequency_IgG_psy.iloc[:,3] + frequency_IgG_psy.iloc[:,8] + frequency_IgG_psy.iloc[:,9])/4
+frequency_IgG_psy = pd.concat([frequency_IgG_psy, emi_IgG_binding.iloc[:,5]], axis = 1)
 frequency_IgG_psy.reset_index(drop = False, inplace = True)
+frequency_IgG_psy.dropna(subset = ['label', 'label3'], inplace = True)
 
 
 emi_inlib_IgG_ant_rep1 = pd.concat([emi_IgG_binding.iloc[0:42,1], emi_input_rep1, emi_rep1_antigen_pos], axis = 1, ignore_index = False)
@@ -112,7 +105,9 @@ frequency_IgG_ant_neg.dropna(subset = ['label', 'label3'], inplace = True)
 
 frequency_IgG_ant = frequency_IgG_ant_neg
 frequency_IgG_ant['AVE Freq'] = (frequency_IgG_ant.iloc[:,2] + frequency_IgG_ant.iloc[:,6])/2
+frequency_IgG_ant = pd.concat([frequency_IgG_ant, emi_IgG_binding.iloc[:,4]], axis = 1)
 frequency_IgG_ant.reset_index(drop = False, inplace = True)
+frequency_IgG_ant.dropna(subset = ['label', 'label3'], inplace = True)
 
 
 #%%
@@ -133,7 +128,9 @@ enrichment_IgG_psy_neg = pd.concat([emi_inlib_IgG_psy_rep1, emi_inlib_IgG_psy_re
 enrichment_IgG_psy_neg.dropna(subset = ['label', 'label3'], inplace = True)
 enrichment_IgG_psy = enrichment_IgG_psy_neg
 enrichment_IgG_psy['AVE ER'] = (enrichment_IgG_psy.iloc[:,4] + enrichment_IgG_psy.iloc[:,5] + enrichment_IgG_psy.iloc[:,10] + enrichment_IgG_psy.iloc[:,11])/4
+enrichment_IgG_psy = pd.concat([enrichment_IgG_psy, emi_IgG_binding.iloc[:,5]], axis = 1)
 enrichment_IgG_psy.reset_index(drop = False, inplace = True)
+enrichment_IgG_psy.dropna(subset = ['label', 'label3'], inplace = True)
 
 
 emi_inlib_IgG_ant_rep1 = pd.concat([emi_IgG_binding.iloc[0:42,1], emi_input_rep1, emi_rep1_antigen_pos], axis = 1, ignore_index = False)
@@ -150,7 +147,9 @@ enrichment_IgG_ant_neg.dropna(inplace = True)
 
 enrichment_IgG_ant = enrichment_IgG_ant_neg
 enrichment_IgG_ant['AVE ER'] = (enrichment_IgG_ant.iloc[:,3] + enrichment_IgG_ant.iloc[:,7])/2
+enrichment_IgG_ant = pd.concat([enrichment_IgG_ant, emi_IgG_binding.iloc[:,4]], axis = 1)
 enrichment_IgG_ant.reset_index(drop = False, inplace = True)
+enrichment_IgG_ant.dropna(subset = ['label', 'label3'], inplace = True)
 
 
 #%%
@@ -167,35 +166,42 @@ cmap10 = LinearSegmentedColormap.from_list("mycmap", colormap10)
 
 
 plt.figure()
-plt.scatter(frequency_IgG_ant['AVE Freq'], frequency_IgG_ant['label'], c = cmap(0.15), s = 150, edgecolor = 'k', linewidth = 0.5)
-plt.scatter(0.002476627274008098, 1, c = 'k', s = 250, edgecolor = 'k', linewidth = 0.5)
-plt.xticks([-6, -4, -2, 0, 2, 4, 6, 8], [-6, -4, -2, 0, 2, 4, 6, 8], fontsize = 22)
+plt.errorbar(frequency_IgG_ant['AVE Freq'], frequency_IgG_ant['label'], frequency_IgG_ant['ANT STDEV'], linewidth = 0, elinewidth = 0.5, ecolor = 'k', capsize = 3, zorder = 1)
+plt.scatter(frequency_IgG_ant['AVE Freq'], frequency_IgG_ant['label'], c = cmap(0.15), s = 150, edgecolor = 'k', linewidth = 0.25, zorder = 2)
+plt.scatter(0.002476627274008098, 1, c = 'k', s = 250, edgecolor = 'k', linewidth = 0.25, zorder = 3)
+plt.xticks([-6, -4, -2, 0, 2, 4, 6, 8], [-6, -4, -2, 0, 2, 4, 6, 8], fontsize = 26)
 plt.xscale('log')
-plt.yticks([0.0, 0.4, 0.8, 1.2, 1.6], [0.0, 0.4, 0.8, 1.2, 1.6], fontsize = 22)
+plt.yticks([0.0, 0.4, 0.8, 1.2, 1.6], [0.0, 0.4, 0.8, 1.2, 1.6], fontsize = 26)
 plt.ylim(-0.4, 1.8)
 
 plt.figure()
-plt.scatter(enrichment_IgG_ant['AVE ER'], enrichment_IgG_ant['label'], c = cmap(0.15), s = 150, edgecolor = 'k', linewidth = 0.5)
-plt.scatter(3.37595, 1, c = 'k', s = 250, edgecolor = 'k', linewidth = 0.5)
-plt.xticks([-2, 0, 2, 4, 6], [-2, 0, 2, 4, 6], fontsize = 22)
-plt.yticks([0.0, 0.4, 0.8, 1.2, 1.6], [0.0, 0.4, 0.8, 1.2, 1.6], fontsize = 22)
+plt.errorbar(enrichment_IgG_ant['AVE ER'], enrichment_IgG_ant['label'], enrichment_IgG_ant['ANT STDEV'], linewidth = 0, elinewidth = 0.5, ecolor = 'k', capsize = 3, zorder = 1)
+
+plt.scatter(enrichment_IgG_ant['AVE ER'], enrichment_IgG_ant['label'], c = cmap(0.15), s = 150, edgecolor = 'k', linewidth = 0.25, zorder = 2)
+plt.scatter(3.37595, 1, c = 'k', s = 250, edgecolor = 'k', linewidth = 0.25, zorder = 3)
+plt.xticks([-2, 0, 2, 4, 6], [-2, 0, 2, 4, 6], fontsize = 26)
+plt.yticks([0.0, 0.4, 0.8, 1.2, 1.6], [0.0, 0.4, 0.8, 1.2, 1.6], fontsize = 26)
 plt.ylim(-0.4, 1.8)
 
 
 #%%
 plt.figure()
-plt.scatter(frequency_IgG_psy['AVE Freq'], frequency_IgG_psy['label'], c = cmap(0.85), s = 150, edgecolor = 'k', linewidth = 0.5)
-plt.scatter(4.697303754236948e-05, 1, c = 'k', s = 250, edgecolor = 'k', linewidth = 0.5)
-plt.xticks([-6, -4, -2, 0, 2, 4, 6], [-6, -4, -2, 0, 2, 4, 6], fontsize = 22)
+plt.errorbar(frequency_IgG_psy['AVE Freq'], frequency_IgG_psy['label'], frequency_IgG_psy['OVA STDEV'], linewidth = 0, elinewidth = 0.5, ecolor = 'k', capsize = 3, zorder = 1)
+
+plt.scatter(frequency_IgG_psy['AVE Freq'], frequency_IgG_psy['label'], c = cmap(0.85), s = 150, edgecolor = 'k', linewidth = 0.25, zorder = 2)
+plt.scatter(4.697303754236948e-05, 1, c = 'k', s = 250, edgecolor = 'k', linewidth = 0.25, zorder = 3)
+plt.xticks([-6, -4, -2, 0, 2, 4, 6], [-6, -4, -2, 0, 2, 4, 6], fontsize = 26)
 plt.xscale('log')
-plt.yticks([0.0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2], [0.0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2], fontsize = 22)
+plt.yticks([0.0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2], [0.0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2], fontsize = 26)
 plt.ylim(-0.15, 1.2)
 
 plt.figure()
-plt.scatter(enrichment_IgG_psy['AVE ER'], enrichment_IgG_psy['label'], c = cmap(0.85), s = 150, edgecolor = 'k', linewidth = 0.5)
-plt.scatter(-2.93006, 1, c = 'k', s = 250, edgecolor = 'k', linewidth = 0.5)
-plt.xticks([-4, -2, 0, 2, 4], [-4, -2, 0, 2, 4], fontsize = 22)
-plt.yticks([0.0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2], [0.0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2], fontsize = 22)
+plt.errorbar(enrichment_IgG_psy['AVE ER'], enrichment_IgG_psy['label'], enrichment_IgG_psy['OVA STDEV'], linewidth = 0, elinewidth = 0.5, ecolor = 'k', capsize = 3, zorder = 1)
+
+plt.scatter(enrichment_IgG_psy['AVE ER'], enrichment_IgG_psy['label'], c = cmap(0.85), s = 150, edgecolor = 'k', linewidth = 0.25, zorder = 2)
+plt.scatter(-2.93006, 1, c = 'k', s = 250, edgecolor = 'k', linewidth = 0.25, zorder = 3)
+plt.xticks([-4, -2, 0, 2, 4], [-4, -2, 0, 2, 4], fontsize = 26)
+plt.yticks([0.0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2], [0.0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2], fontsize = 26)
 plt.ylim(-0.15, 1.2)
 
 
@@ -204,7 +210,7 @@ print(sc.stats.spearmanr(frequency_IgG_ant['AVE Freq'], frequency_IgG_ant['label
 print(sc.stats.spearmanr(enrichment_IgG_ant['AVE ER'], enrichment_IgG_ant['label'], nan_policy = 'omit'))
 print(sc.stats.spearmanr(frequency_IgG_psy['AVE Freq'], frequency_IgG_psy['label'], nan_policy = 'omit'))
 print(sc.stats.spearmanr(enrichment_IgG_psy['AVE ER'], enrichment_IgG_psy['label'], nan_policy = 'omit'))
-"""
+
 
 #%%
 emi_sequencing = pd.concat([emi_rep1_antigen_pos, emi_rep2_antigen_pos, emi_rep1_psr_neg, emi_rep2_psr_neg, emi_rep1_ova_neg, emi_rep2_ova_neg], axis = 1)

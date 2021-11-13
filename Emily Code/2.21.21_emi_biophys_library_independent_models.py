@@ -52,12 +52,13 @@ cmap8 = LinearSegmentedColormap.from_list("mycmap", colormap8)
 
 
 #%%
-emi_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_seqs.txt", header = None, index_col = None)
-emi_seqs_pI = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_seqs_pI.txt", sep = '\t', header = None, index_col = None)
-emi_labels = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_rep_labels.csv", header = 0, index_col = 0)
+emi_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_seqs_stringent.txt", header = None, index_col = None)
+emi_seqs_pI = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_seqs_pI_stringent.txt", sep = '\t', header = None, index_col = None)
+emi_labels = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_rep_labels_stringent.csv", header = 0, index_col = 0)
 emi_flags = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\flagsummary_emi.csv", header = 0, index_col = 0)
 
 wt_seq = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_wt_seq.txt", header = None, index_col = None)
+wt_seqs_pI = pd.DataFrame([9.2, 12939.43]).T
 emi_iso_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_iso_seqs_reduced.txt", header = None, index_col = None)
 emi_iso_seqs_pI = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_iso_seqs_reduced_pI.txt", sep = '\t', header = None, index_col = None)
 emi_iso_binding = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_iso_binding_reduced.csv", header = 0, index_col = None)
@@ -255,13 +256,36 @@ for column in emi_res_counts:
     emi_hydrophobicity.append(hydros)
 emi_hydrophobicity = pd.DataFrame(emi_hydrophobicity).T
 emi_hydrophobicity['ave'] = emi_hydrophobicity.sum(axis = 1)/115
-emi_res_counts['Hydro'] = emi_res_counts['A'] +  emi_res_counts['I'] +  emi_res_counts['L']+  emi_res_counts['M']+  emi_res_counts['F']+  emi_res_counts['V']
+emi_res_counts['Hydro'] = emi_res_counts['A'] +  emi_res_counts['I'] +  emi_res_counts['L']+  emi_res_counts['F']+  emi_res_counts['V']
 emi_res_counts['Amph'] = emi_res_counts['W'] +  emi_res_counts['Y']+  emi_res_counts['M']
-emi_res_counts['Polar'] = emi_res_counts['Q'] +  emi_res_counts['N'] +  emi_res_counts['H'] + emi_res_counts['S'] +  emi_res_counts['T'] +  emi_res_counts['C']
-emi_res_counts['Charged'] =  emi_res_counts['R'] +  emi_res_counts['K'] + emi_res_counts['D'] +  emi_res_counts['E']
+emi_res_counts['Polar'] = emi_res_counts['Q'] +  emi_res_counts['N'] + emi_res_counts['S'] +  emi_res_counts['T'] +  emi_res_counts['C']+  emi_res_counts['M']
+emi_res_counts['Charged'] =  emi_res_counts['R'] +  emi_res_counts['K'] + emi_res_counts['D'] +  emi_res_counts['E'] +  emi_res_counts['H']
 emi_res_counts.reset_index(drop = True, inplace = True)
 
 emi = pd.concat([emi_res_counts, emi_seqs_pI.iloc[:,1], emi_hydrophobicity['ave']], axis = 1, ignore_index = False)
+
+emi_wt_res_counts = pd.DataFrame(index = alph)
+for i in wt_seq.iloc[:,0]:
+    seq = pd.Series(list(i))
+    emi_wt_res_counts = pd.concat([emi_wt_res_counts, seq.value_counts()], axis = 1, ignore_index = False)
+emi_wt_res_counts.fillna(0, inplace = True)
+emi_wt_res_counts = emi_wt_res_counts.T
+
+emi_wt_hydrophobicity = []
+for column in emi_wt_res_counts:
+    hydros = []
+    for index, row in emi_wt_res_counts.iterrows():
+        hydros.append(row[column]*res_dict.loc[column, 'Hydropathy Score'])
+    emi_wt_hydrophobicity.append(hydros)
+emi_wt_hydrophobicity = pd.DataFrame(emi_wt_hydrophobicity).T
+emi_wt_hydrophobicity['ave'] = emi_wt_hydrophobicity.sum(axis = 1)/115
+emi_wt_res_counts['Hydro'] = emi_wt_res_counts['A'] +  emi_wt_res_counts['I'] +  emi_wt_res_counts['L']+  emi_wt_res_counts['F']+  emi_wt_res_counts['V']
+emi_wt_res_counts['Amph'] = emi_wt_res_counts['W'] +  emi_wt_res_counts['Y']+  emi_wt_res_counts['M']
+emi_wt_res_counts['Polar'] = emi_wt_res_counts['Q'] +  emi_wt_res_counts['N'] + emi_wt_res_counts['S'] +  emi_wt_res_counts['T'] +  emi_wt_res_counts['C']+  emi_wt_res_counts['M']
+emi_wt_res_counts['Charged'] =  emi_wt_res_counts['R'] +  emi_wt_res_counts['K'] + emi_wt_res_counts['D'] +  emi_wt_res_counts['E'] +  emi_wt_res_counts['H']
+emi_wt_res_counts.reset_index(drop = True, inplace = True)
+
+emi_wt = pd.concat([emi_wt_res_counts, wt_seqs_pI.iloc[:,0], emi_wt_hydrophobicity['ave']], axis = 1, ignore_index = False)
 
 
 emi_iso_res_counts = pd.DataFrame(index = alph)
@@ -279,10 +303,10 @@ for column in emi_iso_res_counts:
     emi_iso_hydrophobicity.append(hydros)
 emi_iso_hydrophobicity = pd.DataFrame(emi_iso_hydrophobicity).T
 emi_iso_hydrophobicity['ave'] = emi_iso_hydrophobicity.sum(axis = 1)/115
-emi_iso_res_counts['Hydro'] = emi_iso_res_counts['A'] +  emi_iso_res_counts['I'] +  emi_iso_res_counts['L']+  emi_iso_res_counts['M']+  emi_iso_res_counts['F']+  emi_iso_res_counts['V']
+emi_iso_res_counts['Hydro'] = emi_iso_res_counts['A'] +  emi_iso_res_counts['I'] +  emi_iso_res_counts['L']+  emi_iso_res_counts['F']+  emi_iso_res_counts['V']
 emi_iso_res_counts['Amph'] = emi_iso_res_counts['W'] +  emi_iso_res_counts['Y']+  emi_iso_res_counts['M']
-emi_iso_res_counts['Polar'] = emi_iso_res_counts['Q'] +  emi_iso_res_counts['N'] +  emi_iso_res_counts['H'] + emi_iso_res_counts['S'] +  emi_iso_res_counts['T'] +  emi_iso_res_counts['C']
-emi_iso_res_counts['Charged'] =  emi_iso_res_counts['R'] +  emi_iso_res_counts['K'] + emi_iso_res_counts['D'] +  emi_iso_res_counts['E']
+emi_iso_res_counts['Polar'] = emi_iso_res_counts['Q'] +  emi_iso_res_counts['N'] + emi_iso_res_counts['S'] +  emi_iso_res_counts['T'] +  emi_iso_res_counts['C']+  emi_iso_res_counts['M']
+emi_iso_res_counts['Charged'] =  emi_iso_res_counts['R'] +  emi_iso_res_counts['K'] + emi_iso_res_counts['D'] +  emi_iso_res_counts['E'] +  emi_iso_res_counts['H']
 emi_iso_res_counts.reset_index(drop = True, inplace = True)
 
 emi_iso = pd.concat([emi_iso_res_counts, emi_iso_seqs_pI.iloc[:,1], emi_iso_hydrophobicity['ave']], axis = 1, ignore_index = False)
@@ -303,10 +327,10 @@ for column in emi_IgG_res_counts:
     emi_IgG_hydrophobicity.append(hydros)
 emi_IgG_hydrophobicity = pd.DataFrame(emi_IgG_hydrophobicity).T
 emi_IgG_hydrophobicity['ave'] = emi_IgG_hydrophobicity.sum(axis = 1)/115
-emi_IgG_res_counts['Hydro'] = emi_IgG_res_counts['A'] +  emi_IgG_res_counts['I'] +  emi_IgG_res_counts['L']+  emi_IgG_res_counts['M']+  emi_IgG_res_counts['F']+  emi_IgG_res_counts['V']
+emi_IgG_res_counts['Hydro'] = emi_IgG_res_counts['A'] +  emi_IgG_res_counts['I'] +  emi_IgG_res_counts['L']+  emi_IgG_res_counts['F']+  emi_IgG_res_counts['V']
 emi_IgG_res_counts['Amph'] = emi_IgG_res_counts['W'] +  emi_IgG_res_counts['Y']+  emi_IgG_res_counts['M']
-emi_IgG_res_counts['Polar'] = emi_IgG_res_counts['Q'] +  emi_IgG_res_counts['N'] +  emi_IgG_res_counts['H'] + emi_IgG_res_counts['S'] +  emi_IgG_res_counts['T'] +  emi_IgG_res_counts['C']
-emi_IgG_res_counts['Charged'] =  emi_IgG_res_counts['R'] +  emi_IgG_res_counts['K'] + emi_IgG_res_counts['D'] +  emi_IgG_res_counts['E']
+emi_IgG_res_counts['Polar'] = emi_IgG_res_counts['Q'] +  emi_IgG_res_counts['N'] + emi_IgG_res_counts['S'] +  emi_IgG_res_counts['T'] +  emi_IgG_res_counts['C']+  emi_IgG_res_counts['M']
+emi_IgG_res_counts['Charged'] =  emi_IgG_res_counts['R'] +  emi_IgG_res_counts['K'] + emi_IgG_res_counts['D'] +  emi_IgG_res_counts['E'] +  emi_IgG_res_counts['H']
 emi_IgG_res_counts.reset_index(drop = True, inplace = True)
 
 emi_IgG = pd.concat([emi_IgG_res_counts, emi_IgG_seqs_pI.iloc[:,1], emi_IgG_hydrophobicity['ave']], axis = 1, ignore_index = False)
@@ -327,10 +351,10 @@ for column in emi_0NotY_res_counts:
     emi_0NotY_hydrophobicity.append(hydros)
 emi_0NotY_hydrophobicity = pd.DataFrame(emi_0NotY_hydrophobicity).T
 emi_0NotY_hydrophobicity['ave'] = emi_0NotY_hydrophobicity.sum(axis = 1)/115
-emi_0NotY_res_counts['Hydro'] = emi_0NotY_res_counts['A'] +  emi_0NotY_res_counts['I'] +  emi_0NotY_res_counts['L']+  emi_0NotY_res_counts['M']+  emi_0NotY_res_counts['F']+  emi_0NotY_res_counts['V']
+emi_0NotY_res_counts['Hydro'] = emi_0NotY_res_counts['A'] +  emi_0NotY_res_counts['I'] +  emi_0NotY_res_counts['L']+  emi_0NotY_res_counts['F']+  emi_0NotY_res_counts['V']
 emi_0NotY_res_counts['Amph'] = emi_0NotY_res_counts['W'] +  emi_0NotY_res_counts['Y']+  emi_0NotY_res_counts['M']
-emi_0NotY_res_counts['Polar'] = emi_0NotY_res_counts['Q'] +  emi_0NotY_res_counts['N'] +  emi_0NotY_res_counts['H'] + emi_0NotY_res_counts['S'] +  emi_0NotY_res_counts['T'] +  emi_0NotY_res_counts['C']
-emi_0NotY_res_counts['Charged'] =  emi_0NotY_res_counts['R'] +  emi_0NotY_res_counts['K'] + emi_0NotY_res_counts['D'] +  emi_0NotY_res_counts['E']
+emi_0NotY_res_counts['Polar'] = emi_0NotY_res_counts['Q'] +  emi_0NotY_res_counts['N'] + emi_0NotY_res_counts['S'] +  emi_0NotY_res_counts['T'] +  emi_0NotY_res_counts['C']+  emi_0NotY_res_counts['M']
+emi_0NotY_res_counts['Charged'] =  emi_0NotY_res_counts['R'] +  emi_0NotY_res_counts['K'] + emi_0NotY_res_counts['D'] +  emi_0NotY_res_counts['E'] +  emi_0NotY_res_counts['H']
 emi_0NotY_res_counts.reset_index(drop = True, inplace = True)
 
 emi_0NotY = pd.concat([emi_0NotY_res_counts, emi_0NotY_seqs_pI.iloc[:,1], emi_0NotY_hydrophobicity['ave']], axis = 1, ignore_index = False)
@@ -351,10 +375,10 @@ for column in emi_1NotR_res_counts:
     emi_1NotR_hydrophobicity.append(hydros)
 emi_1NotR_hydrophobicity = pd.DataFrame(emi_1NotR_hydrophobicity).T
 emi_1NotR_hydrophobicity['ave'] = emi_1NotR_hydrophobicity.sum(axis = 1)/115
-emi_1NotR_res_counts['Hydro'] = emi_1NotR_res_counts['A'] +  emi_1NotR_res_counts['I'] +  emi_1NotR_res_counts['L']+  emi_1NotR_res_counts['M']+  emi_1NotR_res_counts['F']+  emi_1NotR_res_counts['V']
+emi_1NotR_res_counts['Hydro'] = emi_1NotR_res_counts['A'] +  emi_1NotR_res_counts['I'] +  emi_1NotR_res_counts['L']+  emi_1NotR_res_counts['F']+  emi_1NotR_res_counts['V']
 emi_1NotR_res_counts['Amph'] = emi_1NotR_res_counts['W'] +  emi_1NotR_res_counts['Y']+  emi_1NotR_res_counts['M']
-emi_1NotR_res_counts['Polar'] = emi_1NotR_res_counts['Q'] +  emi_1NotR_res_counts['N'] +  emi_1NotR_res_counts['H'] + emi_1NotR_res_counts['S'] +  emi_1NotR_res_counts['T'] +  emi_1NotR_res_counts['C']
-emi_1NotR_res_counts['Charged'] =  emi_1NotR_res_counts['R'] +  emi_1NotR_res_counts['K'] + emi_1NotR_res_counts['D'] +  emi_1NotR_res_counts['E']
+emi_1NotR_res_counts['Polar'] = emi_1NotR_res_counts['Q'] +  emi_1NotR_res_counts['N'] + emi_1NotR_res_counts['S'] +  emi_1NotR_res_counts['T'] +  emi_1NotR_res_counts['C']
+emi_1NotR_res_counts['Charged'] =  emi_1NotR_res_counts['R'] +  emi_1NotR_res_counts['K'] + emi_1NotR_res_counts['D'] +  emi_1NotR_res_counts['E'] +  emi_1NotR_res_counts['H']
 emi_1NotR_res_counts.reset_index(drop = True, inplace = True)
 
 emi_1NotR = pd.concat([emi_1NotR_res_counts, emi_1NotR_seqs_pI.iloc[:,1], emi_1NotR_hydrophobicity['ave']], axis = 1, ignore_index = False)
@@ -375,10 +399,10 @@ for column in emi_2NotR_res_counts:
     emi_2NotR_hydrophobicity.append(hydros)
 emi_2NotR_hydrophobicity = pd.DataFrame(emi_2NotR_hydrophobicity).T
 emi_2NotR_hydrophobicity['ave'] = emi_2NotR_hydrophobicity.sum(axis = 1)/115
-emi_2NotR_res_counts['Hydro'] = emi_2NotR_res_counts['A'] +  emi_2NotR_res_counts['I'] +  emi_2NotR_res_counts['L']+  emi_2NotR_res_counts['M']+  emi_2NotR_res_counts['F']+  emi_2NotR_res_counts['V']
-emi_2NotR_res_counts['Amph'] = emi_2NotR_res_counts['W'] +  emi_2NotR_res_counts['Y'] +  emi_2NotR_res_counts['M']
-emi_2NotR_res_counts['Polar'] = emi_2NotR_res_counts['Q'] +  emi_2NotR_res_counts['N'] +  emi_2NotR_res_counts['H'] + emi_2NotR_res_counts['S'] +  emi_2NotR_res_counts['T'] +  emi_2NotR_res_counts['C']
-emi_2NotR_res_counts['Charged'] =  emi_2NotR_res_counts['R'] +  emi_2NotR_res_counts['K'] + emi_2NotR_res_counts['D'] +  emi_2NotR_res_counts['E']
+emi_2NotR_res_counts['Hydro'] = emi_2NotR_res_counts['A'] +  emi_2NotR_res_counts['I'] +  emi_2NotR_res_counts['L']+  emi_2NotR_res_counts['F']+  emi_2NotR_res_counts['V']
+emi_2NotR_res_counts['Amph'] = emi_2NotR_res_counts['W'] +  emi_2NotR_res_counts['Y']+  emi_2NotR_res_counts['M']
+emi_2NotR_res_counts['Polar'] = emi_2NotR_res_counts['Q'] +  emi_2NotR_res_counts['N'] + emi_2NotR_res_counts['S'] +  emi_2NotR_res_counts['T'] +  emi_2NotR_res_counts['C']+  emi_2NotR_res_counts['M']
+emi_2NotR_res_counts['Charged'] =  emi_2NotR_res_counts['R'] +  emi_2NotR_res_counts['K'] + emi_2NotR_res_counts['D'] +  emi_2NotR_res_counts['E'] +  emi_2NotR_res_counts['H']
 emi_2NotR_res_counts.reset_index(drop = True, inplace = True)
 
 emi_2NotR = pd.concat([emi_2NotR_res_counts, emi_2NotR_seqs_pI.iloc[:,1], emi_2NotR_hydrophobicity['ave']], axis = 1, ignore_index = False)
@@ -399,10 +423,10 @@ for column in emi_3NotR_res_counts:
     emi_3NotR_hydrophobicity.append(hydros)
 emi_3NotR_hydrophobicity = pd.DataFrame(emi_3NotR_hydrophobicity).T
 emi_3NotR_hydrophobicity['ave'] = emi_3NotR_hydrophobicity.sum(axis = 1)/115
-emi_3NotR_res_counts['Hydro'] = emi_3NotR_res_counts['A'] +  emi_3NotR_res_counts['I'] +  emi_3NotR_res_counts['L']+  emi_3NotR_res_counts['M']+  emi_3NotR_res_counts['F']+  emi_3NotR_res_counts['V']
+emi_3NotR_res_counts['Hydro'] = emi_3NotR_res_counts['A'] +  emi_3NotR_res_counts['I'] +  emi_3NotR_res_counts['L']+  emi_3NotR_res_counts['F']+  emi_3NotR_res_counts['V']
 emi_3NotR_res_counts['Amph'] = emi_3NotR_res_counts['W'] +  emi_3NotR_res_counts['Y']+  emi_3NotR_res_counts['M']
-emi_3NotR_res_counts['Polar'] = emi_3NotR_res_counts['Q'] +  emi_3NotR_res_counts['N'] +  emi_3NotR_res_counts['H'] + emi_3NotR_res_counts['S'] +  emi_3NotR_res_counts['T'] +  emi_3NotR_res_counts['C']
-emi_3NotR_res_counts['Charged'] =  emi_3NotR_res_counts['R'] +  emi_3NotR_res_counts['K'] + emi_3NotR_res_counts['D'] +  emi_3NotR_res_counts['E']
+emi_3NotR_res_counts['Polar'] = emi_3NotR_res_counts['Q'] +  emi_3NotR_res_counts['N'] + emi_3NotR_res_counts['S'] +  emi_3NotR_res_counts['T'] +  emi_3NotR_res_counts['C']+  emi_3NotR_res_counts['M']
+emi_3NotR_res_counts['Charged'] =  emi_3NotR_res_counts['R'] +  emi_3NotR_res_counts['K'] + emi_3NotR_res_counts['D'] +  emi_3NotR_res_counts['E'] +  emi_3NotR_res_counts['H']
 
 emi_3NotR_res_counts.reset_index(drop = True, inplace = True)
 
@@ -424,10 +448,10 @@ for column in emi_4NotG_res_counts:
     emi_4NotG_hydrophobicity.append(hydros)
 emi_4NotG_hydrophobicity = pd.DataFrame(emi_4NotG_hydrophobicity).T
 emi_4NotG_hydrophobicity['ave'] = emi_4NotG_hydrophobicity.sum(axis = 1)/115
-emi_4NotG_res_counts['Hydro'] = emi_4NotG_res_counts['A'] +  emi_4NotG_res_counts['I'] +  emi_4NotG_res_counts['L']+  emi_4NotG_res_counts['M']+  emi_4NotG_res_counts['F']+  emi_4NotG_res_counts['V']
+emi_4NotG_res_counts['Hydro'] = emi_4NotG_res_counts['A'] +  emi_4NotG_res_counts['I'] +  emi_4NotG_res_counts['L']+  emi_4NotG_res_counts['F']+  emi_4NotG_res_counts['V']
 emi_4NotG_res_counts['Amph'] = emi_4NotG_res_counts['W'] +  emi_4NotG_res_counts['Y']+  emi_4NotG_res_counts['M']
-emi_4NotG_res_counts['Polar'] = emi_4NotG_res_counts['Q'] +  emi_4NotG_res_counts['N'] +  emi_4NotG_res_counts['H'] + emi_4NotG_res_counts['S'] +  emi_4NotG_res_counts['T'] +  emi_4NotG_res_counts['C']
-emi_4NotG_res_counts['Charged'] =  emi_4NotG_res_counts['R'] +  emi_4NotG_res_counts['K'] + emi_4NotG_res_counts['D'] +  emi_4NotG_res_counts['E']
+emi_4NotG_res_counts['Polar'] = emi_4NotG_res_counts['Q'] +  emi_4NotG_res_counts['N'] + emi_4NotG_res_counts['S'] +  emi_4NotG_res_counts['T'] +  emi_4NotG_res_counts['C']+  emi_4NotG_res_counts['M']
+emi_4NotG_res_counts['Charged'] =  emi_4NotG_res_counts['R'] +  emi_4NotG_res_counts['K'] + emi_4NotG_res_counts['D'] +  emi_4NotG_res_counts['E'] +  emi_4NotG_res_counts['H']
 
 emi_4NotG_res_counts.reset_index(drop = True, inplace = True)
 
@@ -449,10 +473,10 @@ for column in emi_5NotA_res_counts:
     emi_5NotA_hydrophobicity.append(hydros)
 emi_5NotA_hydrophobicity = pd.DataFrame(emi_5NotA_hydrophobicity).T
 emi_5NotA_hydrophobicity['ave'] = emi_5NotA_hydrophobicity.sum(axis = 1)/115
-emi_5NotA_res_counts['Hydro'] = emi_5NotA_res_counts['A'] +  emi_5NotA_res_counts['I'] +  emi_5NotA_res_counts['L']+  emi_5NotA_res_counts['M']+  emi_5NotA_res_counts['F']+  emi_5NotA_res_counts['V']
+emi_5NotA_res_counts['Hydro'] = emi_5NotA_res_counts['A'] +  emi_5NotA_res_counts['I'] +  emi_5NotA_res_counts['L']+  emi_5NotA_res_counts['F']+  emi_5NotA_res_counts['V']
 emi_5NotA_res_counts['Amph'] = emi_5NotA_res_counts['W'] +  emi_5NotA_res_counts['Y']+  emi_5NotA_res_counts['M']
-emi_5NotA_res_counts['Polar'] = emi_5NotA_res_counts['Q'] +  emi_5NotA_res_counts['N'] +  emi_5NotA_res_counts['H'] + emi_5NotA_res_counts['S'] +  emi_5NotA_res_counts['T'] +  emi_5NotA_res_counts['C']
-emi_5NotA_res_counts['Charged'] =  emi_5NotA_res_counts['R'] +  emi_5NotA_res_counts['K'] + emi_5NotA_res_counts['D'] +  emi_5NotA_res_counts['E']
+emi_5NotA_res_counts['Polar'] = emi_5NotA_res_counts['Q'] +  emi_5NotA_res_counts['N'] + emi_5NotA_res_counts['S'] +  emi_5NotA_res_counts['T'] +  emi_5NotA_res_counts['C']+  emi_5NotA_res_counts['M']
+emi_5NotA_res_counts['Charged'] =  emi_5NotA_res_counts['R'] +  emi_5NotA_res_counts['K'] + emi_5NotA_res_counts['D'] +  emi_5NotA_res_counts['E'] +  emi_5NotA_res_counts['H']
 
 emi_5NotA_res_counts.reset_index(drop = True, inplace = True)
 
@@ -474,10 +498,10 @@ for column in emi_6NotW_res_counts:
     emi_6NotW_hydrophobicity.append(hydros)
 emi_6NotW_hydrophobicity = pd.DataFrame(emi_6NotW_hydrophobicity).T
 emi_6NotW_hydrophobicity['ave'] = emi_6NotW_hydrophobicity.sum(axis = 1)/115
-emi_6NotW_res_counts['Hydro'] = emi_6NotW_res_counts['A'] +  emi_6NotW_res_counts['I'] +  emi_6NotW_res_counts['L']+  emi_6NotW_res_counts['M']+  emi_6NotW_res_counts['F']+  emi_6NotW_res_counts['V']
+emi_6NotW_res_counts['Hydro'] = emi_6NotW_res_counts['A'] +  emi_6NotW_res_counts['I'] +  emi_6NotW_res_counts['L']+  emi_6NotW_res_counts['F']+  emi_6NotW_res_counts['V']
 emi_6NotW_res_counts['Amph'] = emi_6NotW_res_counts['W'] +  emi_6NotW_res_counts['Y']+  emi_6NotW_res_counts['M']
-emi_6NotW_res_counts['Polar'] = emi_6NotW_res_counts['Q'] +  emi_6NotW_res_counts['N'] +  emi_6NotW_res_counts['H'] + emi_6NotW_res_counts['S'] +  emi_6NotW_res_counts['T'] +  emi_6NotW_res_counts['C']
-emi_6NotW_res_counts['Charged'] =  emi_6NotW_res_counts['R'] +  emi_6NotW_res_counts['K'] + emi_6NotW_res_counts['D'] +  emi_6NotW_res_counts['E']
+emi_6NotW_res_counts['Polar'] = emi_6NotW_res_counts['Q'] +  emi_6NotW_res_counts['N'] + emi_6NotW_res_counts['S'] +  emi_6NotW_res_counts['T'] +  emi_6NotW_res_counts['C']+  emi_6NotW_res_counts['M']
+emi_6NotW_res_counts['Charged'] =  emi_6NotW_res_counts['R'] +  emi_6NotW_res_counts['K'] + emi_6NotW_res_counts['D'] +  emi_6NotW_res_counts['E'] +  emi_6NotW_res_counts['H']
 
 emi_6NotW_res_counts.reset_index(drop = True, inplace = True)
 
@@ -499,10 +523,10 @@ for column in emi_7NotY_res_counts:
     emi_7NotY_hydrophobicity.append(hydros)
 emi_7NotY_hydrophobicity = pd.DataFrame(emi_7NotY_hydrophobicity).T
 emi_7NotY_hydrophobicity['ave'] = emi_7NotY_hydrophobicity.sum(axis = 1)/115
-emi_7NotY_res_counts['Hydro'] = emi_7NotY_res_counts['A'] +  emi_7NotY_res_counts['I'] +  emi_7NotY_res_counts['L']+  emi_7NotY_res_counts['M']+  emi_7NotY_res_counts['F']+  emi_7NotY_res_counts['V']
-emi_7NotY_res_counts['Amph'] = emi_7NotY_res_counts['W'] +  emi_7NotY_res_counts['Y'] +  emi_7NotY_res_counts['M']
-emi_7NotY_res_counts['Polar'] = emi_7NotY_res_counts['Q'] +  emi_7NotY_res_counts['N'] +  emi_7NotY_res_counts['H'] + emi_7NotY_res_counts['S'] +  emi_7NotY_res_counts['T'] +  emi_7NotY_res_counts['C']
-emi_7NotY_res_counts['Charged'] =  emi_7NotY_res_counts['R'] +  emi_7NotY_res_counts['K'] + emi_7NotY_res_counts['D'] +  emi_7NotY_res_counts['E']
+emi_7NotY_res_counts['Hydro'] = emi_7NotY_res_counts['A'] +  emi_7NotY_res_counts['I'] +  emi_7NotY_res_counts['L']+  emi_7NotY_res_counts['F']+  emi_7NotY_res_counts['V']
+emi_7NotY_res_counts['Amph'] = emi_7NotY_res_counts['W'] +  emi_7NotY_res_counts['Y']+  emi_7NotY_res_counts['M']
+emi_7NotY_res_counts['Polar'] = emi_7NotY_res_counts['Q'] +  emi_7NotY_res_counts['N'] + emi_7NotY_res_counts['S'] +  emi_7NotY_res_counts['T'] +  emi_7NotY_res_counts['C']+  emi_7NotY_res_counts['M']
+emi_7NotY_res_counts['Charged'] =  emi_7NotY_res_counts['R'] +  emi_7NotY_res_counts['K'] + emi_7NotY_res_counts['D'] +  emi_7NotY_res_counts['E']+  emi_7NotY_res_counts['H'] 
 
 emi_7NotY_res_counts.reset_index(drop = True, inplace = True)
 
@@ -525,10 +549,10 @@ for column in emi_iso_0Y_res_counts:
     emi_iso_0Y_hydrophobicity.append(hydros)
 emi_iso_0Y_hydrophobicity = pd.DataFrame(emi_iso_0Y_hydrophobicity).T
 emi_iso_0Y_hydrophobicity['ave'] = emi_iso_0Y_hydrophobicity.sum(axis = 1)/115
-emi_iso_0Y_res_counts['Hydro'] = emi_iso_0Y_res_counts['A'] +  emi_iso_0Y_res_counts['I'] +  emi_iso_0Y_res_counts['L']+  emi_iso_0Y_res_counts['M']+  emi_iso_0Y_res_counts['F']+  emi_iso_0Y_res_counts['V']
-emi_iso_0Y_res_counts['Amph'] = emi_iso_0Y_res_counts['W'] +  emi_iso_0Y_res_counts['Y'] +  emi_iso_0Y_res_counts['M']
-emi_iso_0Y_res_counts['Polar'] = emi_iso_0Y_res_counts['Q'] +  emi_iso_0Y_res_counts['N'] +  emi_iso_0Y_res_counts['H'] + emi_iso_0Y_res_counts['S'] +  emi_iso_0Y_res_counts['T'] +  emi_iso_0Y_res_counts['C']
-emi_iso_0Y_res_counts['Charged'] =  emi_iso_0Y_res_counts['R'] +  emi_iso_0Y_res_counts['K'] + emi_iso_0Y_res_counts['D'] +  emi_iso_0Y_res_counts['E']
+emi_iso_0Y_res_counts['Hydro'] = emi_iso_0Y_res_counts['A'] +  emi_iso_0Y_res_counts['I'] +  emi_iso_0Y_res_counts['L']+  emi_iso_0Y_res_counts['F']+  emi_iso_0Y_res_counts['V']
+emi_iso_0Y_res_counts['Amph'] = emi_iso_0Y_res_counts['W'] +  emi_iso_0Y_res_counts['Y']+  emi_iso_0Y_res_counts['M']
+emi_iso_0Y_res_counts['Polar'] = emi_iso_0Y_res_counts['Q'] +  emi_iso_0Y_res_counts['N'] + emi_iso_0Y_res_counts['S'] +  emi_iso_0Y_res_counts['T'] +  emi_iso_0Y_res_counts['C']+  emi_iso_0Y_res_counts['M']
+emi_iso_0Y_res_counts['Charged'] =  emi_iso_0Y_res_counts['R'] +  emi_iso_0Y_res_counts['K'] + emi_iso_0Y_res_counts['D'] +  emi_iso_0Y_res_counts['E'] +  emi_iso_0Y_res_counts['H']
 
 emi_iso_0Y_res_counts.reset_index(drop = True, inplace = True)
 
@@ -550,10 +574,10 @@ for column in emi_iso_1R_res_counts:
     emi_iso_1R_hydrophobicity.append(hydros)
 emi_iso_1R_hydrophobicity = pd.DataFrame(emi_iso_1R_hydrophobicity).T
 emi_iso_1R_hydrophobicity['ave'] = emi_iso_1R_hydrophobicity.sum(axis = 1)/115
-emi_iso_1R_res_counts['Hydro'] = emi_iso_1R_res_counts['A'] +  emi_iso_1R_res_counts['I'] +  emi_iso_1R_res_counts['L']+  emi_iso_1R_res_counts['M']+  emi_iso_1R_res_counts['F']+  emi_iso_1R_res_counts['V'] 
-emi_iso_1R_res_counts['Amph'] = emi_iso_1R_res_counts['W'] +  emi_iso_1R_res_counts['Y'] +  emi_iso_1R_res_counts['M']
-emi_iso_1R_res_counts['Polar'] = emi_iso_1R_res_counts['Q'] +  emi_iso_1R_res_counts['N'] +  emi_iso_1R_res_counts['H'] + emi_iso_1R_res_counts['S'] +  emi_iso_1R_res_counts['T'] +  emi_iso_1R_res_counts['C']
-emi_iso_1R_res_counts['Charged'] =  emi_iso_1R_res_counts['R'] +  emi_iso_1R_res_counts['K'] + emi_iso_1R_res_counts['D'] +  emi_iso_1R_res_counts['E']
+emi_iso_1R_res_counts['Hydro'] = emi_iso_1R_res_counts['A'] +  emi_iso_1R_res_counts['I'] +  emi_iso_1R_res_counts['L']+  emi_iso_1R_res_counts['F']+  emi_iso_1R_res_counts['V'] 
+emi_iso_1R_res_counts['Amph'] = emi_iso_1R_res_counts['W'] +  emi_iso_1R_res_counts['Y']+  emi_iso_1R_res_counts['M']
+emi_iso_1R_res_counts['Polar'] = emi_iso_1R_res_counts['Q'] +  emi_iso_1R_res_counts['N'] + emi_iso_1R_res_counts['S'] +  emi_iso_1R_res_counts['T'] +  emi_iso_1R_res_counts['C']+  emi_iso_1R_res_counts['M']
+emi_iso_1R_res_counts['Charged'] =  emi_iso_1R_res_counts['R'] +  emi_iso_1R_res_counts['K'] + emi_iso_1R_res_counts['D'] +  emi_iso_1R_res_counts['E'] +  emi_iso_1R_res_counts['H']
 
 emi_iso_1R_res_counts.reset_index(drop = True, inplace = True)
 
@@ -575,10 +599,10 @@ for column in emi_iso_2R_res_counts:
     emi_iso_2R_hydrophobicity.append(hydros)
 emi_iso_2R_hydrophobicity = pd.DataFrame(emi_iso_2R_hydrophobicity).T
 emi_iso_2R_hydrophobicity['ave'] = emi_iso_2R_hydrophobicity.sum(axis = 1)/115
-emi_iso_2R_res_counts['Hydro'] = emi_iso_2R_res_counts['A'] +  emi_iso_2R_res_counts['I'] +  emi_iso_2R_res_counts['L']+  emi_iso_2R_res_counts['M']+  emi_iso_2R_res_counts['F']+  emi_iso_2R_res_counts['V']
+emi_iso_2R_res_counts['Hydro'] = emi_iso_2R_res_counts['A'] +  emi_iso_2R_res_counts['I'] +  emi_iso_2R_res_counts['L']+  emi_iso_2R_res_counts['F']+  emi_iso_2R_res_counts['V']
 emi_iso_2R_res_counts['Amph'] = emi_iso_2R_res_counts['W'] +  emi_iso_2R_res_counts['Y']+  emi_iso_2R_res_counts['M']
-emi_iso_2R_res_counts['Polar'] = emi_iso_2R_res_counts['Q'] +  emi_iso_2R_res_counts['N'] +  emi_iso_2R_res_counts['H'] + emi_iso_2R_res_counts['S'] +  emi_iso_2R_res_counts['T'] +  emi_iso_2R_res_counts['C']
-emi_iso_2R_res_counts['Charged'] =  emi_iso_2R_res_counts['R'] +  emi_iso_2R_res_counts['K'] + emi_iso_2R_res_counts['D'] +  emi_iso_2R_res_counts['E']
+emi_iso_2R_res_counts['Polar'] = emi_iso_2R_res_counts['Q'] +  emi_iso_2R_res_counts['N'] + emi_iso_2R_res_counts['S'] +  emi_iso_2R_res_counts['T'] +  emi_iso_2R_res_counts['C']+  emi_iso_2R_res_counts['M']
+emi_iso_2R_res_counts['Charged'] =  emi_iso_2R_res_counts['R'] +  emi_iso_2R_res_counts['K'] + emi_iso_2R_res_counts['D'] +  emi_iso_2R_res_counts['E'] +  emi_iso_2R_res_counts['H']
 
 emi_iso_2R_res_counts.reset_index(drop = True, inplace = True)
 
@@ -600,10 +624,10 @@ for column in emi_iso_3R_res_counts:
     emi_iso_3R_hydrophobicity.append(hydros)
 emi_iso_3R_hydrophobicity = pd.DataFrame(emi_iso_3R_hydrophobicity).T
 emi_iso_3R_hydrophobicity['ave'] = emi_iso_3R_hydrophobicity.sum(axis = 1)/115
-emi_iso_3R_res_counts['Hydro'] = emi_iso_3R_res_counts['A'] +  emi_iso_3R_res_counts['I'] +  emi_iso_3R_res_counts['L']+  emi_iso_3R_res_counts['M']+  emi_iso_3R_res_counts['F']+  emi_iso_3R_res_counts['V']
-emi_iso_3R_res_counts['Amph'] = emi_iso_3R_res_counts['W'] +  emi_iso_3R_res_counts['Y'] +  emi_iso_3R_res_counts['M']
-emi_iso_3R_res_counts['Polar'] = emi_iso_3R_res_counts['Q'] +  emi_iso_3R_res_counts['N'] +  emi_iso_3R_res_counts['H'] + emi_iso_3R_res_counts['S'] +  emi_iso_3R_res_counts['T'] +  emi_iso_3R_res_counts['C']
-emi_iso_3R_res_counts['Charged'] =  emi_iso_3R_res_counts['R'] +  emi_iso_3R_res_counts['K'] + emi_iso_3R_res_counts['D'] +  emi_iso_3R_res_counts['E']
+emi_iso_3R_res_counts['Hydro'] = emi_iso_3R_res_counts['A'] +  emi_iso_3R_res_counts['I'] +  emi_iso_3R_res_counts['L']+  emi_iso_3R_res_counts['F']+  emi_iso_3R_res_counts['V']
+emi_iso_3R_res_counts['Amph'] = emi_iso_3R_res_counts['W'] +  emi_iso_3R_res_counts['Y']+  emi_iso_3R_res_counts['M']
+emi_iso_3R_res_counts['Polar'] = emi_iso_3R_res_counts['Q'] +  emi_iso_3R_res_counts['N'] + emi_iso_3R_res_counts['S'] +  emi_iso_3R_res_counts['T'] +  emi_iso_3R_res_counts['C']+  emi_iso_3R_res_counts['M']
+emi_iso_3R_res_counts['Charged'] =  emi_iso_3R_res_counts['R'] +  emi_iso_3R_res_counts['K'] + emi_iso_3R_res_counts['D'] +  emi_iso_3R_res_counts['E'] +  emi_iso_3R_res_counts['H']
 
 emi_iso_3R_res_counts.reset_index(drop = True, inplace = True)
 
@@ -625,10 +649,10 @@ for column in emi_iso_4G_res_counts:
     emi_iso_4G_hydrophobicity.append(hydros)
 emi_iso_4G_hydrophobicity = pd.DataFrame(emi_iso_4G_hydrophobicity).T
 emi_iso_4G_hydrophobicity['ave'] = emi_iso_4G_hydrophobicity.sum(axis = 1)/115
-emi_iso_4G_res_counts['Hydro'] = emi_iso_4G_res_counts['A'] +  emi_iso_4G_res_counts['I'] +  emi_iso_4G_res_counts['L']+  emi_iso_4G_res_counts['M']+  emi_iso_4G_res_counts['F']+  emi_iso_4G_res_counts['V']
+emi_iso_4G_res_counts['Hydro'] = emi_iso_4G_res_counts['A'] +  emi_iso_4G_res_counts['I'] +  emi_iso_4G_res_counts['L']+  emi_iso_4G_res_counts['F']+  emi_iso_4G_res_counts['V']
 emi_iso_4G_res_counts['Amph'] = emi_iso_4G_res_counts['W'] +  emi_iso_4G_res_counts['Y']+  emi_iso_4G_res_counts['M']
-emi_iso_4G_res_counts['Polar'] = emi_iso_4G_res_counts['Q'] +  emi_iso_4G_res_counts['N'] +  emi_iso_4G_res_counts['H'] + emi_iso_4G_res_counts['S'] +  emi_iso_4G_res_counts['T'] +  emi_iso_4G_res_counts['C']
-emi_iso_4G_res_counts['Charged'] =  emi_iso_4G_res_counts['R'] +  emi_iso_4G_res_counts['K'] + emi_iso_4G_res_counts['D'] +  emi_iso_4G_res_counts['E']
+emi_iso_4G_res_counts['Polar'] = emi_iso_4G_res_counts['Q'] +  emi_iso_4G_res_counts['N'] + emi_iso_4G_res_counts['S'] +  emi_iso_4G_res_counts['T'] +  emi_iso_4G_res_counts['C']+  emi_iso_4G_res_counts['M']
+emi_iso_4G_res_counts['Charged'] =  emi_iso_4G_res_counts['R'] +  emi_iso_4G_res_counts['K'] + emi_iso_4G_res_counts['D'] +  emi_iso_4G_res_counts['E'] +  emi_iso_4G_res_counts['H']
 
 emi_iso_4G_res_counts.reset_index(drop = True, inplace = True)
 
@@ -650,10 +674,10 @@ for column in emi_iso_5A_res_counts:
     emi_iso_5A_hydrophobicity.append(hydros)
 emi_iso_5A_hydrophobicity = pd.DataFrame(emi_iso_5A_hydrophobicity).T
 emi_iso_5A_hydrophobicity['ave'] = emi_iso_5A_hydrophobicity.sum(axis = 1)/115
-emi_iso_5A_res_counts['Hydro'] = emi_iso_5A_res_counts['A'] +  emi_iso_5A_res_counts['I'] +  emi_iso_5A_res_counts['L']+  emi_iso_5A_res_counts['M']+  emi_iso_5A_res_counts['F']+  emi_iso_5A_res_counts['V']
+emi_iso_5A_res_counts['Hydro'] = emi_iso_5A_res_counts['A'] +  emi_iso_5A_res_counts['I'] +  emi_iso_5A_res_counts['L']+  emi_iso_5A_res_counts['F']+  emi_iso_5A_res_counts['V']
 emi_iso_5A_res_counts['Amph'] = emi_iso_5A_res_counts['W'] +  emi_iso_5A_res_counts['Y']+  emi_iso_5A_res_counts['M']
-emi_iso_5A_res_counts['Polar'] = emi_iso_5A_res_counts['Q'] +  emi_iso_5A_res_counts['N'] +  emi_iso_5A_res_counts['H'] + emi_iso_5A_res_counts['S'] +  emi_iso_5A_res_counts['T'] +  emi_iso_5A_res_counts['C']
-emi_iso_5A_res_counts['Charged'] =  emi_iso_5A_res_counts['R'] +  emi_iso_5A_res_counts['K'] + emi_iso_5A_res_counts['D'] +  emi_iso_5A_res_counts['E']
+emi_iso_5A_res_counts['Polar'] = emi_iso_5A_res_counts['Q'] +  emi_iso_5A_res_counts['N'] + emi_iso_5A_res_counts['S'] +  emi_iso_5A_res_counts['T'] +  emi_iso_5A_res_counts['C']+  emi_iso_5A_res_counts['M']
+emi_iso_5A_res_counts['Charged'] =  emi_iso_5A_res_counts['R'] +  emi_iso_5A_res_counts['K'] + emi_iso_5A_res_counts['D'] +  emi_iso_5A_res_counts['E'] +  emi_iso_5A_res_counts['H']
 
 emi_iso_5A_res_counts.reset_index(drop = True, inplace = True)
 
@@ -675,10 +699,10 @@ for column in emi_iso_6W_res_counts:
     emi_iso_6W_hydrophobicity.append(hydros)
 emi_iso_6W_hydrophobicity = pd.DataFrame(emi_iso_6W_hydrophobicity).T
 emi_iso_6W_hydrophobicity['ave'] = emi_iso_6W_hydrophobicity.sum(axis = 1)/115
-emi_iso_6W_res_counts['Hydro'] = emi_iso_6W_res_counts['A'] +  emi_iso_6W_res_counts['I'] +  emi_iso_6W_res_counts['L']+  emi_iso_6W_res_counts['M']+  emi_iso_6W_res_counts['F']+  emi_iso_6W_res_counts['V']
-emi_iso_6W_res_counts['Amph'] = emi_iso_6W_res_counts['W'] +  emi_iso_6W_res_counts['Y'] +  emi_iso_6W_res_counts['M']
-emi_iso_6W_res_counts['Polar'] = emi_iso_6W_res_counts['Q'] +  emi_iso_6W_res_counts['N'] +  emi_iso_6W_res_counts['H'] + emi_iso_6W_res_counts['S'] +  emi_iso_6W_res_counts['T'] +  emi_iso_6W_res_counts['C']
-emi_iso_6W_res_counts['Charged'] =  emi_iso_6W_res_counts['R'] +  emi_iso_6W_res_counts['K'] + emi_iso_6W_res_counts['D'] +  emi_iso_6W_res_counts['E']
+emi_iso_6W_res_counts['Hydro'] = emi_iso_6W_res_counts['A'] +  emi_iso_6W_res_counts['I'] +  emi_iso_6W_res_counts['L']+  emi_iso_6W_res_counts['F']+  emi_iso_6W_res_counts['V']
+emi_iso_6W_res_counts['Amph'] = emi_iso_6W_res_counts['W'] +  emi_iso_6W_res_counts['Y']+  emi_iso_6W_res_counts['M']
+emi_iso_6W_res_counts['Polar'] = emi_iso_6W_res_counts['Q'] +  emi_iso_6W_res_counts['N'] + emi_iso_6W_res_counts['S'] +  emi_iso_6W_res_counts['T'] +  emi_iso_6W_res_counts['C']+  emi_iso_6W_res_counts['M']
+emi_iso_6W_res_counts['Charged'] =  emi_iso_6W_res_counts['R'] +  emi_iso_6W_res_counts['K'] + emi_iso_6W_res_counts['D'] +  emi_iso_6W_res_counts['E'] +  emi_iso_6W_res_counts['H']
 
 emi_iso_6W_res_counts.reset_index(drop = True, inplace = True)
 
@@ -700,10 +724,10 @@ for column in emi_iso_7Y_res_counts:
     emi_iso_7Y_hydrophobicity.append(hydros)
 emi_iso_7Y_hydrophobicity = pd.DataFrame(emi_iso_7Y_hydrophobicity).T
 emi_iso_7Y_hydrophobicity['ave'] = emi_iso_7Y_hydrophobicity.sum(axis = 1)/115
-emi_iso_7Y_res_counts['Hydro'] = emi_iso_7Y_res_counts['A'] +  emi_iso_7Y_res_counts['I'] +  emi_iso_7Y_res_counts['L']+  emi_iso_7Y_res_counts['M']+  emi_iso_7Y_res_counts['F']+  emi_iso_7Y_res_counts['V']
-emi_iso_7Y_res_counts['Amph'] = emi_iso_7Y_res_counts['W'] +  emi_iso_7Y_res_counts['Y'] +  emi_iso_7Y_res_counts['M']
-emi_iso_7Y_res_counts['Polar'] = emi_iso_7Y_res_counts['Q'] +  emi_iso_7Y_res_counts['N'] +  emi_iso_7Y_res_counts['H'] + emi_iso_7Y_res_counts['S'] +  emi_iso_7Y_res_counts['T'] +  emi_iso_7Y_res_counts['C']
-emi_iso_7Y_res_counts['Charged'] =  emi_iso_7Y_res_counts['R'] +  emi_iso_7Y_res_counts['K'] + emi_iso_7Y_res_counts['D'] +  emi_iso_7Y_res_counts['E']
+emi_iso_7Y_res_counts['Hydro'] = emi_iso_7Y_res_counts['A'] +  emi_iso_7Y_res_counts['I'] +  emi_iso_7Y_res_counts['L']+  emi_iso_7Y_res_counts['F']+  emi_iso_7Y_res_counts['V']
+emi_iso_7Y_res_counts['Amph'] = emi_iso_7Y_res_counts['W'] +  emi_iso_7Y_res_counts['Y']+  emi_iso_7Y_res_counts['M']
+emi_iso_7Y_res_counts['Polar'] = emi_iso_7Y_res_counts['Q'] +  emi_iso_7Y_res_counts['N'] + emi_iso_7Y_res_counts['S'] +  emi_iso_7Y_res_counts['T'] +  emi_iso_7Y_res_counts['C']+  emi_iso_7Y_res_counts['M']
+emi_iso_7Y_res_counts['Charged'] =  emi_iso_7Y_res_counts['R'] +  emi_iso_7Y_res_counts['K'] + emi_iso_7Y_res_counts['D'] +  emi_iso_7Y_res_counts['E'] +  emi_iso_7Y_res_counts['H']
 
 emi_iso_7Y_res_counts.reset_index(drop = True, inplace = True)
 
@@ -717,7 +741,10 @@ print(np.mean(cv_lda_ant['test_score']))
 lda_ant.fit(emi, emi_labels.iloc[:,3])
 emi_ant_transform = pd.DataFrame(lda_ant.transform(emi))
 iso_ant_transform = pd.DataFrame(lda_ant.transform(emi_iso))
+iso_ant_predict = pd.DataFrame(lda_ant.predict(emi_iso))
 IgG_ant_transform = pd.DataFrame(lda_ant.transform(emi_IgG))
+wt_ant_transform = pd.DataFrame(lda_ant.transform(emi_wt))
+
 ant_scalings = lda_ant.scalings_
 
 lda_ant.fit(emi_0NotY, emi_rep_labels_0NotY.iloc[:,3])
@@ -761,7 +788,9 @@ print(np.mean(cv_lda_psy['test_score']))
 lda_psy.fit(emi, emi_labels.iloc[:,2])
 emi_psy_transform = pd.DataFrame(lda_psy.transform(emi))
 iso_psy_transform = pd.DataFrame(lda_psy.transform(emi_iso))
+iso_psy_predict = pd.DataFrame(lda_psy.predict(emi_iso))
 IgG_psy_transform = pd.DataFrame(lda_psy.transform(emi_IgG))
+wt_psy_transform = pd.DataFrame(lda_psy.transform(emi_wt))
 
 lda_psy.fit(emi_0NotY, emi_rep_labels_0NotY.iloc[:,2])
 iso_transform_0Y = pd.DataFrame(lda_psy.transform(emi_iso_0Y))
@@ -824,16 +853,102 @@ print(sc.stats.spearmanr(IgG_psy_transform.iloc[41:103,0], emi_IgG_binding.iloc[
 
 
 #%%
+plt.figure()
+sns.distplot(emi_ant_transform.loc[emi_labels['ANT Binding'] == 0, 0], color = 'red')
+sns.distplot(emi_ant_transform.loc[emi_labels['ANT Binding'] == 1, 0], color = 'blue')
+plt.xticks([-4, -2, 0, 2, 4], [-4, -2, 0, 2, 4], fontsize = 26)
+plt.yticks([0.0, 0.2, 0.4, 0.6], [0.0, 0.2, 0.4, 0.6], fontsize = 26)
+plt.ylabel('')
+plt.xlim(-5,5)
+
+plt.figure()
+sns.distplot(-1*emi_psy_transform.loc[emi_labels['OVA Binding'] == 0, 0], color = 'blue')
+sns.distplot(-1*emi_psy_transform.loc[emi_labels['OVA Binding'] == 1, 0], color = 'red')
+plt.xticks([-4, -2, 0, 2, 4], [-4, -2, 0, 2, 4], fontsize = 26)
+plt.yticks([0.0, 0.2, 0.4, 0.6], [0.0, 0.2, 0.4, 0.6], fontsize = 26)
+plt.ylabel('')
+
+#%%
+cmap = plt.cm.get_cmap('bwr')
+colormap9= np.array([cmap(0.15),cmap(0.85)])
+cmap9 = LinearSegmentedColormap.from_list("mycmap", colormap9)
+
+colormap9r= np.array([cmap(0.85),cmap(0.15)])
+cmap9r = LinearSegmentedColormap.from_list("mycmap", colormap9r)
+
+plt.figure()
+plt.scatter(iso_ant_transform.iloc[:,0], emi_iso_binding.iloc[:,1], c = iso_ant_predict.iloc[:,0], cmap = cmap9r, s = 150, edgecolor = 'k', linewidth = 0.25)
+plt.scatter(wt_ant_transform.iloc[:,0], 1, c = 'k', s = 250, edgecolor = 'k', linewidth = 0.25)
+plt.xticks([-4, -2, 0, 2, 4], [-4, -2, 0, 2, 4], fontsize = 26)
+plt.yticks([0.0, 0.4, 0.8, 1.2, 1.6], [0.0, 0.4, 0.8, 1.2, 1.6], fontsize = 26)
+plt.ylim(-0.15, 1.85)
+
+plt.figure()
+plt.scatter(-1*iso_psy_transform.iloc[:,0], emi_iso_binding.iloc[:,2], c = iso_psy_predict.iloc[:,0], cmap = cmap9, s = 150, edgecolor = 'k', linewidth = 0.25)
+plt.scatter(-1*wt_psy_transform.iloc[:,0], 1, c = 'k', s = 250, edgecolor = 'k', linewidth = 0.25)
+plt.xticks([-4, -2, 0, 2, 4], [-4, -2, 0, 2, 4], fontsize = 26)
+plt.yticks([0.0, 0.4, 0.8, 1.2, 1.6], [0.0, 0.4, 0.8, 1.2, 1.6], fontsize = 26)
+plt.ylim(-0.15, 1.85)
+
+#%%
 cmap = plt.cm.get_cmap('bwr')
 
 plt.figure()
 plt.scatter(emi_ant_transform, -1*emi_psy_transform, color = 'white', edgecolor = 'k', s = 40, linewidth = 0.25)
 plt.scatter(IgG_ant_transform.iloc[42:103,0], -1*IgG_psy_transform.iloc[42:103,0], color = cmap(0.15), edgecolor= 'k', s = 80, linewidth = 0.25)
 plt.scatter(IgG_ant_transform.iloc[41,0], -1*IgG_psy_transform.iloc[41,0], color = 'black', s = 150, edgecolor= 'k', linewidth = 0.25)
-plt.xticks([-6, -4, -2, 0, 2, 4, 6], [-6, -4, -2, 0, 2, 4, 6], fontsize = 22)
-plt.yticks([-6, -4, -2, 0, 2, 4, 6], [-6, -4, -2, 0, 2, 4, 6], fontsize = 22)
+plt.xticks([-6, -4, -2, 0, 2, 4, 6], [-6, -4, -2, 0, 2, 4, 6], fontsize = 26)
+plt.yticks([-6, -4, -2, 0, 2, 4, 6], [-6, -4, -2, 0, 2, 4, 6], fontsize = 26)
 plt.ylabel('')
 
+#%%
+plt.figure()
+plt.scatter(emi_ant_transform, -1*emi_psy_transform, color = 'white', edgecolor = 'k', s = 40, linewidth = 0.25)
+plt.scatter(IgG_ant_transform.iloc[0:41,0], -1*IgG_psy_transform.iloc[0:41,0], color = cmap(0.15), edgecolor= 'k', s = 80, linewidth = 0.25)
+plt.scatter(wt_ant_transform.iloc[0,0], -1*wt_psy_transform.iloc[0,0], color = 'black', s = 150, edgecolor= 'k', linewidth = 0.25)
+plt.xticks([-6, -4, -2, 0, 2, 4, 6], [-6, -4, -2, 0, 2, 4, 6], fontsize = 26)
+plt.yticks([-6, -4, -2, 0, 2, 4, 6], [-6, -4, -2, 0, 2, 4, 6], fontsize = 26)
+plt.ylabel('')
+
+#%%
+plt.figure()
+plt.errorbar(IgG_ant_transform.iloc[0:41,0], emi_IgG_binding.iloc[0:41,1], yerr = emi_IgG_binding.iloc[0:41,5], linewidth = 0, elinewidth = 0.5, ecolor = 'k', capsize = 3, zorder = 1)
+plt.scatter(IgG_ant_transform.iloc[0:41,0], emi_IgG_binding.iloc[0:41,1], c = cmap(0.15), s = 150, edgecolor = 'k', linewidth = 0.25, zorder = 2)
+plt.scatter(wt_ant_transform.iloc[0,0], 1, color = 'k', s = 250, edgecolor= 'k', linewidth = 0.25, zorder = 3)
+plt.xticks([0,1, 2, 3,4], [0,1, 2, 3,4], fontsize = 26)
+plt.yticks([0.0, 0.4, 0.8, 1.2, 1.6], [0.0, 0.4, 0.8, 1.2, 1.6], fontsize = 26)
+plt.ylim(-0.05, 1.75)
+
+plt.figure()
+plt.errorbar(-1*IgG_psy_transform.iloc[0:41,0], emi_IgG_binding.iloc[0:41,2], yerr = emi_IgG_binding.iloc[0:41,6], linewidth = 0, elinewidth = 0.5, ecolor = 'k', capsize = 3, zorder = 1)
+plt.scatter(-1*IgG_psy_transform.iloc[0:41,0], emi_IgG_binding.iloc[0:41,2], c = cmap(0.85), s = 150, edgecolor = 'k', linewidth = 0.25, zorder = 2)
+plt.scatter(-1*wt_psy_transform.iloc[0,0], 1, color = 'k', s = 250, edgecolor= 'k', linewidth = 0.25)
+plt.xticks([0,1, 2, 3], [0,1, 2, 3], fontsize = 26)
+plt.yticks([0.0, 0.4, 0.8, 1.2], [0.0, 0.4, 0.8, 1.2], fontsize = 26)
+plt.ylim(-0.15, 1.45)
+
+#%%
+plt.figure()
+plt.errorbar(IgG_ant_transform.iloc[42:103,0], emi_IgG_binding.iloc[42:103,1], yerr = emi_IgG_binding.iloc[42:103,5], linewidth = 0, elinewidth = 0.25, ecolor = 'k', capsize = 3, zorder = 1)
+
+plt.scatter(IgG_ant_transform.iloc[42:103,0], emi_IgG_binding.iloc[42:103,1], c = cmap(0.15), s = 150, edgecolor = 'k', linewidth = 0.25, zorder = 2)
+
+plt.scatter(IgG_ant_transform.iloc[8,0], emi_IgG_binding.iloc[8,1], c = cmap(0.85), s = 250, edgecolor = 'k', linewidth = 0.25, zorder = 3)
+
+plt.scatter(wt_ant_transform.iloc[0,0], 1, color = 'k', s = 250, edgecolor= 'k', linewidth = 0.25, zorder = 3)
+plt.xticks([0,1, 2, 3,4], [0,1, 2, 3,4], fontsize = 26)
+plt.yticks([0.0, 0.4, 0.8, 1.2, 1.6], [0.0, 0.4, 0.8, 1.2, 1.6], fontsize = 26)
+plt.ylim(-0.05, 1.8)
+
+plt.figure()
+plt.errorbar(-1*IgG_psy_transform.iloc[42:103,0], emi_IgG_binding.iloc[42:103,2], yerr = emi_IgG_binding.iloc[42:103,6], linewidth = 0, elinewidth = 0.25, ecolor = 'k', capsize = 3, zorder = 1)
+plt.scatter(-1*IgG_psy_transform.iloc[42:103,0], emi_IgG_binding.iloc[42:103,2], c = cmap(0.85), s = 150, edgecolor = 'k', linewidth = 0.25, zorder = 2)
+plt.scatter(-1*IgG_psy_transform.iloc[8,0], emi_IgG_binding.iloc[8,2], c = cmap(0.85), s = 250, edgecolor = 'k', linewidth = 0.25, zorder = 3)
+
+plt.scatter(-1*wt_psy_transform.iloc[0,0], 1, color = 'k', s = 250, edgecolor= 'k', linewidth = 0.25, zorder = 3)
+plt.xticks([0,1, 2, 3], [0,1, 2, 3], fontsize = 26)
+plt.yticks([0.0, 0.4, 0.8, 1.2], [0.0, 0.4, 0.8, 1.2], fontsize = 26)
+plt.ylim(-0.15, 1.45)
 
 #%%
 from sklearn.decomposition import PCA

@@ -26,22 +26,6 @@ from matplotlib.colors import ListedColormap, LinearSegmentedColormap
 def split(word): 
     return [char for char in word]
 
-colormap6 = np.array(['deepskyblue','indigo','deeppink'])
-cmap6 = LinearSegmentedColormap.from_list("mycmap", colormap6)
-
-colormap6_r = np.array(['deeppink', 'indigo', 'deepskyblue'])
-cmap6_r = LinearSegmentedColormap.from_list("mycmap", colormap6_r)
-
-colormap7 = np.array(['deepskyblue','dimgrey'])
-cmap7 = LinearSegmentedColormap.from_list("mycmap", colormap7)
-
-colormap7r = np.array(['dimgrey', 'deepskyblue'])
-cmap7_r = LinearSegmentedColormap.from_list("mycmap", colormap7r)
-
-colormap8 = np.array(['deeppink','blueviolet'])
-cmap8 = LinearSegmentedColormap.from_list("mycmap", colormap8)
-
-
 
 #%%
 emi_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_reps_stringent.csv", header = 0, index_col = None)
@@ -69,8 +53,8 @@ emi_rep_labels_5NotA = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\
 emi_rep_labels_6NotW = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_rep_labels_6NotW.csv", header = 0, index_col = 0)
 emi_rep_labels_7NotY = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_rep_labels_7NotY.csv", header = 0, index_col = 0)
 
-emi_IgG_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_IgG_reps_noed.csv", header = 0, index_col = 0)
-emi_IgG_binding = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_IgG_binding_noed.csv", header = 0, index_col = None)
+emi_IgG_reps = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_IgG_reps_noed_blosum.csv", header = 0, index_col = 0)
+emi_IgG_binding = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_IgG_binding_noed_blosum.csv", header = 0, index_col = None)
 
 
 #%%
@@ -275,16 +259,16 @@ print(sc.stats.spearmanr(IgG_psy_transform.iloc[41:103,0], emi_IgG_binding.iloc[
 plt.figure()
 sns.distplot(emi_ant_transform.loc[emi_labels['ANT Binding'] == 0, 0], color = 'red')
 sns.distplot(emi_ant_transform.loc[emi_labels['ANT Binding'] == 1, 0], color = 'blue')
-plt.xticks([-4, -2, 0, 2, 4], [-4, -2, 0, 2, 4], fontsize = 22)
-plt.yticks([0.0, 0.2, 0.4, 0.6], [0.0, 0.2, 0.4, 0.6], fontsize = 22)
+plt.xticks([-4, -2, 0, 2, 4], [-4, -2, 0, 2, 4], fontsize = 26)
+plt.yticks([0.0, 0.2, 0.4, 0.6], [0.0, 0.2, 0.4, 0.6], fontsize = 26)
 plt.ylabel('')
 plt.xlim(-5,5)
 
 plt.figure()
 sns.distplot(emi_psy_transform.loc[emi_labels['PSY Binding'] == 0, 0], color = 'blue')
 sns.distplot(emi_psy_transform.loc[emi_labels['PSY Binding'] == 1, 0], color = 'red')
-plt.xticks([-4, -2, 0, 2, 4], [-4, -2, 0, 2, 4], fontsize = 22)
-plt.yticks([0.0, 0.2, 0.4, 0.6], [0.0, 0.2, 0.4, 0.6], fontsize = 22)
+plt.xticks([-4, -2, 0, 2, 4], [-4, -2, 0, 2, 4], fontsize = 26)
+plt.yticks([0.0, 0.2, 0.4, 0.6], [0.0, 0.2, 0.4, 0.6], fontsize = 26)
 plt.ylabel('')
 
 
@@ -297,17 +281,17 @@ colormap9r= np.array([cmap(0.85),cmap(0.15)])
 cmap9r = LinearSegmentedColormap.from_list("mycmap", colormap9r)
 
 plt.figure()
-plt.scatter(emi_iso_ant_transform.iloc[:,0], emi_iso_binding.iloc[:,1], c = emi_iso_ant_predict.iloc[:,0], cmap = cmap9r, s = 150, edgecolor = 'k', linewidth = 0.5)
-plt.scatter(wt_ant_transform.iloc[:,0], 1, c = 'k', s = 250, edgecolor = 'k', linewidth = 0.5)
-plt.xticks([-4, -2, 0, 2, 4], [-4, -2, 0, 2, 4], fontsize = 22)
-plt.yticks([0.0, 0.4, 0.8, 1.2, 1.6], [0.0, 0.4, 0.8, 1.2, 1.6], fontsize = 22)
+plt.scatter(emi_iso_ant_transform.iloc[:,0], emi_iso_binding.iloc[:,1], c = emi_iso_ant_predict.iloc[:,0], cmap = cmap9r, s = 150, edgecolor = 'k', linewidth = 0.25)
+plt.scatter(wt_ant_transform.iloc[:,0], 1, c = 'k', s = 250, edgecolor = 'k', linewidth = 0.25)
+plt.xticks([-4, -2, 0, 2, 4], [-4, -2, 0, 2, 4], fontsize = 26)
+plt.yticks([0.0, 0.4, 0.8, 1.2, 1.6], [0.0, 0.4, 0.8, 1.2, 1.6], fontsize = 26)
 plt.ylim(-0.15, 1.85)
 
 plt.figure()
-plt.scatter(emi_iso_psy_transform.iloc[:,0], emi_iso_binding.iloc[:,2], c = emi_iso_psy_predict.iloc[:,0], cmap = cmap9, s = 150, edgecolor = 'k', linewidth = 0.5)
-plt.scatter(wt_psy_transform.iloc[:,0], 1, c = 'k', s = 250, edgecolor = 'k', linewidth = 0.5)
-plt.xticks([-4, -2, 0, 2, 4], [-4, -2, 0, 2, 4], fontsize = 22)
-plt.yticks([0.0, 0.4, 0.8, 1.2, 1.6], [0.0, 0.4, 0.8, 1.2, 1.6], fontsize = 22)
+plt.scatter(emi_iso_psy_transform.iloc[:,0], emi_iso_binding.iloc[:,2], c = emi_iso_psy_predict.iloc[:,0], cmap = cmap9, s = 150, edgecolor = 'k', linewidth = 0.25)
+plt.scatter(wt_psy_transform.iloc[:,0], 1, c = 'k', s = 250, edgecolor = 'k', linewidth = 0.25)
+plt.xticks([-4, -2, 0, 2, 4], [-4, -2, 0, 2, 4], fontsize = 26)
+plt.yticks([0.0, 0.4, 0.8, 1.2, 1.6], [0.0, 0.4, 0.8, 1.2, 1.6], fontsize = 26)
 plt.ylim(-0.15, 1.85)
 
 
@@ -316,8 +300,8 @@ plt.figure()
 plt.scatter(emi_ant_transform, emi_psy_transform, color = 'white', edgecolor = 'k', s = 40, linewidth = 0.25)
 plt.scatter(IgG_ant_transform.iloc[0:41,0], IgG_psy_transform.iloc[0:41,0], color = cmap(0.15), edgecolor= 'k', s = 80, linewidth = 0.25)
 plt.scatter(wt_ant_transform.iloc[0,0], wt_psy_transform.iloc[0,0], color = 'black', s = 150, edgecolor= 'k', linewidth = 0.25)
-plt.xticks([-6, -4, -2, 0, 2, 4, 6], [-6, -4, -2, 0, 2, 4, 6], fontsize = 22)
-plt.yticks([-6, -4, -2, 0, 2, 4, 6], [-6, -4, -2, 0, 2, 4, 6], fontsize = 22)
+plt.xticks([-6, -4, -2, 0, 2, 4, 6], [-6, -4, -2, 0, 2, 4, 6], fontsize = 26)
+plt.yticks([-6, -4, -2, 0, 2, 4, 6], [-6, -4, -2, 0, 2, 4, 6], fontsize = 26)
 plt.ylabel('')
 
 
@@ -326,8 +310,8 @@ plt.figure()
 plt.scatter(emi_ant_transform, emi_psy_transform, color = 'white', edgecolor = 'k', s = 40, linewidth = 0.25)
 plt.scatter(IgG_ant_transform.iloc[42:103,0], IgG_psy_transform.iloc[42:103,0], color = cmap(0.15), edgecolor= 'k', s = 80, linewidth = 0.25)
 plt.scatter(wt_ant_transform.iloc[0,0], wt_psy_transform.iloc[0,0], color = 'black', s = 150, edgecolor= 'k', linewidth = 0.25)
-plt.xticks([-6, -4, -2, 0, 2, 4, 6], [-6, -4, -2, 0, 2, 4, 6], fontsize = 22)
-plt.yticks([-6, -4, -2, 0, 2, 4, 6], [-6, -4, -2, 0, 2, 4, 6], fontsize = 22)
+plt.xticks([-6, -4, -2, 0, 2, 4, 6], [-6, -4, -2, 0, 2, 4, 6], fontsize = 26)
+plt.yticks([-6, -4, -2, 0, 2, 4, 6], [-6, -4, -2, 0, 2, 4, 6], fontsize = 26)
 plt.ylabel('')
 
 
@@ -336,16 +320,16 @@ plt.figure()
 plt.errorbar(IgG_ant_transform.iloc[0:41,0], emi_IgG_binding.iloc[0:41,1], yerr = emi_IgG_binding.iloc[0:41,5], linewidth = 0, elinewidth = 0.5, ecolor = 'k', capsize = 3, zorder = 1)
 plt.scatter(IgG_ant_transform.iloc[0:41,0], emi_IgG_binding.iloc[0:41,1], c = cmap(0.15), s = 150, edgecolor = 'k', linewidth = 0.25, zorder = 2)
 plt.scatter(wt_ant_transform.iloc[0,0], 1, color = 'k', s = 250, edgecolor= 'k', linewidth = 0.25, zorder = 3)
-plt.xticks([1, 2, 3], [1, 2, 3], fontsize = 22)
-plt.yticks([0.0, 0.4, 0.8, 1.2, 1.6], [0.0, 0.4, 0.8, 1.2, 1.6], fontsize = 22)
+plt.xticks([1, 2, 3], [1, 2, 3], fontsize = 26)
+plt.yticks([0.0, 0.4, 0.8, 1.2, 1.6], [0.0, 0.4, 0.8, 1.2, 1.6], fontsize = 26)
 plt.ylim(-0.05, 1.65)
 
 plt.figure()
 plt.errorbar(IgG_psy_transform.iloc[0:41,0], emi_IgG_binding.iloc[0:41,2], yerr = emi_IgG_binding.iloc[0:41,6], linewidth = 0, elinewidth = 0.5, ecolor = 'k', capsize = 3, zorder = 1)
-plt.scatter(IgG_psy_transform.iloc[0:41,0], emi_IgG_binding.iloc[0:41,2], c = cmap(0.15), s = 150, edgecolor = 'k', linewidth = 0.25, zorder = 2)
+plt.scatter(IgG_psy_transform.iloc[0:41,0], emi_IgG_binding.iloc[0:41,2], c = cmap(0.85), s = 150, edgecolor = 'k', linewidth = 0.25, zorder = 2)
 plt.scatter(wt_psy_transform.iloc[0,0], 1, color = 'k', s = 250, edgecolor= 'k', linewidth = 0.25)
-plt.xticks([1, 2, 3], [1, 2, 3], fontsize = 22)
-plt.yticks([0.0, 0.4, 0.8, 1.2], [0.0, 0.4, 0.8, 1.2], fontsize = 22)
+plt.xticks([0,1, 2, 3], [0,1, 2, 3], fontsize = 26)
+plt.yticks([0.0, 0.4, 0.8, 1.2], [0.0, 0.4, 0.8, 1.2], fontsize = 26)
 plt.ylim(-0.15, 1.45)
 
 
@@ -356,9 +340,9 @@ plt.errorbar(emi_IgG_binding.iloc[0:41,1], emi_IgG_binding.iloc[0:41,2], xerr = 
 plt.scatter(emi_IgG_binding.iloc[0:41,1], emi_IgG_binding.iloc[0:41,2], s = 150, c = cmap(0.15), edgecolor = 'k', linewidth = 0.5, zorder = 2)
 plt.scatter(1,1, s = 200, c = 'k', edgecolor = 'k', linewidth = 0.5, zorder = 3)
 plt.scatter(1.2,0.4, s = 200, c = cmap(0.85), edgecolor = 'k', linewidth = 0.5, zorder = 3)
-plt.xticks([0.0, 0.4, 0.8, 1.2], [0.0, 0.4, 0.8, 1.2], fontsize = 22)
+plt.xticks([0.0, 0.4, 0.8, 1.2], [0.0, 0.4, 0.8, 1.2], fontsize = 26)
 plt.xlim(-0.05, 1.45)
-plt.yticks([0.0, 0.4, 0.8, 1.2], [0.0, 0.4, 0.8, 1.2], fontsize = 22)
+plt.yticks([0.0, 0.4, 0.8, 1.2], [0.0, 0.4, 0.8, 1.2], fontsize = 26)
 plt.ylim(-0.15, 1.35)
 
 
@@ -366,42 +350,103 @@ plt.ylim(-0.15, 1.35)
 plt.figure()
 plt.errorbar(emi_IgG_binding.iloc[0:41,1], emi_IgG_binding.iloc[0:41,2], xerr = emi_IgG_binding.iloc[0:41,5], yerr = emi_IgG_binding.iloc[0:41,5], linewidth = 0, elinewidth = 0.5, ecolor = 'k', capsize = 3, zorder = 1)
 plt.scatter(emi_IgG_binding.iloc[0:41,1], emi_IgG_binding.iloc[0:41,2], s = 150, c = cmap(0.15), edgecolor = 'k', linewidth = 0.5, zorder = 2)
-#plt.errorbar(emi_IgG_binding.iloc[42:103,1], emi_IgG_binding.iloc[42:103,2], xerr = emi_IgG_binding.iloc[42:103,5], yerr = emi_IgG_binding.iloc[42:103,5], linewidth = 0, elinewidth = 0.5, ecolor = 'k', capsize = 3, zorder = 1)
-#plt.scatter(emi_IgG_binding.iloc[42:103,1], emi_IgG_binding.iloc[42:103,2], s = 150, c = cmap(0.55), edgecolor = 'k', linewidth = 0.5, zorder = 2)
+plt.errorbar(emi_IgG_binding.iloc[42:103,1], emi_IgG_binding.iloc[42:103,2], xerr = emi_IgG_binding.iloc[42:103,5], yerr = emi_IgG_binding.iloc[42:103,5], linewidth = 0, elinewidth = 0.5, ecolor = 'k', capsize = 3, zorder = 1)
+plt.scatter(emi_IgG_binding.iloc[42:103,1], emi_IgG_binding.iloc[42:103,2], s = 150, c = cmap(0.55), edgecolor = 'k', linewidth = 0.5, zorder = 2)
 plt.errorbar(emi_IgG_binding.iloc[96:103,1], emi_IgG_binding.iloc[96:103,2], xerr = emi_IgG_binding.iloc[96:103,5], yerr = emi_IgG_binding.iloc[96:103,5], linewidth = 0, elinewidth = 0.5, ecolor = 'k', capsize = 3, zorder = 1)
 plt.scatter(emi_IgG_binding.iloc[96:103,1], emi_IgG_binding.iloc[96:103,2], s = 150, c = cmap(0.65), edgecolor = 'k', linewidth = 0.5, zorder = 2)
 
 plt.scatter(1,1, s = 200, c = 'k', edgecolor = 'k', linewidth = 0.5, zorder = 3)
 plt.scatter(1.2,0.4, s = 200, c = cmap(0.85), edgecolor = 'k', linewidth = 0.5, zorder = 3)
 #plt.scatter(1.28,0.3, s = 200, c = 'orange', edgecolor = 'k', linewidth = 0.5, zorder = 3)
-plt.xticks([0.0, 0.4, 0.8, 1.2], [0.0, 0.4, 0.8, 1.2], fontsize = 22)
+plt.xticks([0.0, 0.4, 0.8, 1.2], [0.0, 0.4, 0.8, 1.2], fontsize = 26)
 plt.xlim(-0.05, 1.45)
-plt.yticks([0.0, 0.4, 0.8, 1.2], [0.0, 0.4, 0.8, 1.2], fontsize = 22)
+plt.yticks([0.0, 0.4, 0.8, 1.2], [0.0, 0.4, 0.8, 1.2], fontsize = 26)
 plt.ylim(-0.15, 1.35)
 
 
 #%%
 plt.figure()
-plt.errorbar(IgG_ant_transform.iloc[42:103,0], emi_IgG_binding.iloc[42:103,1], yerr = emi_IgG_binding.iloc[42:103,5], linewidth = 0, elinewidth = 0.5, ecolor = 'k', capsize = 3, zorder = 1)
+plt.errorbar(IgG_ant_transform.iloc[42:103,0], emi_IgG_binding.iloc[42:103,1], yerr = emi_IgG_binding.iloc[42:103,5], linewidth = 0, elinewidth = 0.25, ecolor = 'k', capsize = 3, zorder = 1)
 
-plt.scatter(IgG_ant_transform.iloc[42:103,0], emi_IgG_binding.iloc[42:103,1], c = cmap(0.15), s = 150, edgecolor = 'k', linewidth = 0.5, zorder = 2)
+plt.scatter(IgG_ant_transform.iloc[42:103,0], emi_IgG_binding.iloc[42:103,1], c = cmap(0.15), s = 150, edgecolor = 'k', linewidth = 0.25, zorder = 2)
 
-plt.scatter(IgG_ant_transform.iloc[8,0], emi_IgG_binding.iloc[8,1], c = cmap(0.85), s = 250, edgecolor = 'k', linewidth = 0.5, zorder = 3)
+plt.scatter(IgG_ant_transform.iloc[8,0], emi_IgG_binding.iloc[8,1], c = cmap(0.85), s = 250, edgecolor = 'k', linewidth = 0.25, zorder = 3)
 
 plt.scatter(wt_ant_transform.iloc[0,0], 1, color = 'k', s = 250, edgecolor= 'k', linewidth = 0.25, zorder = 3)
-plt.xticks([1, 2, 3, 4,5,6], [1, 2, 3, 4,5,6], fontsize = 22)
-plt.yticks([0.0, 0.4, 0.8, 1.2, 1.6], [0.0, 0.4, 0.8, 1.2, 1.6], fontsize = 22)
+plt.xticks([1, 2, 3,4], [1, 2, 3,4], fontsize = 26)
+plt.yticks([0.0, 0.4, 0.8, 1.2, 1.6], [0.0, 0.4, 0.8, 1.2, 1.6], fontsize = 26)
 plt.ylim(-0.05, 1.8)
 
 plt.figure()
-plt.errorbar(IgG_psy_transform.iloc[42:103,0], emi_IgG_binding.iloc[42:103,2], yerr = emi_IgG_binding.iloc[42:103,6], linewidth = 0, elinewidth = 0.5, ecolor = 'k', capsize = 3, zorder = 1)
-plt.scatter(IgG_psy_transform.iloc[42:103,0], emi_IgG_binding.iloc[42:103,2], c = cmap(0.15), s = 150, edgecolor = 'k', linewidth = 0.5, zorder = 2)
-plt.scatter(IgG_psy_transform.iloc[8,0], emi_IgG_binding.iloc[8,2], c = cmap(0.85), s = 250, edgecolor = 'k', linewidth = 0.5, zorder = 3)
+plt.errorbar(IgG_psy_transform.iloc[42:103,0], emi_IgG_binding.iloc[42:103,2], yerr = emi_IgG_binding.iloc[42:103,6], linewidth = 0, elinewidth = 0.25, ecolor = 'k', capsize = 3, zorder = 1)
+plt.scatter(IgG_psy_transform.iloc[42:103,0], emi_IgG_binding.iloc[42:103,2], c = cmap(0.85), s = 150, edgecolor = 'k', linewidth = 0.25, zorder = 2)
+plt.scatter(IgG_psy_transform.iloc[8,0], emi_IgG_binding.iloc[8,2], c = cmap(0.85), s = 250, edgecolor = 'k', linewidth = 0.25, zorder = 3)
 
 plt.scatter(wt_psy_transform.iloc[0,0], 1, color = 'k', s = 250, edgecolor= 'k', linewidth = 0.25, zorder = 3)
-plt.xticks([-2,-1,0, 1, 2, 3], [-2,-1,0, 1, 2, 3], fontsize = 22)
-plt.yticks([0.0, 0.4, 0.8, 1.2], [0.0, 0.4, 0.8, 1.2], fontsize = 22)
+plt.xticks([0,1, 2, 3], [0,1, 2, 3], fontsize = 26)
+plt.yticks([0.0, 0.4, 0.8, 1.2], [0.0, 0.4, 0.8, 1.2], fontsize = 26)
 plt.ylim(-0.15, 1.45)
+
+
+#%%
+cmap = plt.cm.get_cmap('bwr')
+
+data = pd.read_csv("C:\\Users\\makow\\Documents\\Research\\Data Analysis\\9.2.20_emi_specificity\\9.9.21_emi_cs-sins.csv", header = 0, index_col = 0)
+x = np.arange(len(data.index))
+width = 0.3
+
+plt.figure()
+plt.bar(data.index, data['CS-SINS score'], width, yerr = data.iloc[:,4], capsize = 4, color = cmap(0.85), edgecolor = 'k', linewidth = 0.5)
+plt.scatter(x = [0,0,0], y = data.iloc[0,0:3], c = 'lightgray', edgecolor = 'k', alpha = 0.65, linewidth = 0.5, s = 200, zorder = 2)
+plt.scatter(x = [1,1,1], y = data.iloc[1,0:3], c = 'lightgray', edgecolor = 'k', alpha = 0.65, linewidth = 0.5, s = 200, zorder = 2)
+plt.scatter(x = [2,2,2], y = data.iloc[2,0:3], c = 'lightgray', edgecolor = 'k', alpha = 0.65, linewidth = 0.5, s = 200, zorder = 2)
+plt.xticks(ticks = [0,1,2], labels = ['WT', 'EM1', 'EM2'], fontsize = 30)
+plt.ylim(0,0.38)
+plt.yticks([0,0.1,0.2, 0.3], [0,0.1,0.2, 0.3], fontsize = 26)
+
+
+plt.figure()
+plt.bar(data.index, data['Melting temp'], width, yerr = data.iloc[:,9], capsize = 4, color = cmap(0.15), edgecolor = 'k', linewidth = 0.5)
+plt.scatter(x = [0,0,0], y = data.iloc[0,5:8], c = 'lightgray', edgecolor = 'k', alpha = 0.65, linewidth = 0.5, s = 200, zorder = 2)
+plt.scatter(x = [1,1,1], y = data.iloc[1,5:8], c = 'lightgray', edgecolor = 'k', alpha = 0.65, linewidth = 0.5, s = 200, zorder = 2)
+plt.scatter(x = [2,2,2], y = data.iloc[2,5:8], c = 'lightgray', edgecolor = 'k', alpha = 0.65, linewidth = 0.5, s = 200, zorder = 2)
+plt.ylim([74,80])
+plt.xticks(ticks = [0,1,2], labels = ['WT', 'EM1', 'EM2'], fontsize = 30)
+plt.yticks([75,77,79,81], [75,77,79,81], fontsize = 26)
+
+#%%
+plt.figure()
+plt.bar(data.index, data['Proliferation'], width, yerr = data.iloc[:,16], capsize = 4, color = 'orange', edgecolor = 'k', linewidth = 0.5)
+
+plt.plot([0,1,2], data.iloc[0:3,10], '-', c = 'k')
+plt.plot([0,1,2], data.iloc[0:3,11], '-', c = 'k')
+plt.plot([0,1,2], data.iloc[0:3,12], '-', c = 'k')
+plt.plot([0,1,2], data.iloc[0:3,13], '-', c = 'k')
+plt.plot([0,1,2], data.iloc[0:3,14], '-', c = 'k')
+plt.scatter(x = [0,0,0,0,0], y = data.iloc[0,10:15], c = 'lightgray', edgecolor = 'k', alpha = 0.65, linewidth = 0.5, s = 200, zorder = 2)
+plt.scatter(x = [1,1,1,1,1], y = data.iloc[1,10:15], c = 'lightgray', edgecolor = 'k', alpha = 0.65, linewidth = 0.5, s = 200, zorder = 2)
+plt.scatter(x = [2,2,2,2,2], y = data.iloc[2,10:15], c = 'lightgray', edgecolor = 'k', alpha = 0.65, linewidth = 0.5, s = 200, zorder = 2)
+
+plt.scatter(x = [3,3,3,3,3], y = data.iloc[3,10:15], c = 'lightgray', edgecolor = 'k', alpha = 0.65, linewidth = 0.25, s = 100, zorder = 2)
+plt.scatter(x = [4,4,4,4,4], y = data.iloc[4,10:15], c = 'lightgray', edgecolor = 'k', alpha = 0.65, linewidth = 0.25, s = 100, zorder = 2)
+
+
+plt.show()
+
+
+#%%
+plt.scatter(x = [0,1,2,3,4], y = data.iloc[:,10], c = 'lightgray', edgecolor = 'k', linewidth = 0.5, s = 100, marker = 'o', zorder = 4)
+plt.scatter(x = [0,1,2,3,4], y = data.iloc[:,11], c = 'lightgray', edgecolor = 'k', linewidth = 0.5, s = 100, marker = '^', zorder = 4)
+plt.scatter(x = [0,1,2,3,4], y = data.iloc[:,12], c = 'lightgray', edgecolor = 'k', linewidth = 0.5, s = 100, marker = 's', zorder = 4)
+plt.scatter(x = [0,1,2,3,4], y = data.iloc[:,13], c = 'lightgray', edgecolor = 'k', linewidth = 0.5, s = 100, marker = 'X', zorder = 4)
+plt.scatter(x = [0,1,2,3,4], y = data.iloc[:,14], c = 'lightgray', edgecolor = 'k', linewidth = 0.5, s = 100, marker = 'P', zorder = 4)
+plt.bar(data.index, data['Proliferation'], width, yerr = data.iloc[:,16], capsize = 4, color = 'orange', edgecolor = 'k', linewidth = 0.5)
+
+
+plt.ylim([0,1.05])
+plt.xticks(ticks = [0,1,2,3,4], labels = ['WT', 'EM1', 'EM2', 'HGF', 'NT'], fontsize = 30)
+plt.yticks([0.0, 0.2, 0.4, 0.6, 0.8, 1.0], [0.0, 0.2, 0.4, 0.6, 0.8, 1.0], fontsize = 26)
+
 
 
 #%%

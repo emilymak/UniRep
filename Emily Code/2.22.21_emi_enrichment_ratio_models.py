@@ -26,8 +26,8 @@ cmap = plt.cm.get_cmap('bwr')
 
 
 #%%
-emi_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_seqs.txt", header = None, index_col = 0)
-emi_labels = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_rep_labels.csv", header = 0, index_col = 0)
+emi_seqs = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\seqs\\emi_seqs_stringent.txt", header = None, index_col = 0)
+emi_labels = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\UniRep\\Datasets\\emi_rep_labels_stringent.csv", header = 0, index_col = 0)
 emi_labels.set_index('Sequences', inplace = True)
 emi_seqs['label'] = emi_labels.iloc[:,1]
 
@@ -167,35 +167,35 @@ cmap10 = LinearSegmentedColormap.from_list("mycmap", colormap10)
 
 
 plt.figure()
-plt.scatter(frequency_iso_ant['AVE Freq'], frequency_iso_ant['label'], c = cmap(0.15), s = 150, edgecolor = 'k', linewidth = 0.5)
-plt.scatter(frequency_iso_ant.loc[59, 'AVE Freq'], 1, c = 'k', s = 250, edgecolor = 'k', linewidth = 0.5)
-plt.xticks([-4, -2, 0, 2, 4, 6], [-4, -2, 0, 2, 4, 6], fontsize = 22)
+plt.scatter(frequency_iso_ant['AVE Freq'], frequency_iso_ant['label'], c = cmap(0.15), s = 150, edgecolor = 'k', linewidth = 0.25)
+plt.scatter(frequency_iso_ant.loc[59, 'AVE Freq'], 1, c = 'k', s = 250, edgecolor = 'k', linewidth = 0.25)
+plt.xticks([-4, -2, 0, 2, 4, 6], [-4, -2, 0, 2, 4, 6], fontsize = 26)
 plt.xscale('log')
-plt.yticks([0.0, 0.4, 0.8, 1.2, 1.6], [0.0, 0.4, 0.8, 1.2, 1.6], fontsize = 22)
+plt.yticks([0.0, 0.4, 0.8, 1.2, 1.6], [0.0, 0.4, 0.8, 1.2, 1.6], fontsize = 26)
 plt.ylim(-0.4, 1.8)
 
 plt.figure()
-plt.scatter(enrichment_iso_ant['AVE ER'], enrichment_iso_ant['label'], c = cmap(0.15), s = 150, edgecolor = 'k', linewidth = 0.5)
-plt.scatter(3.37595, 1, c = 'k', s = 250, edgecolor = 'k', linewidth = 0.5)
-plt.xticks([-4, -2, 0, 2, 4, 6], [-4, -2, 0, 2, 4, 6], fontsize = 22)
-plt.yticks([0.0, 0.4, 0.8, 1.2, 1.6], [0.0, 0.4, 0.8, 1.2, 1.6], fontsize = 22)
+plt.scatter(enrichment_iso_ant['AVE ER'], enrichment_iso_ant['label'], c = cmap(0.15), s = 150, edgecolor = 'k', linewidth = 0.25)
+plt.scatter(3.37595, 1, c = 'k', s = 250, edgecolor = 'k', linewidth = 0.25)
+plt.xticks([-4, -2, 0, 2, 4, 6], [-4, -2, 0, 2, 4, 6], fontsize = 26)
+plt.yticks([0.0, 0.4, 0.8, 1.2, 1.6], [0.0, 0.4, 0.8, 1.2, 1.6], fontsize = 26)
 plt.ylim(-0.4, 1.8)
 
 
 #%%
 plt.figure()
-plt.scatter(frequency_iso_psy['AVE Freq'], frequency_iso_psy['label'], c = cmap(0.85), s = 150, edgecolor = 'k', linewidth = 0.5)
-plt.scatter(frequency_iso_psy.loc[122, 'AVE Freq'], 1, c = 'k', s = 250, edgecolor = 'k', linewidth = 0.5)
-plt.xticks([-4, -2, 0, 2, 4, 6], [-4, -2, 0, 2, 4, 6], fontsize = 22)
+plt.scatter(frequency_iso_psy['AVE Freq'], frequency_iso_psy['label'], c = cmap(0.85), s = 150, edgecolor = 'k', linewidth = 0.25)
+plt.scatter(frequency_iso_psy.loc[122, 'AVE Freq'], 1, c = 'k', s = 250, edgecolor = 'k', linewidth = 0.25)
+plt.xticks([-4, -2, 0, 2, 4, 6], [-4, -2, 0, 2, 4, 6], fontsize = 26)
 plt.xscale('log')
-plt.yticks([0.2, 0.4, 0.6, 0.8, 1.0, 1.2], [0.2, 0.4, 0.6, 0.8, 1.0, 1.2], fontsize = 22)
+plt.yticks([0.2, 0.4, 0.6, 0.8, 1.0, 1.2], [0.2, 0.4, 0.6, 0.8, 1.0, 1.2], fontsize = 26)
 plt.ylim(0.15, 1.2)
 
 plt.figure()
-plt.scatter(enrichment_iso_psy['AVE ER'], enrichment_iso_psy['label'], c = cmap(0.85), s = 150, edgecolor = 'k', linewidth = 0.5)
-plt.scatter(-2.93006, 1, c = 'k', s = 250, edgecolor = 'k', linewidth = 0.5)
-plt.xticks([-4, -2, 0, 2, 4], [-4, -2, 0, 2, 4], fontsize = 22)
-plt.yticks([0.2, 0.4, 0.6, 0.8, 1.0, 1.2], [0.2, 0.4, 0.6, 0.8, 1.0, 1.2], fontsize = 22)
+plt.scatter(enrichment_iso_psy['AVE ER'], enrichment_iso_psy['label'], c = cmap(0.85), s = 150, edgecolor = 'k', linewidth = 0.25)
+plt.scatter(-2.93006, 1, c = 'k', s = 250, edgecolor = 'k', linewidth = 0.25)
+plt.xticks([-4, -2, 0, 2, 4], [-4, -2, 0, 2, 4], fontsize = 26)
+plt.yticks([0.2, 0.4, 0.6, 0.8, 1.0, 1.2], [0.2, 0.4, 0.6, 0.8, 1.0, 1.2], fontsize = 26)
 plt.ylim(0.15, 1.2)
 
 
@@ -204,4 +204,23 @@ print(sc.stats.spearmanr(frequency_iso_ant['AVE Freq'], frequency_iso_ant['label
 print(sc.stats.spearmanr(enrichment_iso_ant['AVE ER'], enrichment_iso_ant['label'], nan_policy = 'omit'))
 print(sc.stats.spearmanr(frequency_iso_psy['AVE Freq'], frequency_iso_psy['label'], nan_policy = 'omit'))
 print(sc.stats.spearmanr(enrichment_iso_psy['AVE ER'], enrichment_iso_psy['label'], nan_policy = 'omit'))
+
+#%%
+sns.kdeplot(1/emi_rep1_psr_pos.iloc[:,0])
+sns.kdeplot(1/frequency_iso_psy['AVE Freq'])
+plt.xscale('log')
+
+#%%
+sns.kdeplot(1/emi_rep1_psr_neg.iloc[:,0])
+sns.kdeplot(1/emi_rep1_ova_neg.iloc[:,0])
+sns.kdeplot(1/frequency_iso_psy['AVE Freq'])
+plt.xscale('log')
+
+#%%
+sns.kdeplot(1/emi_rep1_antigen_pos.iloc[:,0])
+sns.kdeplot(1/frequency_iso_ant['AVE Freq'])
+plt.xscale('log')
+
+
+
 
