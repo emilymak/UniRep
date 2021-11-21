@@ -8,9 +8,9 @@ Created on Sun Sep 12 13:13:21 2021
 from holdout_utils import *
 from onehot_gen import onehot_gen
 
-emi_binding = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\Emi_Pareto_opt_ML\\emi_binding.csv", header = 0, index_col = 0)
-iso_binding = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\Emi_Pareto_opt_ML\\iso_binding.csv", header = 0, index_col = 0)
-igg_binding = pd.read_csv("C:\\Users\\makow\\Documents\\GitHub\\Emi_Pareto_opt_ML\\igg_binding.csv", header = 0, index_col = 0)
+emi_binding = pd.read_csv(".\\emi_binding.csv", header = 0, index_col = 0)
+iso_binding = pd.read_csv(".\\iso_binding.csv", header = 0, index_col = 0)
+igg_binding = pd.read_csv(".\\igg_binding.csv", header = 0, index_col = 0)
 
 #%%
 emi_physvh = onehot_gen(emi_binding)
