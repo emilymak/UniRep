@@ -37,34 +37,34 @@ iso_psy_predict = pd.DataFrame(lda_psy.predict(iso_physvh)).set_index(iso_bindin
 igg_psy_transform = pd.DataFrame(lda_psy.transform(igg_physvh)).set_index(igg_binding.index)
 
 #%% Check if LDA params for non-varying features are 0
-# nUnique = []
-# for ii in range(emi_physvh.shape[1]):
-#     nUnique.append(np.unique(emi_physvh.iloc[:,ii]).shape[0])
-# nUnique = np.array(nUnique)
-# print('Number of homogeneous features')
-# print(sum([nUnique[ii]==1 for ii in range(len(nUnique))]))
-# print('Number of homogeneous features')
-# print(sum([nUnique[ii]==2 for ii in range(len(nUnique))]))
+nUnique = []
+for ii in range(emi_physvh.shape[1]):
+    nUnique.append(np.unique(emi_physvh.iloc[:,ii]).shape[0])
+nUnique = np.array(nUnique)
+print('Number of homogeneous features')
+print(sum([nUnique[ii]==1 for ii in range(len(nUnique))]))
+print('Number of homogeneous features')
+print(sum([nUnique[ii]==2 for ii in range(len(nUnique))]))
 
-# homogFeatures = np.where(nUnique == 1)[0]
-# inhomogFeatures = np.where(nUnique==2)[0]
-# plt.figure()
-# plt.subplot(1,2,1)
-# plt.hist(lda_ant.coef_[0][homogFeatures])
-# plt.title('homogeneous features are zero')
-# plt.subplot(1,2,2)
-# plt.hist(lda_ant.coef_[0][inhomogFeatures])
-# plt.title('Distribution of mutant features')
+homogFeatures = np.where(nUnique == 1)[0]
+inhomogFeatures = np.where(nUnique==2)[0]
+plt.figure()
+plt.subplot(1,2,1)
+plt.hist(lda_ant.coef_[0][homogFeatures])
+plt.title('homogeneous features are zero')
+plt.subplot(1,2,2)
+plt.hist(lda_ant.coef_[0][inhomogFeatures])
+plt.title('Distribution of mutant features')
 
 #%% Check sequences for homogeneous sites
-# seqs = np.chararray((115,4000))
-# for ii in range(4000):
-#     seqs[:,ii] = list(emi_binding.index[ii])
+seqs = np.chararray((115,4000))
+for ii in range(4000):
+    seqs[:,ii] = list(emi_binding.index[ii])
 
-# nUniqueAAs = []
-# for jj in range(115):
-#     nUniqueAAs.append(len(np.unique(seqs[jj,:])))
-# diverseSites = np.where(np.array(nUniqueAAs)>1)[0]
+nUniqueAAs = []
+for jj in range(115):
+    nUniqueAAs.append(len(np.unique(seqs[jj,:])))
+diverseSites = np.where(np.array(nUniqueAAs)>1)[0]
 AAlib = np.array(sorted('ACDEFGHIKLMNPQRSTVWY'))
 siteLib = np.arange(1,116,1)
 alph_letters = np.array(sorted('ACDEFGHIKLMNPQRSTVWY'))
@@ -105,26 +105,198 @@ nSeqs = emi_binding.shape[0]
 mostCommonResidue = np.zeros(seqLen)
 for ii in range(seqLen):
     seqCounts = Counter(encodedSeqs[ii,:])
+
     mostCommonResidue[ii] = seqCounts.most_common(1)[0][0]
 
 goodSeqs = np.zeros(nSeqs, dtype=bool)
 for ii in range(nSeqs):
     goodSeqs[ii]=np.array_equal(encodedSeqs[nonLibSites,ii], mostCommonResidue[nonLibSites])
     
-filtSeqs = emi_physvh[goodSeqs]
+# filtSeqs = emi_physvh[goodSeqs]
     
     
 #%% Generate feature labels
+plt.close('all')
+ldaScaleMat = np.zeros((len(siteLib), len(AAlib)))
+c=0
+for ii in range(len(siteLib)):
+    for jj in range(len(AAlib)):
+        ldaScaleMat[ii,jj] = lda_ant.coef_[0][c]
+        c+=1
 
-# ldaScaleMat = np.zeros((len(siteLib), len(AAlib)))
-# c=0
-# for ii in range(len(AAlib)):
-#     for jj in range(len(siteLib)):
-#         ldaScaleMat[jj,ii] = lda_ant.coef_[0][c]
-#         c+=1
+#Gather all mutations seen at lib sites
+libMuts = np.array([])
+for ii in range(len(libSites)):
+    libMuts = np.hstack([libMuts, np.unique(encodedSeqs[libSites[ii],:])])
+uniqueLibMuts = np.unique(libMuts)
+uniqueLibMuts = np.array([0,2,3,4,5,8,9,11,14,15,16,17,18,19])
+ldaScaleMatFilt = ldaScaleMat[libSites.astype(int), :]
+ldaScaleMatFilt = ldaScaleMatFilt[:,uniqueLibMuts.astype(int)]
+import seaborn as sns
+plt.figure()
+xticklbls = AAlib[uniqueLibMuts.astype(int)]
+ytickLbls = libSites
+sns.heatmap(ldaScaleMatFilt, xticklabels=xticklbls, yticklabels=ytickLbls)
+
+#Mask heatmap by actual library sites
+wtResidues = ['Y', 'R','R','R','G','A','W','Y']
+sampResidues = [['YFVASD'],
+                ['RKGATE'],
+                ['RKGATE'],
+                ['RKGATE'],
+                ['GANSTD'],
+                ['AFVYSD'],
+                ['WLVGAS'],
+                ['YFVASD']]
+scaleMask = np.zeros(ldaScaleMatFilt.shape)
+uniqueLibMutsStr = np.array([AAlib[ii] for ii in uniqueLibMuts.astype(int)])
+wtList = []
+for ii in range(len(sampResidues)):
+    currWT = wtResidues[ii]
+    currWTidx = np.where(uniqueLibMutsStr==currWT)[0][0]
+    wtList.append((ii,currWTidx))
+    for jj in range(len(sampResidues[ii][0])):
+        currRes = sampResidues[ii][0][jj]
+        #Find index of currRes in uniqueLibMutsStr
+        currResIdx = np.where(uniqueLibMutsStr==currRes)
+        scaleMask[ii,currResIdx] = 1
+    
+plt.figure()
+plt.imshow(scaleMask)
+nonZeroRows = np.where(np.any(scaleMask!=0,axis =1))
+nonZeroCols = np.where(np.any(scaleMask != 0,axis =0))
+
+ldaScaleMatFilt[~scaleMask.astype(bool)]=np.nan
+# ldaScaleMatFilt = ldaScaleMatFilt[nonZeroRows,:]
+# ldaScaleMatFilt= ldaScaleMatFilt[:,nonZeroCols]
+xticklbls = AAlib[uniqueLibMuts[nonZeroCols].astype(int)]
+plt.figure()
+ytickLbls = libSites
+nanMask = np.isnan(ldaScaleMatFilt)
+ax=sns.heatmap(ldaScaleMatFilt.T, yticklabels=xticklbls, xticklabels=ytickLbls, square = True, cmap = "bwr", vmin = -3, vmax = 3, mask = nanMask.T)
+ax.set_facecolor([0.85, 0.85, 0.85])
+
+from matplotlib.patches import Rectangle
+
+for ii in range(len(sampResidues)):
+    
+    ax.add_patch(Rectangle(wtList[ii], 1, 1, fill=False, edgecolor='black', lw=4))
+plt.show()
+
+
+plt.figure()
+ytickLbls = libSites
+ax=sns.heatmap(ldaScaleMat.T, square = True, cmap = "bwr")#, vmin = -3, vmax = 3)
+plt.title('All coefs')
+#################
+ldaScaleMatSpec = np.zeros((len(siteLib), len(AAlib)))
+c=0
+for ii in range(len(siteLib)):
+    for jj in range(len(AAlib)):
+        ldaScaleMatSpec[ii,jj] = lda_psy.coef_[0][c]
+        c+=1
+
+#Gather all mutations seen at lib sites
+libMuts = np.array([])
+for ii in range(len(libSites)):
+    libMuts = np.hstack([libMuts, np.unique(encodedSeqs[libSites[ii],:])])
+uniqueLibMuts = np.unique(libMuts)
+uniqueLibMuts = np.array([0,2,3,4,5,8,9,11,14,15,16,17,18,19])
+ldaScaleMatSpecFilt = ldaScaleMatSpec[libSites.astype(int), :]
+ldaScaleMatSpecFilt = ldaScaleMatSpecFilt[:,uniqueLibMuts.astype(int)]
+import seaborn as sns
+plt.figure()
+xticklbls = AAlib[uniqueLibMuts.astype(int)]
+ytickLbls = libSites
+sns.heatmap(ldaScaleMatSpecFilt, xticklabels=xticklbls, yticklabels=ytickLbls)
+
+#Mask heatmap by actual library sites
+wtResidues = ['Y', 'R','R','R','G','A','W','Y']
+sampResidues = [['YFVASD'],
+                ['RKGATE'],
+                ['RKGATE'],
+                ['RKGATE'],
+                ['GANSTD'],
+                ['AFVYSD'],
+                ['WLVGAS'],
+                ['YFVASD']]
+scaleMask = np.zeros(ldaScaleMatSpecFilt.shape)
+uniqueLibMutsStr = np.array([AAlib[ii] for ii in uniqueLibMuts.astype(int)])
+wtList = []
+for ii in range(len(sampResidues)):
+    currWT = wtResidues[ii]
+    currWTidx = np.where(uniqueLibMutsStr==currWT)[0][0]
+    wtList.append((ii,currWTidx))
+    for jj in range(len(sampResidues[ii][0])):
+        currRes = sampResidues[ii][0][jj]
+        #Find index of currRes in uniqueLibMutsStr
+        currResIdx = np.where(uniqueLibMutsStr==currRes)
+        scaleMask[ii,currResIdx] = 1
+    
+plt.figure()
+plt.imshow(scaleMask)
+nonZeroRows = np.where(np.any(scaleMask!=0,axis =1))
+nonZeroCols = np.where(np.any(scaleMask != 0,axis =0))
+
+ldaScaleMatSpecFilt[~scaleMask.astype(bool)]=np.nan
+# ldaScaleMatSpecFilt = ldaScaleMatSpecFilt[nonZeroRows,:]
+# ldaScaleMatSpecFilt= ldaScaleMatSpecFilt[:,nonZeroCols]
+xticklbls = AAlib[uniqueLibMuts[nonZeroCols].astype(int)]
+plt.figure()
+ytickLbls = libSites
+nanMask = np.isnan(ldaScaleMatSpecFilt)
+ax=sns.heatmap(ldaScaleMatSpecFilt.T, yticklabels=xticklbls, xticklabels=ytickLbls, square = True, cmap = "bwr", vmin = -3, vmax = 3, mask = nanMask.T)
+ax.set_facecolor([0.85, 0.85, 0.85])
+
+from matplotlib.patches import Rectangle
+
+for ii in range(len(sampResidues)):
+    
+    ax.add_patch(Rectangle(wtList[ii], 1, 1, fill=False, edgecolor='black', lw=4))
+plt.show()
+
+
+plt.figure()
+ytickLbls = libSites
+ax=sns.heatmap(ldaScaleMatSpec.T, square = True, cmap = "bwr")#, vmin = -3, vmax = 3)
+plt.title('All coefs')
+
+######### Plot both
+plt.figure()
+plt.subplot(1,2,1)
+ytickLbls = libSites
+nanMask = np.isnan(ldaScaleMatFilt)
+ax=sns.heatmap(ldaScaleMatFilt.T, yticklabels=xticklbls, xticklabels=ytickLbls, square = True, cmap = "bwr", vmin = -3, vmax = 3, mask = nanMask.T)
+ax.set_facecolor([0.85, 0.85, 0.85])
+
+from matplotlib.patches import Rectangle
+
+for ii in range(len(sampResidues)):
+    
+    ax.add_patch(Rectangle(wtList[ii], 1, 1, fill=False, edgecolor='black', lw=4))
+plt.show()
+
+plt.subplot(1,2,2)
+ytickLbls = libSites
+nanMask = np.isnan(ldaScaleMatSpecFilt)
+ax=sns.heatmap(ldaScaleMatSpecFilt.T, yticklabels=xticklbls, xticklabels=ytickLbls, square = True, cmap = "bwr", vmin = -3, vmax = 3, mask = nanMask.T)
+ax.set_facecolor([0.85, 0.85, 0.85])
+
+from matplotlib.patches import Rectangle
+
+for ii in range(len(sampResidues)):
+    
+    ax.add_patch(Rectangle(wtList[ii], 1, 1, fill=False, edgecolor='black', lw=4))
+plt.show()
+
+# colReorder = np.array([0,1,4,9,10,11,3,13,4,5,2,6,7,12])
+# ldaScaleMatFiltReorder = ldaScaleMatFilt[:,colReorder]
+# xticklblsReorder = xticklbls[colReorder]
 # plt.figure()
-# plt.imshow(ldaScaleMat)
+# ax=sns.heatmap(ldaScaleMatFiltReorder, xticklabels=xticklblsReorder, yticklabels=ytickLbls)
 
+# plt.figure()
+# ax=sns.heatmap(ldaScaleMatFiltReorder.T, yticklabels=xticklblsReorder, xticklabels=ytickLbls, square=True, cmap='bwr')
 # #%%
 # plt.figure()
 # sns.distplot(emi_ant_transform.loc[emi_binding['ANT Binding'] == 0, 0], color = 'red')
